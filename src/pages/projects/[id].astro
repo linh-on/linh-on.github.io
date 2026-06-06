@@ -31,7 +31,7 @@ const { Content } = await render(post);
                 {tags.join(', ')}
             </p>
         </div>
-        <Image transition:name={`${post.id}-image`} class="rounded-2xl" src={cover} alt="Main project image"/>
+        {cover && <Image transition:name={`${post.id}-image`} class="rounded-2xl" src={cover} alt="Main project image"/>}
         <p>
             {summary}
         </p>
