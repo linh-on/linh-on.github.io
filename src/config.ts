@@ -1,0 +1,79 @@
+export const SITE = {
+    website: "https://linh-on.github.io",
+    title: "Linh On | Portfolio",
+    description: "Software Engineer & Embedded Systems Engineer — MS CS student at UC Irvine",
+    tags: ["portfolio", "Resume cv", "Astro"],
+    ogImage: "",
+    logo: "",
+    logoText: "Portfolio",
+    lang: "en",
+    favicon: "",
+    repository: "https://github.com/linh-on/simple-portfolio.git",
+    author: "Linh On",
+    profile: "https://github.com/linh-on",
+}
+
+export const ME = {
+    name: "Linh On",
+    profession: "Software Engineer & Embedded Systems Engineer",
+    profileImage: "pp2.png",
+    profileFacts: [
+        {
+            value: 3,
+            description: "Years of Experience"
+        },
+        {
+            value: 3,
+            description: "Projects Built"
+        },
+        {
+            value: 4,
+            description: "Roles Held"
+        }
+    ],
+    contactInfo: {
+        email: "linhon07@gmail.com",
+        linkedin: "https://www.linkedin.com/in/linh-m-on/",
+        resumeDoc: "resume.pdf",
+    },
+    aboutMe: "Master of Computer Science student at UC Irvine (expected December 2026), with a BS in Computer Science and Engineering (GPA 3.86). Passionate about full-stack development, embedded systems, and robotics.",
+}
+
+export const SOCIALS = [
+    {
+        name: "GitHub",
+        url: "https://github.com/linh-on",
+        icon: "github-fill",
+        show: true
+    },
+    {
+        name: "Twitter",
+        url: "https://twitter.com/",
+        icon: "twitter-x-fill",
+        show: false
+    },
+    {
+        name: "Facebook",
+        url: "https://www.facebook.com/",
+        icon: "facebook-fill",
+        show: false
+    },
+    {
+        name: "Instagram",
+        url: "https://www.instagram.com/",
+        icon: "instagram-fill",
+        show: false
+    },
+    {
+        name: "Youtube",
+        url: "https://www.youtube.com/",
+        icon: "youtube-fill",
+        show: false
+    },
+    {
+        name: "TikTok",
+        url: "https://tiktok.com/",
+        icon: "tik-fill",
+        show: false
+    }
+]

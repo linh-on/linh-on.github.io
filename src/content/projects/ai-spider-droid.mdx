@@ -1,0 +1,81 @@
+---
+title: AI Spider Droid
+summary: An autonomous legged robot powered by an NVIDIA Jetson Nano, using PyTorch-based computer vision and reinforcement learning to navigate and respond to its environment.
+tags:
+    - Python
+    - PyTorch
+    - NVIDIA Jetson Nano
+    - Robotics
+    - Computer Vision
+startDate: 2024-09-01
+endDate: 2025-03-31
+author: Linh On
+url: https://github.com/linh-on
+cover: ../../assets/images/hourglass.jpg
+---
+
+## Table of Contents
+1. [Overview](#overview)
+2. [Role](#role)
+3. [Problem](#problem)
+4. [Goal](#goal)
+5. [Solution](#solution)
+6. [Challenges and Learnings](#challenges-and-learnings)
+7. [Final Thoughts](#final-thoughts)
+
+---
+
+## Overview
+**AI Spider Droid** is an autonomous multi-legged robot built around the **NVIDIA Jetson Nano** edge AI platform. It uses **PyTorch**-based neural networks for real-time perception and decision-making, enabling the droid to navigate its environment, avoid obstacles, and respond to visual stimuli without human input.
+
+---
+
+## 👨‍💻 Role
+**AI & Robotics Engineer** — designed the system architecture, trained the perception models, and integrated everything on the Jetson Nano.
+
+---
+
+## ❓ Problem
+Most hobby robots rely on hard-coded rule-based navigation, which fails in unstructured environments. Integrating on-device AI inference on a legged platform creates a more adaptable and intelligent robot while keeping compute close to the hardware.
+
+---
+
+## 🎯 Goal
+1. Deploy a lightweight PyTorch model on the NVIDIA Jetson Nano for real-time edge inference.
+2. Implement computer vision–based obstacle detection and gait control for the legged chassis.
+3. Demonstrate autonomous navigation in a dynamic environment without a remote operator.
+
+---
+
+## ✨ Solution
+
+### Hardware
+- **Platform:** NVIDIA Jetson Nano (4GB) — provides GPU-accelerated inference at the edge.
+- **Chassis:** Multi-legged spider-style robot frame with servo-driven legs.
+- **Sensors:** Camera module for visual input; IMU for orientation feedback.
+
+### Software
+- **Perception:** PyTorch CNN for object and obstacle detection, optimized with TensorRT for Jetson deployment.
+- **Control:** Python control loop translating perception outputs into servo gait commands.
+- **Training Pipeline:** Models trained offline on a GPU workstation, then exported and deployed to Jetson.
+
+### Key Features
+1. **Edge AI Inference:** Real-time neural network inference running entirely on-device at the edge.
+2. **Obstacle Avoidance:** Camera-based perception pipeline detects and routes around obstacles.
+3. **Adaptive Gait:** Python controller adjusts leg movement patterns based on terrain and sensor feedback.
+
+---
+
+## ⚙️ Challenges and Learnings
+1. **Model Optimization:** Deploying PyTorch models on the Jetson Nano required TensorRT quantization to meet real-time latency requirements.
+2. **Power Constraints:** Balancing compute load with battery capacity was a continuous hardware/software co-design challenge.
+3. **Latency vs. Accuracy:** Reducing model size to hit inference speed targets while retaining acceptable detection accuracy required careful architecture choices.
+
+---
+
+## ✨ Final Thoughts
+1. **Edge AI is a real constraint** — designing for deployment on limited hardware from the start is far easier than optimizing after the fact.
+2. This project merged my interests in robotics and machine learning into a single, tangible system.
+3. The experience reinforced how interdisciplinary modern robotics is: mechanical design, embedded firmware, and AI all had to work in concert.
+
+---

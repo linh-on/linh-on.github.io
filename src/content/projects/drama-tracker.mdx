@@ -1,0 +1,82 @@
+---
+title: DramaTracker
+summary: A full-stack movie tracking web app that lets users discover, search, rate, and organize films using the TMDB API. Built with React.js, Node.js, Express.js, PostgreSQL, Python, and Flask.
+tags:
+    - React.js
+    - Node.js
+    - Express.js
+    - PostgreSQL
+    - Python
+    - Flask
+    - TMDB API
+startDate: 2024-01-01
+endDate: 2024-06-30
+author: Linh On
+url: https://github.com/linh-on
+cover: ../../assets/images/hourglass.jpg
+---
+
+## Table of Contents
+1. [Overview](#overview)
+2. [Role](#role)
+3. [Problem](#problem)
+4. [Goal](#goal)
+5. [Solution](#solution)
+6. [Challenges and Learnings](#challenges-and-learnings)
+7. [Final Thoughts](#final-thoughts)
+
+---
+
+## Overview
+**DramaTracker** is a full-stack web application that allows users to discover, search, rate, and track movies using the TMDB (The Movie Database) API. The app provides a clean interface for building a personal watchlist and reviewing films.
+
+The frontend is built with **React.js**, the backend API with **Node.js** and **Express.js**, data is stored in **PostgreSQL**, and a **Python/Flask** service handles supplemental data processing tasks.
+
+---
+
+## 👨‍💻 Role
+**Full-Stack Developer** — designed and implemented both the frontend and backend from scratch.
+
+---
+
+## ❓ Problem
+Movie enthusiasts often rely on scattered notes or memory to track what they have watched or want to watch next. There was no simple, centralized tool that combined real-time movie data with personal tracking features in a clean UI.
+
+---
+
+## 🎯 Goal
+1. Build a responsive movie discovery interface powered by the TMDB API.
+2. Allow users to create accounts, rate movies, and maintain a personal watchlist.
+3. Use a relational database to persist user data and movie records reliably.
+
+---
+
+## ✨ Solution
+
+### Architecture
+- **Frontend:** React.js with component-based UI, fetching TMDB data via REST calls.
+- **Backend:** Node.js + Express.js REST API handling authentication and user data.
+- **Database:** PostgreSQL schema managing users, watchlists, and ratings.
+- **Python/Flask Service:** Secondary microservice for data enrichment and batch processing tasks.
+
+### Key Features
+1. **Movie Search & Discovery:** Real-time search powered by TMDB API with genre filtering.
+2. **Watchlist Management:** Add, remove, and categorize films into custom lists.
+3. **Rating System:** Users can rate films and view aggregated community scores.
+4. **User Authentication:** Secure JWT-based login and session management.
+
+---
+
+## ⚙️ Challenges and Learnings
+1. **API Rate Limiting:** Managing TMDB API quota required implementing server-side caching to reduce redundant calls.
+2. **Database Schema Design:** Structuring the PostgreSQL schema to efficiently handle many-to-many relationships between users and movies took several iterations.
+3. **Full-Stack Coordination:** Keeping the React frontend and Express backend in sync required clear API contracts and disciplined testing.
+
+---
+
+## ✨ Final Thoughts
+1. **Caching is essential** when working with external APIs at scale — even simple in-memory caches dramatically reduced latency.
+2. **PostgreSQL** proved to be the right choice over NoSQL for this use case given the relational nature of users, movies, and ratings.
+3. The project reinforced the value of planning the data model carefully before writing application logic.
+
+---
