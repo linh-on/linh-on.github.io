@@ -3,7 +3,13 @@
 @tailwind utilities;
 @layer base {
     :root {
-        --radius: 0.5rem
+        --radius: 0.5rem;
+        --blue-darkest: #084594;
+        --blue-dark: #2171b5;
+        --blue-medium: #4292c6;
+        --blue-light: #6baed6;
+        --blue-lighter: #9ecae1;
+        --blue-lightest: #c6dbef;
     }
 }
 

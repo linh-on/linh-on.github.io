@@ -8,8 +8,9 @@ export default {
 			screens: {
 				sm: "100%",
 				md: "100%",
-				lg: "520px",
-				xl: "620px"
+				lg: "72rem",
+				xl: "80rem",
+				"2xl": "80rem",
 			},
 			padding: '2rem',
 		},
@@ -20,15 +21,23 @@ export default {
     			sm: 'calc(var(--radius) - 4px)'
     		},
 			colors: {
+				// Blues palette
+				'blue-darkest': '#084594',
+				'blue-dark': '#2171b5',
+				'blue-medium': '#4292c6',
+				'blue-light': '#6baed6',
+				'blue-lighter': '#9ecae1',
+				'blue-lightest': '#c6dbef',
+
 				// Light mode colors
-				'light-theme': '#E9EBEC',
-				'primary-light': '#FBD144',
-				'primary-hover-light': '#FFE071',
+				'light-theme': '#c6dbef',
+				'primary-light': '#2171b5',
+				'primary-hover-light': '#084594',
 
 				// Dark mode colors
-				'dark-theme': '#0C151D',
-				'primary-dark': '#FFE071',
-				'primary-hover-dark': '#FBD144',
+				'dark-theme': '#071428',
+				'primary-dark': '#6baed6',
+				'primary-hover-dark': '#9ecae1',
 
 				// Neutrals
 				'n200': '#d7d9da',
