@@ -1,0 +1,34 @@
+---
+title: "Pawse"
+summary: "A phone lockbox productivity system that physically locks your phone during focus sessions, controlled by a mobile app with AI-powered notification filtering. Semifinalist at the UCI Stella Zhang New Venture Competition and the Beall & Butterworth Product Design Competition 2026."
+tags: ["React Native", "Expo", "Arduino", "C++", "Python", "PyTorch", "Supabase", "BLE", "FastAPI", "Machine Learning", "Embedded Systems", "Mobile"]
+startDate: 2025-09-01
+endDate: 2026-06-01
+url: "https://github.com/linh-on/pawse"
+cover: ../../assets/images/hourglass.jpg
+---
+
+## Overview
+
+Pawse is a productivity system that combines a physical phone lockbox with a mobile app to help users stay focused. The box is controlled by an ESP32 microcontroller over Bluetooth — when a focus session starts, the app locks the box and an AI classifier decides which notifications are important enough to interrupt the session. Built by a five-person team. Semifinalist at the UCI Stella Zhang New Venture Competition and the Beall & Butterworth Product Design Competition 2026.
+
+## Role
+
+Co-founder, CTO & CEO — led the technical architecture across firmware, mobile, and AI. Personally built the ESP32 firmware in Arduino/C++, the MobileBERT-based notification classifier, the BLE communication layer between the hardware and app, and multiple React Native screens including HomeScreen, ActiveSessionScreen, GracePeriodScreen, SchoolScreen, StatsScreen, SettingsScreen, and ProfileScreen.
+
+## Problem
+
+Most productivity apps rely on willpower — notifications still come in and phones are still reachable. We wanted something with a physical consequence: if your phone is locked in a box, you actually can't use it.
+
+## Solution
+
+Built a lockbox controlled by a servo motor and ESP32, paired with a React Native app over BLE. An Android native notification listener captures incoming notifications and routes them through a MobileBERT classifier (95% accuracy) to decide if they're urgent enough to trigger a grace period — giving the user a short window to unlock the box if needed. All session data syncs to Supabase.
+
+## Technical Details
+- ESP32 firmware in Arduino/C++ with FreeRTOS-safe architecture controlling servo, LCD, and physical buttons
+- BLE communication between ESP32 and React Native app with MTU truncation handling
+- MobileBERT notification classifier trained on Google Colab, reaching 95% accuracy with TF-IDF fallback
+- Classifier deployed as a FastAPI/Docker API on Hugging Face Spaces
+- React Native/Expo mobile app with Supabase backend for session tracking and user data
+- Android native notification listener integration for real-time notification capture
+- School mode with teacher-student session flow for classroom use

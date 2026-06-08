@@ -25,21 +25,37 @@ const { Content } = await render(post);
         <div class="flex justify-center mt-10">
             <BackBtn/>
         </div>
-        <div class="flex flex-col gap-6 justify-center items-center">
-            <h1 class="text-3xl font-bold text-center">{title}</h1>
-            <p class="text-sm text-n500 dark:text-primary-dark ">
-                {tags.join(', ')}
-            </p>
+        <div class="w-full flex flex-col gap-4">
+            <h1 class="text-3xl font-bold">{title}</h1>
+            <div class="flex flex-wrap gap-2">
+                {tags.map(tag => (
+                    <span class="px-3 py-1 text-xs font-medium rounded-full bg-blue-lightest dark:bg-primary-dark/20 text-primary-light dark:text-primary-dark border border-blue-light dark:border-primary-dark">
+                        {tag}
+                    </span>
+                ))}
+            </div>
         </div>
-        {cover && <Image transition:name={`${post.id}-image`} class="rounded-2xl" src={cover} alt="Main project image"/>}
-        <p>
-            {summary}
-        </p>
-        <a href={url}>
-            Visit the project ↗
-        </a>
+        {cover && (
+            <Image
+                transition:name={`${post.id}-image`}
+                class="rounded-2xl w-full max-h-[300px] object-cover object-top"
+                src={cover}
+                alt="Main project image"
+            />
+        )}
+        <p class="text-n500 dark:text-n200">{summary}</p>
+        {url && (
+            <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary-light hover:bg-primary-hover-light dark:bg-blue-medium dark:hover:bg-blue-dark text-white font-medium transition-colors w-fit"
+            >
+                Visit the project ↗
+            </a>
+        )}
 
-        <article id="article" class="mt-8 prose dark:prose-invert">
+        <article id="article" class="mt-8 prose dark:prose-invert max-w-none w-full">
             <Content/>
         </article>
         <BackToTop />

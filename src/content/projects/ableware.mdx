@@ -1,0 +1,33 @@
+---
+title: "Ableware"
+summary: "A voice-controlled assistive lift system built with Raspberry Pi and Arduino. Won 2nd place at the 2026 UCI MCS ICS Expo."
+tags: ["Python", "TypeScript", "Raspberry Pi", "Arduino", "WebSocket", "FastAPI", "Embedded Systems", "Assistive Technology"]
+startDate: 2025-09-01
+endDate: 2026-06-01
+url: "https://github.com/EliyaKhajeiee/ableware-pi-final"
+cover: ../../assets/images/hourglass.jpg
+---
+
+## Overview
+
+Ableware is a voice-controlled assistive lift system designed to help users with limited mobility control a physical lift using just their voice. A Raspberry Pi listens for a wake word ("Ableware"), recognizes a command, and sends it over WebSocket to a hub server that coordinates the lift hardware, a 3D simulation, and a real-time dashboard — all at the same time. Won 2nd place at the 2026 UCI MCS ICS Expo.
+
+## Role
+
+Embedded Systems & Backend Engineer — worked on the Arduino actuator driver, the WebSocket communication pipeline between the Pi and the hub server, and integrating the voice command flow end to end.
+
+## Problem
+
+People with limited mobility often can't operate lift systems that require physical buttons or touch input. We wanted to build something that lets users control a lift completely hands-free using natural voice commands.
+
+## Solution
+
+Built a distributed system where a Raspberry Pi handles wake word detection and voice recognition, a FastAPI hub server acts as the central coordinator, and an Arduino drives the physical actuator. The hub also serves a live dashboard and feeds a 3D PyBullet simulation so the team can test without needing the hardware connected.
+
+## Technical Details
+- Raspberry Pi runs a Vosk-based speech recognition pipeline with a custom ONNX wake word model ("Ableware")
+- Voice commands (up, down, start, stop, left, right) are sent to a FastAPI hub over WebSocket
+- Hub server coordinates between the Pi, the 3D simulation, and the Arduino hardware in real time
+- Arduino C++ firmware drives the physical lift actuator based on commands forwarded from the hub
+- React/TypeScript dashboard displays live system state, updated every 250ms via WebSocket polling
+- PyBullet 3D simulation allows full testing of the lift mechanics without physical hardware
