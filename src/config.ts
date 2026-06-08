@@ -17,20 +17,6 @@ export const ME = {
     name: "Linh On",
     profession: "Software Engineer & Embedded Systems Engineer",
     profileImage: "pp2.png",
-    profileFacts: [
-        {
-            value: 3,
-            description: "Years of Experience"
-        },
-        {
-            value: 3,
-            description: "Projects Built"
-        },
-        {
-            value: 4,
-            description: "Roles Held"
-        }
-    ],
     contactInfo: {
         email: "linhon07@gmail.com",
         linkedin: "https://www.linkedin.com/in/linh-m-on/",
