@@ -35,14 +35,14 @@ const { title, tags, cover, id } = Astro.props as Props;
             )}
         </div>
         <div class="flex flex-col gap-2 flex-1">
-            <p class="text-sm text-n500 dark:text-light-theme">
-                {tags.join(', ')}
-            </p>
             <div class="flex items-center justify-between mb-2">
                 <h6 class={cn("font-semibold text-xl", "text-n500 dark:text-white")}>
                     {title}
                 </h6>
             </div>
+            <p class="text-sm text-n500 dark:text-light-theme">
+                {tags.join(', ')}
+            </p>
         </div>
     </div>
 </a>

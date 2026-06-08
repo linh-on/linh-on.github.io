@@ -13,6 +13,10 @@
     }
 }
 
+body {
+    font-size: 17px;
+}
+
 main {
     @apply flex-grow;
 }
