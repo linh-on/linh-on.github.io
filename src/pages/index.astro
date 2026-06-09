@@ -2,20 +2,12 @@
 import Layout from '../layouts/Layout.astro';
 import workExperience from '../data/Jobs';
 import education from '../data/education';
-import hardSkills from '../data/hardSkills';
 import languages from '../data/languages';
 import { Image } from 'astro:assets';
 import profilePic from '../assets/pp2.png';
 
 const mainJobs = workExperience.filter(job => job.company !== 'Thai Culture Association');
 const extracurriculars = workExperience.filter(job => job.company === 'Thai Culture Association');
-
-const allTechTools = [
-  'Python', 'C', 'C++', 'Java', 'JavaScript', 'TypeScript', 'HTML', 'CSS', 'SQL',
-  'Verilog', 'VHDL', 'MIPS', 'Flask', 'React.js', 'Node.js', 'Express.js', 'WordPress',
-  'PHP', 'Pandas', 'Scikit-learn', 'Git', 'GitHub', 'PostgreSQL', 'Postman', 'Figma',
-  'Tiva C', 'Arduino', 'NVIDIA Jetson Nano',
-];
 
 const featuredProjects = [
   {
@@ -424,7 +416,7 @@ function formatDate(dateStr: string): string {
 </style>
 
 <script>
-  let _scrollHandler = null;
+  let _scrollHandler: (() => void) | null = null;
 
   function initSectionHighlight() {
     if (_scrollHandler) {
@@ -434,16 +426,16 @@ function formatDate(dateStr: string): string {
 
     const SECTION_IDS = ['projects', 'experience', 'skills', 'contact'];
 
-    function setActive(id) {
+    function setActive(id: string | null) {
       for (const sid of SECTION_IDS) {
         document.getElementById(sid)?.classList.toggle('active', sid === id);
       }
     }
 
-    function getActive() {
+    function getActive(): string | null {
       const vh = window.innerHeight;
       const mid = vh * 0.35;
-      let closest = null;
+      let closest: string | null = null;
       let closestDist = Infinity;
       for (const id of SECTION_IDS) {
         const el = document.getElementById(id);
