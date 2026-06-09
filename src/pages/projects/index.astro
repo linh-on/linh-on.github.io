@@ -4,5 +4,7 @@ import BreadboardProjects from '../../components/BreadboardProjects.astro';
 ---
 
 <Layout title="Linh On | Portfolio | My Projects" description="A list of my best projects" scrollSmooth={false}>
-  <BreadboardProjects />
+  <div style="height: calc(100vh - 60px); display: flex; flex-direction: column;">
+    <BreadboardProjects />
+  </div>
 </Layout>
