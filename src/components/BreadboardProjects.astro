@@ -1,0 +1,292 @@
+---
+---
+
+<div class="bb-outer">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{font-family:'Courier New',monospace;background:#e8e3d8;border-radius:10px;padding:14px;border:2px solid #c8c2b4;}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
+.ttl{font-size:11px;color:#1a6b3a;letter-spacing:3px;font-weight:bold;}
+.sub{font-size:9px;color:#999;margin-top:2px;}
+.leg{display:flex;gap:12px;font-size:9px;color:#888;}
+.main{display:flex;gap:0;border-radius:6px;overflow:hidden;border:2px solid #b8b2a4;}
+.board-col{flex:1 1 0;min-width:0;display:flex;flex-direction:column;background:#ddd8ce;}
+.rail{height:12px;display:flex;align-items:center;padding:0 6px;gap:2.5px;}
+.rail-t{background:#a32020;border-bottom:1.5px solid #dc2626;}
+.rail-b{background:#1a3d7a;border-top:1.5px solid #2563eb;}
+.rdot{width:2px;height:5px;background:#ffffff33;border-radius:1px;}
+.svg-area{overflow:auto;flex:1;}
+.foot{padding:6px 10px;display:flex;align-items:center;justify-content:space-between;background:#ccc8be;border-top:1px solid #b8b2a4;flex-wrap:wrap;gap:4px;}
+.fstatus{font-size:8px;color:#1a6b3a;}
+.zbtns{display:flex;gap:4px;}
+.zb{background:#d8d3c8;border:1px solid #b0aa9e;color:#555;padding:2px 8px;border-radius:2px;cursor:pointer;font-size:8px;font-family:monospace;}
+.zb:hover{background:#c8c3b8;}
+.panel-col{width:260px;flex-shrink:0;background:#1a1a22;border-left:2px solid #b8b2a4;display:flex;flex-direction:column;}
+.panel-hdr{padding:12px 14px 10px;border-bottom:1px solid #2a2a35;}
+.panel-name{font-size:14px;font-weight:bold;letter-spacing:2px;margin-top:3px;}
+.panel-sub{font-size:9px;color:#666;margin-top:1px;}
+.cls-btn{background:none;border:1px solid #333;color:#555;width:22px;height:22px;border-radius:3px;cursor:pointer;font-size:11px;font-family:monospace;flex-shrink:0;}
+.cls-btn:hover{color:#aaa;border-color:#555;}
+.panel-body{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:11px;}
+.pdiv{height:1px;background:#2a2a35;}
+.plbl{font-size:8px;letter-spacing:2px;font-weight:bold;margin-bottom:5px;}
+.pdesc{font-size:10px;color:#888;line-height:1.7;}
+.ptags{display:flex;flex-wrap:wrap;gap:4px;}
+.ptag{font-size:8px;padding:2px 6px;border-radius:2px;border:1px solid #333;background:#222;color:#999;}
+.phls{display:flex;flex-direction:column;gap:4px;}
+.phl{display:flex;gap:5px;font-size:9px;color:#777;line-height:1.5;}
+.pawds{display:flex;flex-direction:column;gap:4px;}
+.pawd{display:flex;gap:5px;font-size:9px;color:#b45309;line-height:1.5;}
+.plinks{display:flex;gap:6px;margin-top:2px;}
+.plink{flex:1;text-align:center;padding:7px 4px;border-radius:3px;font-size:9px;text-decoration:none;border:1px solid #333;color:#888;background:#222;font-family:monospace;cursor:pointer;}
+.plink-main{font-weight:bold;letter-spacing:1px;}
+.pempty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:8px;}
+.pempty-icon{font-size:28px;}
+.pempty-txt{font-size:10px;color:#333;text-align:center;line-height:1.7;}
+.sc-list{width:100%;margin-top:6px;display:flex;flex-direction:column;gap:3px;}
+.scb{width:100%;background:#111;border:1px solid #222;color:#555;padding:5px 10px;border-radius:3px;cursor:pointer;font-size:8px;font-family:monospace;text-align:left;letter-spacing:1px;}
+.scb:hover{background:#1a1a22;color:#aaa;}
+</style>
+
+<div class="wrap">
+  <div class="hdr">
+    <div>
+      <div class="ttl">● PROJECT BREADBOARD</div>
+      <div class="sub">Click any component to view project details</div>
+    </div>
+    <div class="leg">
+      <span><span style="color:#dc2626">●</span> POWER</span>
+      <span><span style="color:#2563eb">●</span> SIGNAL</span>
+      <span><span style="color:#ca8a04">●</span> DATA</span>
+      <span id="sys-status" style="color:#1a6b3a">● SYSTEM: IDLE</span>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="board-col">
+      <div class="rail rail-t" id="rt"></div>
+      <div class="svg-area">
+        <svg id="bbsvg" width="820" height="390" style="display:block;transition:transform 0.3s;transform-origin:top left;"></svg>
+      </div>
+      <div class="rail rail-b" id="rb"></div>
+      <div class="foot">
+        <div class="fstatus">● ALL SYSTEMS OPERATIONAL</div>
+        <div class="zbtns">
+          <button class="zb" onclick="zm(-0.2)">− ZOOM</button>
+          <button class="zb" onclick="zm(0)">RESET</button>
+          <button class="zb" onclick="zm(0.2)">ZOOM +</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-col" id="panel-col">
+      <div id="p-empty-view" style="display:flex;flex-direction:column;height:100%">
+        <div class="panel-hdr">
+          <div style="font-size:9px;color:#1a6b3a;letter-spacing:2px">● COMPONENT READOUT</div>
+          <div style="font-size:9px;color:#333;margin-top:4px">Select a chip to inspect</div>
+        </div>
+        <div class="pempty">
+          <div class="pempty-icon">🔌</div>
+          <div class="pempty-txt">TAP A COMPONENT<br><span style="font-size:8px;color:#2a2a35">to power it up</span></div>
+          <div class="sc-list" id="sc-list"></div>
+        </div>
+      </div>
+      <div id="p-detail-view" style="display:none;flex-direction:column;height:100%">
+        <div class="panel-hdr" id="panel-hdr-content"></div>
+        <div class="panel-body" id="panel-body-content"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script is:inline>
+// @ts-nocheck
+window.addEventListener('load', () => {
+const NS='http://www.w3.org/2000/svg';
+const PROJECTS=[
+  {id:'pawse',name:'PAWSE',subtitle:'Smart Notification Classifier',bg:'#0f1f16',border:'#16a34a',label:'#22c55e',icon:'🐾',x:18,y:25,w:220,h:140,pins:5,shape:'ic',tech:['Python','MobileBERT','ESP32','React Native','BLE','Supabase'],desc:'A phone lockbox that physically locks your phone during focus sessions, with AI-powered notification filtering.',highlights:['95%+ MobileBERT classifier accuracy','BLE hardware-software bridge','FreeRTOS firmware on ESP32','School mode with roster polling'],awards:['Semifinalist — UCI Stella Zhang New Venture Competition','Semifinalist — Beall & Butterworth 2026'],github:'https://github.com/linh-on/pawse',page:'/projects/pawse'},
+  {id:'ableware',name:'ABLEWARE',subtitle:'Assistive Lift System',bg:'#0c1628',border:'#1d4ed8',label:'#60a5fa',icon:'♿',x:265,y:25,w:210,h:140,pins:5,shape:'ic',tech:['Python','Raspberry Pi','Arduino','WebSocket','FastAPI','TypeScript'],desc:'Voice-controlled assistive lift. A Pi listens for wake words and sends commands over WebSocket to a hub coordinating hardware and simulation.',highlights:['Wake word + Vosk voice pipeline','WebSocket hub architecture','PyBullet 3D simulation','React/TypeScript dashboard'],awards:['2nd Place — 2026 UCI MCS ICS Expo'],github:'https://github.com/EliyaKhajeiee/ableware-pi-final',page:'/projects/ableware'},
+  {id:'arctos',name:'ARCTOS 6-DOF',subtitle:'Robotic Arm',bg:'#150e2a',border:'#7c3aed',label:'#a78bfa',icon:'🦾',x:18,y:220,w:155,h:95,pins:3,shape:'ic',tech:['Arduino','C++','Python','Arctos Studio','3D Printing'],desc:'6-DOF robotic arm using Arduino MEGA coordinating stepper motors across all joints for competition tasks.',highlights:['6-joint stepper motor control','Custom CAD end-effector','Waypoint programming','Cup stacking & weight lift'],awards:[],github:'https://github.com/linh-on',page:'/projects/arctos-robotic-arm'},
+  {id:'spider',name:'SPIDER DROID',subtitle:'Autonomous Robot',bg:'#1f0c0c',border:'#b91c1c',label:'#f87171',icon:'🕷️',x:200,y:220,w:160,h:95,pins:3,shape:'ic',tech:['Python','PyTorch','PPO','Jetson Nano','LiDAR'],desc:'3D-printed spider robot trained with PPO RL to walk autonomously across varied terrain, deployed on Jetson Nano.',highlights:['PPO reinforcement learning','LiDAR obstacle detection','Jetson Nano deployment','No external compute'],awards:[],github:'https://github.com/linh-on',page:'/projects/ai-spider-droid'},
+  {id:'drama',name:'DRAMA TRACKER',subtitle:'Movie Web App',bg:'#1f1800',border:'#b45309',label:'#fbbf24',icon:'🎬',x:500,y:25,w:155,h:95,pins:3,shape:'ic',tech:['React.js','Node.js','PostgreSQL','Python','Flask','TMDB API'],desc:'Full-stack movie tracking app with a content-based filtering recommendation engine using TF-IDF cosine similarity.',highlights:['TF-IDF content filtering','TMDB API integration','Flask recommendation service','Vercel + Render deployed'],awards:[],github:'https://github.com/linh-on/drama-tracker',page:'/projects/drama-tracker'},
+  {id:'diabetes',name:'DEEP DIABETES',subtitle:'Risk Prediction Model',bg:'#061a1a',border:'#0e7490',label:'#22d3ee',icon:'🧬',x:500,y:220,w:155,h:95,pins:3,shape:'sensor',tech:['Python','PyTorch','Scikit-learn','Pandas','NumPy'],desc:'Deep MLP for diabetes risk prediction on CDC BRFSS 2015 data, outperforming baseline classifiers.',highlights:['Weighted BCE for imbalance','AdamW + CosineAnnealing LR','Early stopping on ROC-AUC','Feature ablation analysis'],awards:[],github:'https://github.com/juliethecao/deep-diabetes-risk',page:'/projects/deep-diabetes-risk'},
+];
+
+const WIRES=[
+  {from:'pawse',to:'ableware',color:'#16a34a'},
+  {from:'pawse',to:'arctos',color:'#7c3aed'},
+  {from:'ableware',to:'spider',color:'#1d4ed8'},
+  {from:'ableware',to:'drama',color:'#b45309'},
+  {from:'arctos',to:'spider',color:'#b91c1c'},
+  {from:'spider',to:'diabetes',color:'#b45309'},
+  {from:'drama',to:'diabetes',color:'#0e7490'},
+];
+
+let zoom=1,selected=null,blinkT=[];
+const svg=document.getElementById('bbsvg');
+const pMap={};PROJECTS.forEach(p=>pMap[p.id]=p);
+
+function el(tag,a={}){const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(a))e.setAttribute(k,v);return e;}
+function tx(s,a={}){const e=el('text',a);e.textContent=s;return e;}
+
+const defs=el('defs');
+const pat=el('pattern',{id:'h',width:16,height:16,patternUnits:'userSpaceOnUse'});
+pat.appendChild(el('circle',{cx:8,cy:8,r:1.7,fill:'#c0bab0',stroke:'#aaa89e','stroke-width':0.3}));
+defs.appendChild(pat);
+svg.appendChild(defs);
+
+svg.appendChild(el('rect',{width:820,height:390,fill:'url(#h)'}));
+svg.appendChild(el('rect',{x:0,y:195,width:820,height:12,fill:'#ccc8be',stroke:'#b8b2a4','stroke-width':0.8}));
+
+['rt','rb'].forEach(id=>{const r=document.getElementById(id);for(let i=0;i<60;i++){const d=document.createElement('div');d.className='rdot';r.appendChild(d);}});
+
+'ABCDEFGHIJ'.split('').forEach((l,i)=>{
+  svg.appendChild(tx(l,{x:4,y:28+i*17,fill:'#9a9890','font-size':7,'font-family':'monospace'}));
+});
+for(let i=1;i<=50;i++){
+  svg.appendChild(tx(String(i),{x:14+i*15.5,y:13,fill:'#9a9890','font-size':6,'font-family':'monospace','text-anchor':'middle'}));
+}
+
+WIRES.forEach((w,i)=>{
+  const fp=pMap[w.from],tp=pMap[w.to];if(!fp||!tp)return;
+  const fx=fp.x+fp.w/2,fy=fp.y+fp.h;
+  const tx2=tp.x+tp.w/2,ty=tp.y;
+  const off=30+i*9;
+  svg.appendChild(el('path',{d:`M${fx},${fy} C${fx},${fy+off} ${tx2},${ty-off} ${tx2},${ty}`,stroke:w.color,'stroke-width':2.2,fill:'none',opacity:0.6,'stroke-linecap':'round'}));
+});
+
+PROJECTS.forEach(p=>{
+  const g=el('g',{transform:`translate(${p.x},${p.y})`});
+  g.style.cursor='pointer';
+  const W=p.w,H=p.h;
+
+  g.appendChild(el('rect',{x:4,y:4,width:W,height:H,rx:4,fill:'#00000033'}));
+  const body=el('rect',{width:W,height:H,rx:4,fill:p.bg,stroke:'#3a3a3a','stroke-width':1.5});
+  g.appendChild(body);p._body=body;
+
+  const ps=p.pins,step=H/(ps+1);
+  for(let i=1;i<=ps;i++){
+    g.appendChild(el('rect',{x:-10,y:step*i-4,width:10,height:2.5,fill:'#aaa'}));
+    g.appendChild(el('circle',{cx:-10,cy:step*i-2.5,r:3,fill:'#bbb',stroke:'#999','stroke-width':0.5}));
+    g.appendChild(el('rect',{x:W,y:step*i-4,width:10,height:2.5,fill:'#aaa'}));
+    g.appendChild(el('circle',{cx:W+10,cy:step*i-2.5,r:3,fill:'#bbb',stroke:'#999','stroke-width':0.5}));
+  }
+  const tpCount=Math.max(3,Math.floor(W/35));
+  for(let i=1;i<=tpCount;i++){
+    const px=W/(tpCount+1)*i;
+    g.appendChild(el('rect',{x:px-1.5,y:-10,width:3,height:10,fill:'#aaa'}));
+    g.appendChild(el('circle',{cx:px,cy:-10,r:2.5,fill:'#bbb',stroke:'#999','stroke-width':0.5}));
+  }
+
+  if(p.shape==='sensor'){
+    for(let r=0;r<3;r++)for(let c=0;c<5;c++){
+      g.appendChild(el('circle',{cx:10+c*24,cy:10+r*11,r:2.5,fill:p.border+'55',stroke:p.border+'33','stroke-width':0.5}));
+    }
+    g.appendChild(el('line',{x1:4,y1:44,x2:W-4,y2:44,stroke:p.border,'stroke-width':0.5,opacity:0.4}));
+  }
+
+  g.appendChild(el('path',{d:`M${W/2-10},0 A10,10 0 0,1 ${W/2+10},0`,fill:'none',stroke:'#555','stroke-width':1}));
+
+  const led=el('circle',{cx:W-14,cy:15,r:5.5,fill:'#111'});
+  const ledInner=el('circle',{cx:W-14,cy:15,r:3.5,fill:p.border,opacity:0.2});
+  g.appendChild(led);g.appendChild(ledInner);
+  p._led=led;p._ledInner=ledInner;
+
+  const iconY=p.h>120?32:26;
+  g.appendChild(tx(p.icon,{x:14,y:iconY,'font-size':p.h>120?22:16,'font-family':'sans-serif'}));
+
+  const nameY=p.h>120?58:46;
+  g.appendChild(tx(p.name,{x:W/2,y:nameY,'text-anchor':'middle','font-size':p.h>120?13:11,'font-weight':'bold','font-family':'Courier New,monospace',fill:p.label,'letter-spacing':1.2}));
+  g.appendChild(tx(p.subtitle,{x:W/2,y:nameY+15,'text-anchor':'middle','font-size':p.h>120?9:8,'font-family':'Courier New,monospace',fill:'#666'}));
+
+  const techY=p.h>120?88:72;
+  g.appendChild(tx(p.tech.slice(0,p.h>120?3:2).join(' · '),{x:W/2,y:techY,'text-anchor':'middle','font-size':7.5,'font-family':'Courier New,monospace',fill:'#444'}));
+
+  g.appendChild(tx(`${p.id.slice(0,4).toUpperCase()}-${200+Math.floor(p.x/10)*3}`,{x:8,y:H-7,'font-size':6,'font-family':'Courier New,monospace',fill:'#2a2a3a'}));
+
+  const hit=el('rect',{width:W,height:H,rx:4,fill:'transparent'});
+  hit.addEventListener('click',()=>selectP(p));
+  g.appendChild(hit);
+  svg.appendChild(g);
+});
+
+const scList=document.getElementById('sc-list');
+PROJECTS.forEach(p=>{
+  const b=document.createElement('button');
+  b.className='scb';b.textContent=`${p.icon} ${p.name}`;
+  b.style.borderColor=p.border+'44';b.style.color=p.label;
+  b.addEventListener('click',()=>selectP(p));
+  scList.appendChild(b);
+});
+
+function selectP(p){
+  blinkT.forEach(clearInterval);blinkT=[];
+  if(selected===p){
+    selected=null;
+    PROJECTS.forEach(q=>{
+      q._body.setAttribute('stroke','#3a3a3a');q._body.setAttribute('stroke-width','1.5');
+      q._ledInner.setAttribute('opacity',0.2);
+    });
+    document.getElementById('p-empty-view').style.display='flex';
+    document.getElementById('p-detail-view').style.display='none';
+    document.getElementById('sys-status').textContent='● SYSTEM: IDLE';
+    document.getElementById('sys-status').style.color='#1a6b3a';
+    return;
+  }
+  selected=p;
+  PROJECTS.forEach(q=>{
+    const s=q.id===p.id;
+    q._body.setAttribute('stroke',s?p.border:'#3a3a3a');
+    q._body.setAttribute('stroke-width',s?'2.5':'1.5');
+    q._ledInner.setAttribute('opacity',s?1:0.2);
+  });
+  let on=true;
+  blinkT.push(setInterval(()=>{on=!on;p._ledInner.setAttribute('opacity',on?1:0.3);},600));
+  document.getElementById('sys-status').textContent=`● ACTIVE: ${p.name}`;
+  document.getElementById('sys-status').style.color=p.label;
+  document.getElementById('p-empty-view').style.display='none';
+  const dv=document.getElementById('p-detail-view');
+  dv.style.display='flex';
+  document.getElementById('panel-hdr-content').innerHTML=`
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+      <div>
+        <div style="font-size:8px;color:${p.label};letter-spacing:2px;margin-bottom:4px">● COMPONENT READOUT</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:20px">${p.icon}</span>
+          <div>
+            <div class="panel-name" style="color:${p.label}">${p.name}</div>
+            <div class="panel-sub">${p.subtitle}</div>
+          </div>
+        </div>
+      </div>
+      <button class="cls-btn" onclick="selectP(window.__sp)">✕</button>
+    </div>
+  `;
+  document.getElementById('panel-body-content').innerHTML=`
+    <p class="pdesc">${p.desc}</p>
+    <div class="pdiv"></div>
+    <div>
+      <div class="plbl" style="color:${p.label}">TECH STACK</div>
+      <div class="ptags">${p.tech.map(t=>`<span class="ptag" style="border-color:${p.border}55;color:${p.label}88">${t}</span>`).join('')}</div>
+    </div>
+    <div>
+      <div class="plbl" style="color:${p.label}">KEY FEATURES</div>
+      <div class="phls">${p.highlights.map(h=>`<div class="phl"><span style="color:${p.label};flex-shrink:0">✓</span><span>${h}</span></div>`).join('')}</div>
+    </div>
+    ${p.awards.length?`<div><div class="plbl" style="color:${p.label}">RECOGNITION</div><div class="pawds">${p.awards.map(a=>`<div class="pawd"><span>🏆</span><span>${a}</span></div>`).join('')}</div></div>`:''}
+    <div class="pdiv"></div>
+    <div class="plinks">
+      <a href="${p.github}" target="_blank" class="plink">GitHub ↗</a>
+      <a href="${p.page}" class="plink plink-main" style="background:${p.border}22;border-color:${p.border};color:${p.label}">VIEW PROJECT →</a>
+    </div>
+  `;
+  window.__sp=p;
+}
+
+function zm(d){
+  zoom=d===0?1:Math.min(2,Math.max(0.5,zoom+d));
+  document.getElementById('bbsvg').style.transform=`scale(${zoom})`;
+}
+}); // end load
+</script>

@@ -1,10 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import {getCollection} from 'astro:content';
-import ProjectCardList from '@/components/ProjectCardList.astro';
-
-const allProjects = (await getCollection('projects'))
-    .sort((a, b) => b.data.startDate.getTime() - a.data.startDate.getTime());
+import BreadboardProjects from '../../components/BreadboardProjects.astro';
 ---
 
 <Layout title="Linh On | Portfolio | My Projects" description="A list of my best projects" scrollSmooth={false}>
@@ -17,18 +13,7 @@ const allProjects = (await getCollection('projects'))
         </section>
         <!--Projects List-->
         <section class="flex flex-col gap-8">
-            {allProjects.length > 0 ? (
-                allProjects.map((project) => (
-                        <ProjectCardList
-                                id={project.id}
-                                title={project.data.title}
-                                tags={project.data.tags}
-                                cover={project.data.cover}
-                        />
-                ))
-            ) : (
-                    <p>No projects found.</p>
-            )}
+            <BreadboardProjects />
         </section>
     </>
 </Layout>
