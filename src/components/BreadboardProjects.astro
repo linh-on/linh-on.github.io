@@ -2,57 +2,61 @@
 ---
 
 <div class="bb-outer">
-<style>
+<style is:global>
 *{box-sizing:border-box;margin:0;padding:0;}
-.wrap{font-family:'Courier New',monospace;background:#ffffff;padding:8px 16px 0;border-radius:0;height:100%;display:flex;flex-direction:column;}
-.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
-.ttl{font-size:11px;color:#1a6b3a;letter-spacing:3px;font-weight:bold;}
-.sub{font-size:9px;color:#999;margin-top:2px;}
-.leg{display:flex;gap:12px;font-size:9px;color:#888;}
+.bb-outer{width:100%;height:680px;min-height:600px;display:block;}
+.wrap{font-family:'Courier New',monospace;background:#ffffff;padding:14px 20px 0;border-radius:0;height:100%;display:flex;flex-direction:column;}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+.ttl{font-size:20px;color:#1a6b3a;letter-spacing:4px;font-weight:bold;}
+.leg{display:flex;gap:16px;font-size:14px;color:#888;}
 .main{display:flex;gap:0;border-radius:6px;overflow:hidden;border:2px solid #b8b2a4;flex:1;min-height:0;}
 .board-col{flex:1 1 0;min-width:0;display:flex;flex-direction:column;background:#ddd8ce;}
-.rail{height:12px;display:flex;align-items:center;padding:0 6px;gap:2.5px;}
+.rail{height:18px;display:flex;align-items:center;padding:0 8px;gap:3px;}
 .rail-t{background:#a32020;border-bottom:1.5px solid #dc2626;}
 .rail-b{background:#1a3d7a;border-top:1.5px solid #2563eb;}
 .rdot{width:2px;height:5px;background:#ffffff33;border-radius:1px;}
 .svg-area{flex:1;overflow:hidden;display:flex;}
 .foot{padding:6px 10px;display:flex;align-items:center;justify-content:space-between;background:#ccc8be;border-top:1px solid #b8b2a4;flex-wrap:wrap;gap:4px;}
-.fstatus{font-size:8px;color:#1a6b3a;}
+.fstatus{font-size:11px;color:#1a6b3a;}
 .zbtns{display:flex;gap:4px;}
-.zb{background:#d8d3c8;border:1px solid #b0aa9e;color:#555;padding:2px 8px;border-radius:2px;cursor:pointer;font-size:8px;font-family:monospace;}
+.zb{background:#d8d3c8;border:1px solid #b0aa9e;color:#555;padding:4px 12px;border-radius:2px;cursor:pointer;font-size:11px;font-family:monospace;}
 .zb:hover{background:#c8c3b8;}
-.panel-col{flex:0 0 40%;background:#1a1a2e;border-left:2px solid #b8b2a4;display:flex;flex-direction:column;height:100%;}
-.panel-hdr{padding:12px 14px 10px;border-bottom:1px solid #2a2a35;}
-.panel-name{font-size:14px;font-weight:bold;letter-spacing:2px;margin-top:3px;}
-.panel-sub{font-size:9px;color:#cbd5e1;margin-top:1px;}
-.cls-btn{background:none;border:1px solid #333;color:#555;width:22px;height:22px;border-radius:3px;cursor:pointer;font-size:11px;font-family:monospace;flex-shrink:0;}
-.cls-btn:hover{color:#aaa;border-color:#555;}
-.panel-body{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:11px;color:#e2e8f0;}
-.pdiv{height:1px;background:#2a2a35;}
-.plbl{font-size:9px;letter-spacing:3px;font-weight:bold;margin-bottom:8px;color:#ffffff;}
-.pdesc{font-size:10px;color:#cbd5e1;line-height:1.7;}
-.ptags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
-.ptag{font-size:9px;padding:3px 10px;border-radius:12px;border:1px solid #3d3d5c;background:#252538;color:#e2e8f0;white-space:nowrap;}
-.phls{display:flex;flex-direction:column;gap:4px;}
-.phl{display:flex;gap:5px;font-size:11px;color:#cbd5e1;line-height:1.5;}
-.pawds{display:flex;flex-direction:column;gap:4px;}
-.pawd{display:flex;gap:5px;font-size:9px;color:#fbbf24;line-height:1.5;}
-.plinks{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
-.plink{width:100%;text-align:center;padding:8px;border-radius:4px;font-size:10px;text-decoration:none;border:1px solid #3d3d5c;color:#ccc;background:#252538;font-family:monospace;cursor:pointer;display:block;}
-.plink-main{background:#22c55e;color:#000;font-weight:bold;border:none;}
-.pempty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:8px;}
-.pempty-icon{font-size:28px;}
-.pempty-txt{font-size:10px;color:#333;text-align:center;line-height:1.7;}
-.sc-list{width:100%;margin-top:6px;display:flex;flex-direction:column;gap:3px;}
-.scb{width:100%;background:#111;border:1px solid #222;color:#555;padding:5px 10px;border-radius:3px;cursor:pointer;font-size:8px;font-family:monospace;text-align:left;letter-spacing:1px;}
-.scb:hover{background:#1a1a22;color:#aaa;}
+.panel-col{flex:0 0 40%;background:#f5f0e8;border-left:2px solid #b8b2a4;display:flex;flex-direction:column;height:100%;}
+.panel-hdr{padding:18px 18px 16px;border-bottom:1px solid #ddd6c8;background:#f5f0e8;}
+.panel-name{font-size:20px;font-weight:900;letter-spacing:0.5px;margin-top:0;color:#1a1a1a;font-family:'Courier New',monospace;line-height:1.1;}
+.panel-sub{font-size:12px;color:#888;margin-top:4px;font-family:sans-serif;font-weight:400;letter-spacing:0;}
+.cls-btn{background:none;border:1px solid #ccc;color:#999;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;font-family:monospace;flex-shrink:0;transition:all 0.15s;line-height:1;}
+.cls-btn:hover{color:#333;border-color:#888;background:#ede8e0;}
+.panel-body{flex:1;overflow-y:auto;padding:18px 18px 24px;display:flex;flex-direction:column;gap:16px;background:#f5f0e8;}
+.pdiv{height:1px;background:#ddd6c8;margin:0;}
+.plbl{font-size:10px;letter-spacing:3px;font-weight:700;margin-bottom:10px;color:#555;font-family:'Courier New',monospace;}
+.pdesc{font-size:13px;color:#2a2a2a;line-height:1.8;font-family:'Courier New',monospace;}
+.ptags{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px;}
+.ptag{font-size:11px;padding:5px 14px;border-radius:8px;border:1.5px solid #c9c0b0;background:#fff;color:#333;white-space:nowrap;font-family:sans-serif;font-weight:500;display:inline-flex;align-items:center;}
+.phls{display:flex;flex-direction:column;gap:8px;}
+.phl{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#2a2a2a;line-height:1.5;font-family:sans-serif;}
+.phl-check{width:20px;height:20px;border-radius:50%;background:#e8622a;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.phl-check svg{width:11px;height:11px;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+.pawds{display:flex;flex-direction:column;gap:7px;}
+.pawd{display:flex;gap:8px;font-size:11px;color:#92600a;line-height:1.55;font-family:sans-serif;font-weight:500;align-items:flex-start;}
+.plinks-row{display:flex;gap:8px;margin-top:2px;}
+.plink-sm{flex:1;text-align:center;padding:9px 6px;border-radius:8px;font-size:11px;text-decoration:none;border:1.5px solid #c9c0b0;color:#444;background:#fff;font-family:sans-serif;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;transition:background 0.15s;}
+.plink-sm:hover{background:#ede8e0;}
+.plink-main{width:100%;text-align:center;padding:14px;border-radius:10px;font-size:13px;text-decoration:none;border:none;color:#1a1a1a;background:#e8622a;font-family:'Courier New',monospace;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:space-between;letter-spacing:1px;transition:background 0.15s;margin-top:4px;}
+.plink-main:hover{background:#d4551e;}
+.plinks{display:flex;flex-direction:column;gap:10px;}
+.pempty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:10px;}
+.pempty-icon{font-size:40px;}
+.pempty-txt{font-size:13px;color:#888;text-align:center;line-height:1.7;font-family:'Courier New',monospace;letter-spacing:2px;}
+.sc-list{width:100%;margin-top:10px;display:flex;flex-direction:column;gap:8px;}
+.scb{width:100%;background:#ede8e0;border:1.5px solid #c9c0b0;color:#444;padding:14px 16px;border-radius:10px;cursor:pointer;font-size:13px;font-family:monospace;text-align:left;letter-spacing:1.5px;transition:background 0.15s;font-weight:600;}
+.scb:hover{background:#ddd6c8;color:#111;}
 </style>
 
 <div class="wrap">
   <div class="hdr">
     <div>
       <div class="ttl">● PROJECT BREADBOARD</div>
-      <div class="sub">Each chip is a project. Click to inspect.</div>
     </div>
     <div class="leg">
       <span><span style="color:#dc2626">●</span> POWER</span>
@@ -66,7 +70,7 @@
     <div class="board-col">
       <div class="rail rail-t" id="rt"></div>
       <div class="svg-area">
-        <svg id="bbsvg" viewBox="0 0 820 420" preserveAspectRatio="xMidYMid meet" style="display:block; width:100%; height:100%; min-height:380px;"></svg>
+        <svg id="bbsvg" viewBox="0 0 760 380" preserveAspectRatio="xMidYMid meet" style="display:block; width:100%; height:100%;"></svg>
       </div>
       <div class="rail rail-b" id="rb"></div>
       <div class="foot">
@@ -82,12 +86,12 @@
     <div class="panel-col" id="panel-col">
       <div id="p-empty-view" style="display:flex;flex-direction:column;height:100%">
         <div class="panel-hdr">
-          <div style="font-size:9px;color:#1a6b3a;letter-spacing:2px">● COMPONENT READOUT</div>
-          <div style="font-size:9px;color:#333;margin-top:4px">Select a chip to inspect</div>
+          <div style="font-size:13px;color:#1a6b3a;letter-spacing:2px;font-family:'Courier New',monospace;font-weight:bold">● COMPONENT READOUT</div>
+          <div style="font-size:13px;color:#888;margin-top:6px;font-family:sans-serif">Select a chip to inspect</div>
         </div>
         <div class="pempty">
           <div class="pempty-icon">🔌</div>
-          <div class="pempty-txt">TAP A COMPONENT<br><span style="font-size:8px;color:#2a2a35">to power it up</span></div>
+          <div class="pempty-txt">TAP A COMPONENT<br><span style="font-size:8px;color:#aaa">to power it up</span></div>
           <div class="sc-list" id="sc-list"></div>
         </div>
       </div>
@@ -137,16 +141,16 @@ pat.appendChild(el('circle',{cx:8,cy:8,r:1.7,fill:'#c0bab0',stroke:'#aaa89e','st
 defs.appendChild(pat);
 svg.appendChild(defs);
 
-svg.appendChild(el('rect',{width:820,height:420,fill:'url(#h)'}));
-svg.appendChild(el('rect',{x:0,y:195,width:820,height:12,fill:'#ccc8be',stroke:'#b8b2a4','stroke-width':0.8}));
+svg.appendChild(el('rect',{width:760,height:380,fill:'url(#h)'}));
+svg.appendChild(el('rect',{x:0,y:178,width:760,height:12,fill:'#ccc8be',stroke:'#b8b2a4','stroke-width':0.8}));
 
 ['rt','rb'].forEach(id=>{const r=document.getElementById(id);if(!r)return;for(let i=0;i<60;i++){const d=document.createElement('div');d.className='rdot';r.appendChild(d);}});
 
 'ABCDEFGHIJ'.split('').forEach((l,i)=>{
-  svg.appendChild(tx(l,{x:4,y:28+i*17,fill:'#9a9890','font-size':7,'font-family':'monospace'}));
+  svg.appendChild(tx(l,{x:4,y:28+i*17,fill:'#9a9890','font-size':9,'font-family':'monospace'}));
 });
 for(let i=1;i<=50;i++){
-  svg.appendChild(tx(String(i),{x:14+i*15.5,y:13,fill:'#9a9890','font-size':6,'font-family':'monospace','text-anchor':'middle'}));
+  svg.appendChild(tx(String(i),{x:14+i*14.5,y:13,fill:'#9a9890','font-size':8,'font-family':'monospace','text-anchor':'middle'}));
 }
 
 WIRES.forEach((w,i)=>{
@@ -255,14 +259,11 @@ function selectP(p){
   dv.style.display='flex';
   document.getElementById('panel-hdr-content').innerHTML=`
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
-      <div>
-        <div style="font-size:8px;color:${p.label};letter-spacing:2px;margin-bottom:4px">● COMPONENT READOUT</div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:20px">${p.icon}</span>
-          <div>
-            <div class="panel-name" style="color:${p.label}">${p.name}</div>
-            <div class="panel-sub">${p.subtitle}</div>
-          </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font-size:36px;line-height:1">${p.icon}</span>
+        <div>
+          <div class="panel-name" style="color:${p.label}">${p.name}</div>
+          <div class="panel-sub">${p.subtitle}</div>
         </div>
       </div>
       <button class="cls-btn" onclick="selectP(window.__sp)">✕</button>
@@ -278,13 +279,17 @@ function selectP(p){
     <div class="pdiv"></div>
     <div>
       <div class="plbl">KEY FEATURES</div>
-      <div class="phls">${p.highlights.map(h=>`<div class="phl"><span style="color:${p.label};flex-shrink:0">✓</span><span>${h}</span></div>`).join('')}</div>
+      <div class="phls">${p.highlights.map(h=>`<div class="phl"><span class="phl-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>${h}</span></div>`).join('')}</div>
     </div>
     <div class="pdiv"></div>
     ${p.awards.length?`<div><div class="plbl">RECOGNITION</div><div class="pawds">${p.awards.map(a=>`<div class="pawd"><span>🏆</span><span>${a}</span></div>`).join('')}</div></div><div class="pdiv"></div>`:''}
     <div class="plinks">
-      <a href="${p.github}" target="_blank" class="plink">GitHub ↗</a>
-      <a href="${p.page}" class="plink plink-main">VIEW PROJECT →</a>
+      <div class="plbl">LINKS</div>
+      <div class="plinks-row">
+        <a href="${p.github}" target="_blank" class="plink-sm">GitHub <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg></a>
+        <a href="${p.page}" class="plink-sm">Docs <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg></a>
+      </div>
+      <a href="${p.page}" class="plink-main">VIEW FULL PROJECT <span>→</span></a>
     </div>
   `;
   window.__sp=p;
