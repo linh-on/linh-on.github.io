@@ -32,7 +32,7 @@ const {
 <!doctype html>
 <html lang={SITE.lang ?? "en"} class={cn({"scroll-smooth": scrollSmooth})}>
 <head>
-    <meta name="msapplication-TileColor" content="#000000"/>
+    <meta name="msapplication-TileColor" content="#ffffff"/>
     <meta name="viewport" content="width=device-width"/>
     <meta charset="UTF-8"/>
     <meta name="generator" content={Astro.generator}/>
@@ -59,9 +59,9 @@ const {
     <title>{title}</title>
     <ClientRouter/>
 </head>
-<body class="bg-white dark:bg-dark-theme antialiased text-n700 dark:text-light-theme w-full h-screen flex flex-col">
+<body class="bg-white antialiased w-full" style="color:#333;">
 <Navbar/>
-<main class="w-full max-w-5xl mx-auto px-4 py-24 flex gap-8 flex-col" role="main"  id="top">
+<main class="w-full pt-20" role="main" id="top">
     <slot/>
 </main>
 <Footer/>
