@@ -3,7 +3,6 @@
 import { getCollection, render } from "astro:content";
 import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
-import BackBtn from "@/components/BackBtn.astro";
 import BackToTop from "../../components/BackToTop.astro";
 
 export async function getStaticPaths() {
@@ -15,56 +14,160 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { title, summary, tags, cover, ogImage, url } = post.data;
+const { title, summary, tags, cover, ogImage, url, startDate, endDate } = post.data;
 
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 
+const fmtDate = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+const dateRange = `${fmtDate(startDate)} – ${fmtDate(endDate)}`;
+const tocHeadings = headings.filter(h => h.depth === 2);
 ---
+
 <Layout title={title} description={summary} imageOg={ogImage} scrollSmooth={true}>
-    <>
-        <div class="flex justify-center mt-10">
-            <BackBtn/>
+    <!-- Hero Section -->
+    <section class="relative w-full min-h-[440px] md:min-h-[520px] overflow-hidden flex flex-col justify-between">
+        {cover ? (
+            <Image
+                transition:name={`${post.id}-image`}
+                src={cover}
+                alt={`${title} cover image`}
+                style="width:100%;height:100%;"
+                class="absolute inset-0 object-cover object-center"
+            />
+        ) : (
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-darkest via-blue-dark to-blue-medium"></div>
+        )}
+        <!-- Gradient overlay -->
+        <div class="absolute inset-0 bg-gradient-to-b from-black/35 via-black/50 to-black/80"></div>
+
+        <!-- Back button – top-left ghost pill -->
+        <div class="relative z-10 p-5 md:p-8">
+            <button
+                onclick="history.back()"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/50 text-white/90 hover:bg-white/10 hover:border-white/80 transition-all duration-200 text-sm font-medium backdrop-blur-sm"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                    <path d="M7.82843 10.9999H20V12.9999H7.82843L13.1924 18.3638L11.7782 19.778L4 11.9999L11.7782 4.22168L13.1924 5.63589L7.82843 10.9999Z"/>
+                </svg>
+                Back
+            </button>
         </div>
-        <div class="w-full flex flex-col gap-4">
-            <h1 class="text-3xl font-bold">{title}</h1>
+
+        <!-- Title + tags – bottom of hero -->
+        <div class="relative z-10 px-5 md:px-8 pb-10 max-w-6xl mx-auto w-full">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-tight mb-5">
+                {title}
+            </h1>
             <div class="flex flex-wrap gap-2">
                 {tags.map(tag => (
-                    <span class="px-3 py-1 text-xs font-medium rounded-full bg-blue-lightest dark:bg-primary-dark/20 text-primary-light dark:text-primary-dark border border-blue-light dark:border-primary-dark">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-md bg-white/15 text-white border border-white/25 backdrop-blur-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-blue-light flex-shrink-0"></span>
                         {tag}
                     </span>
                 ))}
             </div>
         </div>
-        {cover && (
-            <Image
-                transition:name={`${post.id}-image`}
-                class="rounded-2xl w-full max-h-[300px] object-cover object-top"
-                src={cover}
-                alt="Main project image"
-            />
-        )}
-        <p class="text-n500 dark:text-n200">{summary}</p>
-        {url && (
-            <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary-light hover:bg-primary-hover-light dark:bg-blue-medium dark:hover:bg-blue-dark text-white font-medium transition-colors w-fit"
-            >
-                Visit the project ↗
-            </a>
-        )}
+    </section>
 
-        <article id="article" class="mt-8 prose dark:prose-invert max-w-none w-full">
-            <Content/>
-        </article>
-        <BackToTop />
-    </>
+    <!-- Body: two-column layout -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-14">
+
+            <!-- Main content (2/3) -->
+            <div class="lg:col-span-2 min-w-0">
+                <!-- Summary lead -->
+                <p class="text-lg leading-relaxed text-n500 dark:text-n200 border-l-4 border-primary-light dark:border-primary-dark pl-4 mb-10">
+                    {summary}
+                </p>
+
+                <!-- Table of Contents -->
+                {tocHeadings.length > 0 && (
+                    <div class="mb-10 rounded-xl border border-blue-lightest dark:border-blue-dark/40 bg-blue-lightest/25 dark:bg-primary-dark/10 px-5 py-4">
+                        <p class="text-xs font-semibold uppercase tracking-widest text-primary-light dark:text-primary-dark mb-3">Contents</p>
+                        <ul class="space-y-0.5">
+                            {tocHeadings.map(h => (
+                                <li>
+                                    <a
+                                        href={`#${h.slug}`}
+                                        class="toc-link text-sm text-n500 dark:text-n200 hover:text-primary-light dark:hover:text-primary-dark py-1 inline-block transition-colors duration-150"
+                                    >
+                                        {h.text}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
+                <!-- MDX article -->
+                <article id="article" class="prose dark:prose-invert max-w-none w-full">
+                    <Content />
+                </article>
+
+                <BackToTop />
+            </div>
+
+            <!-- Sticky sidebar (1/3) -->
+            <aside class="lg:col-span-1">
+                <div class="lg:sticky lg:top-24 space-y-5">
+
+                    <!-- Visit project CTA -->
+                    {url && (
+                        <div class="rounded-xl border border-blue-lightest dark:border-blue-dark/40 bg-white p-5 shadow-sm">
+                            <a
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-lg bg-primary-light hover:bg-primary-hover-light dark:bg-blue-medium dark:hover:bg-blue-dark text-white font-semibold text-sm transition-colors duration-200"
+                            >
+                                Visit the Project
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                    <polyline points="15 3 21 3 21 9"/>
+                                    <line x1="10" y1="14" x2="21" y2="3"/>
+                                </svg>
+                            </a>
+                        </div>
+                    )}
+
+                    <!-- Project metadata -->
+                    <div class="rounded-xl border border-blue-lightest dark:border-blue-dark/40 bg-white p-5 shadow-sm">
+                        <p class="text-xs font-semibold uppercase tracking-widest text-n500 dark:text-n200 mb-4">Details</p>
+                        <div class="space-y-3">
+                            <div>
+                                <span class="text-xs font-medium uppercase tracking-wide text-n500 dark:text-n200">Period</span>
+                                <p class="text-sm text-n700 dark:text-n200 mt-0.5">{dateRange}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tech stack tags -->
+                    <div class="rounded-xl border border-blue-lightest dark:border-blue-dark/40 bg-white p-5 shadow-sm">
+                        <p class="text-xs font-semibold uppercase tracking-widest text-n500 dark:text-n200 mb-4">Tech Stack</p>
+                        <div class="flex flex-wrap gap-2">
+                            {tags.map(tag => (
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md bg-blue-lightest dark:bg-primary-dark/20 text-primary-light dark:text-primary-dark border border-blue-light/50 dark:border-primary-dark">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary-light dark:bg-primary-dark flex-shrink-0"></span>
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+
+                </div>
+            </aside>
+        </div>
+    </div>
 </Layout>
 
 <style is:global>
-    h2 {
-        @apply text-2xl font-bold my-4;
+    #article h2 {
+        @apply text-2xl font-bold tracking-tight mt-8 mb-4;
+    }
+    #article h3 {
+        @apply text-xl font-semibold tracking-tight mt-6 mb-3;
+    }
+    .toc-link:hover {
+        transform: translateX(4px);
     }
 </style>
-
