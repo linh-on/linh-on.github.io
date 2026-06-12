@@ -67,6 +67,7 @@
   .svg-area{aspect-ratio:1000/380;}
   .panel-col{flex:none;width:100%;max-width:none;height:auto;}
   .panel-body{overflow-y:visible;}
+  .pempty{overflow-y:visible;}
   .ttl{font-size:17px;letter-spacing:3px;}
   .leg{font-size:11px;gap:10px;}
 }
@@ -93,7 +94,10 @@
       </div>
       <div class="rail rail-b" id="rb"></div>
       <div class="foot">
-        <div class="fstatus" id="fstatus">● ALL SYSTEMS OPERATIONAL</div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <button class="zb" id="dragbtn" onclick="toggleDrag()">🔓 DRAG: ON</button>
+          <div class="fstatus" id="fstatus">● ALL SYSTEMS OPERATIONAL</div>
+        </div>
         <div class="zbtns">
           <button class="zb" onclick="zm(-0.2)">− ZOOM</button>
           <button class="zb" onclick="zm(0)">RESET</button>
@@ -130,6 +134,8 @@ const NS='http://www.w3.org/2000/svg';
 
 // Set to true to have the board already powered on when the page loads.
 const POWER_ON_AT_START=false;
+// Set to false to start with components locked in place (drag off).
+const DRAG_ON_AT_START=true;
 
 /*
  CIRCUIT TOPOLOGY:
@@ -137,11 +143,12 @@ const POWER_ON_AT_START=false;
    +RAIL ──> D1 power-indicator LED ──> R1 current-limiting resistor (lit only when switched on)
    +RAIL ──> PAWSE (MCU / brain)
    DEEP DIABETES (analog sensor) ──SIGNAL──> PAWSE
-   OBSTACLE BOT (ToF sensor board) ──I2C DATA──> PAWSE (bused through center channel)
+   OBSTACLE BOT (ToF sensor board) ──I2C DATA──> PAWSE
    PAWSE ──DATA+CLK──> ABLEWARE (display module)
    PAWSE ──PWM──> ARCTOS (motor driver)
    ABLEWARE ──> DRAMA TRACKER (memory IC) ──> SPIDER (coprocessor)
    GND rail ──> OBSTACLE BOT
+ Components are draggable: wires are anchored to chips and re-route live.
  When the switch is OFF, nothing downstream has power: wires read dead,
  silkscreen text is dark, status LEDs are unlit, and chips don't respond to clicks.
 */
@@ -157,25 +164,28 @@ const PROJECTS=[
 ];
 
 /*
- Straight Manhattan-routed jumpers. Bus wires share the center channel on
- separate lanes so nothing crosses. All of these are DOWNSTREAM of the power
- switch, so they dim when the system is off.
+ Wires are anchored, not hardcoded. Each endpoint is one of:
+   {x,y}            fixed board coordinate
+   {p:'id',dx,dy}   attached to a project chip, offset from its top-left corner
+   {rail:'top'|'bottom'}  power-rail tap that follows the chip horizontally
+ Routes are recomputed every drag frame by drawWires().
 */
 const WIRES=[
-  {pts:[[962,2],[962,8]],           color:'#d8281c'}, // supply -> POWER switch
-  {pts:[[927,26],[943,26]],         color:'#d8281c'}, // switch -> D1 power indicator
-  {pts:[[80,2],[80,28]],            color:'#d8281c'}, // VCC: top rail -> MCU
-  {pts:[[400,378],[400,346]],       color:'#2e2e32'}, // GND: bottom rail -> obstacle board
-  {pts:[[140,250],[140,150]],       color:'#2563eb'}, // SIGNAL: diabetes sensor -> MCU
-  {pts:[[395,250],[395,188],[200,188],[200,150]], color:'#e8a013'}, // I2C DATA: obstacle -> MCU (channel lane 2)
-  {pts:[[255,150],[255,181],[600,181],[600,250]], color:'#f47b20'}, // PWM: MCU -> motor driver (channel lane 1)
-  {pts:[[290,100],[340,100]],       color:'#22a04a'}, // DATA: MCU -> display
-  {pts:[[290,114],[340,114]],       color:'#2563eb'}, // CLK:  MCU -> display
-  {pts:[[570,48],[630,48]],         color:'#0ea5b7'}, // BUS: display -> memory IC
-  {pts:[[820,132],[820,250]],       color:'#c89b2a'}, // ADDR: memory IC -> coprocessor
+  {a:{x:962,y:2},  b:{x:962,y:8},  color:'#d8281c'}, // supply -> POWER switch
+  {a:{x:927,y:26}, b:{x:943,y:26}, color:'#d8281c'}, // switch -> D1 power indicator
+  {a:{rail:'top'},    b:{p:'pawse',dx:40,dy:0},      color:'#d8281c'}, // VCC: top rail -> MCU
+  {a:{rail:'bottom'}, b:{p:'obstacle',dx:110,dy:92}, color:'#2e2e32'}, // GND: bottom rail -> obstacle board
+  {a:{p:'diabetes',dx:100,dy:0},  b:{p:'pawse',dx:100,dy:122},  color:'#2563eb'}, // SIGNAL: diabetes sensor -> MCU
+  {a:{p:'obstacle',dx:105,dy:0},  b:{p:'pawse',dx:160,dy:122},  color:'#e8a013'}, // I2C DATA: obstacle -> MCU
+  {a:{p:'pawse',dx:215,dy:122},   b:{p:'arctos',dx:40,dy:0},    color:'#f47b20'}, // PWM: MCU -> motor driver
+  {a:{p:'pawse',dx:250,dy:72},    b:{p:'ableware',dx:0,dy:68},  color:'#22a04a'}, // DATA: MCU -> display
+  {a:{p:'pawse',dx:250,dy:86},    b:{p:'ableware',dx:0,dy:82},  color:'#2563eb'}, // CLK:  MCU -> display
+  {a:{p:'ableware',dx:230,dy:16}, b:{p:'drama',dx:0,dy:8},      color:'#0ea5b7'}, // BUS: display -> memory IC
+  {a:{p:'drama',dx:190,dy:92},    b:{p:'spider',dx:10,dy:0},    color:'#c89b2a'}, // ADDR: memory IC -> coprocessor
 ];
 
-let zoom=1,selected=null,blinkT=[],powerOn=true;
+let zoom=1,selected=null,blinkT=[],powerOn=true,dragEnabled=DRAG_ON_AT_START;
+const chipGroups=[];
 const svg=document.getElementById('bbsvg');
 if(!svg) return;
 const pMap={};PROJECTS.forEach(p=>pMap[p.id]=p);
@@ -209,13 +219,16 @@ for(let i=1;i<=68;i++){
   if(i%5===0)svg.appendChild(tx(String(i),{x:14+i*14.5,y:13,fill:'#9a9280','font-size':8,'font-family':'monospace','text-anchor':'middle'}));
 }
 
-/* ---------- STRAIGHT JUMPER WIRES ---------- */
+/* ---------- DYNAMIC JUMPER WIRES ---------- */
 const wireG=el('g');
+svg.appendChild(wireG);
+
 function routeD(pts,r=6){
   let d=`M${pts[0][0]},${pts[0][1]}`;
   for(let i=1;i<pts.length-1;i++){
     const [px,py]=pts[i-1],[cx,cy]=pts[i],[nx,ny]=pts[i+1];
     const inL=Math.hypot(cx-px,cy-py),outL=Math.hypot(nx-cx,ny-cy);
+    if(inL<0.01||outL<0.01)continue;
     const rr=Math.min(r,inL/2,outL/2);
     const ax=cx-(cx-px)/inL*rr, ay=cy-(cy-py)/inL*rr;
     const bx=cx+(nx-cx)/outL*rr, by=cy+(ny-cy)/outL*rr;
@@ -225,16 +238,59 @@ function routeD(pts,r=6){
   d+=` L${last[0]},${last[1]}`;
   return d;
 }
-WIRES.forEach(w=>{
-  const d=routeD(w.pts);
-  wireG.appendChild(el('path',{d,stroke:'#3a2e1a',opacity:0.15,'stroke-width':4.4,fill:'none','stroke-linecap':'round','stroke-linejoin':'round',transform:'translate(1.4,2.2)'}));
-  wireG.appendChild(el('path',{d,stroke:w.color,'stroke-width':3.4,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'}));
-  wireG.appendChild(el('path',{d,stroke:'#ffffff',opacity:0.38,'stroke-width':1,fill:'none','stroke-linecap':'round',transform:'translate(-0.5,-0.8)'}));
-  [w.pts[0],w.pts[w.pts.length-1]].forEach(([px,py])=>{
-    wireG.appendChild(el('circle',{cx:px,cy:py,r:2.3,fill:'#9c9c9c',stroke:'#6e6e6e','stroke-width':0.6}));
+
+function endPt(e,other){
+  if(e.rail){
+    const o=other?endPt(other):null;
+    const x=o?o[0]:500;
+    return[x,e.rail==='top'?2:378];
+  }
+  if(e.p){const q=pMap[e.p];return[q.x+e.dx,q.y+e.dy];}
+  return[e.x,e.y];
+}
+
+// Manhattan route between two anchor points: straight if aligned,
+// otherwise a single elbow pair along the dominant axis.
+function wirePts(w){
+  const A=endPt(w.a,w.b),B=endPt(w.b,w.a);
+  const pts=[A];
+  if(Math.abs(A[0]-B[0])>2&&Math.abs(A[1]-B[1])>2){
+    if(Math.abs(B[0]-A[0])>Math.abs(B[1]-A[1])){
+      const mx=(A[0]+B[0])/2;
+      pts.push([mx,A[1]],[mx,B[1]]);
+    }else{
+      const my=(A[1]+B[1])/2;
+      pts.push([A[0],my],[B[0],my]);
+    }
+  }
+  pts.push(B);
+  return pts;
+}
+
+function drawWires(){
+  while(wireG.firstChild)wireG.removeChild(wireG.firstChild);
+  WIRES.forEach(w=>{
+    const pts=wirePts(w);
+    const d=routeD(pts);
+    wireG.appendChild(el('path',{d,stroke:'#3a2e1a',opacity:0.15,'stroke-width':4.4,fill:'none','stroke-linecap':'round','stroke-linejoin':'round',transform:'translate(1.4,2.2)'}));
+    wireG.appendChild(el('path',{d,stroke:w.color,'stroke-width':3.4,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'}));
+    wireG.appendChild(el('path',{d,stroke:'#ffffff',opacity:0.38,'stroke-width':1,fill:'none','stroke-linecap':'round',transform:'translate(-0.5,-0.8)'}));
+    [pts[0],pts[pts.length-1]].forEach(([px,py])=>{
+      wireG.appendChild(el('circle',{cx:px,cy:py,r:2.3,fill:'#9c9c9c',stroke:'#6e6e6e','stroke-width':0.6}));
+    });
   });
-});
-svg.appendChild(wireG);
+}
+
+// Convert a pointer event to SVG user coordinates. Derives scale from the
+// rendered bounding box, so it stays correct under the CSS zoom buttons.
+function svgPt(ev){
+  const r=svg.getBoundingClientRect();
+  const s=Math.min(r.width/1000,r.height/380);
+  const ox=(r.width-1000*s)/2,oy=(r.height-380*s)/2;
+  return[(ev.clientX-r.left-ox)/s,(ev.clientY-r.top-oy)/s];
+}
+
+drawWires();
 
 /* ---------- POWER INDICATOR CIRCUIT: POWER switch -> D1 -> R1 ---------- */
 function desig(x,y,label){svg.appendChild(tx(label,{x,y,'font-size':6.5,'font-family':'monospace',fill:'#8a8273','text-anchor':'middle'}));}
@@ -296,10 +352,9 @@ hintT.setAttribute('stroke-width','6');
 hintT.style.opacity=0;
 svg.appendChild(hintT);
 
-/* ---------- PROJECT COMPONENTS ---------- */
+/* ---------- PROJECT COMPONENTS (draggable) ---------- */
 PROJECTS.forEach(p=>{
   const g=el('g',{transform:`translate(${p.x},${p.y})`});
-  g.style.cursor='pointer';
   const W=p.w,H=p.h;
   const subFill=p.shape==='ic'?'#b8b8c0':'#ece4d4';
   const techFill=p.shape==='ic'?'#8e8e98':'#d2c6b0';
@@ -374,11 +429,48 @@ PROJECTS.forEach(p=>{
   g.appendChild(tg);
   p._tg=tg;
 
+  // hit area (hover affordance lives here; click/drag handled on the group)
   const hit=el('rect',{width:W,height:H,rx:5,fill:'transparent'});
-  hit.addEventListener('click',()=>selectP(p));
-  hit.addEventListener('mouseenter', () => { if(powerOn) p._body.setAttribute('stroke-width', '2.5'); });
-  hit.addEventListener('mouseleave', () => { if(selected?.id !== p.id) p._body.setAttribute('stroke-width', '1.5'); });
+  hit.addEventListener('mouseenter',()=>{ if(powerOn) p._body.setAttribute('stroke-width','2.5'); });
+  hit.addEventListener('mouseleave',()=>{ if(selected?.id!==p.id) p._body.setAttribute('stroke-width','1.5'); });
   g.appendChild(hit);
+
+  // ----- DRAG LOGIC -----
+  // A press with <3px of movement counts as a click (select/deselect).
+  // Anything more is a drag: chip follows the pointer, wires re-route live.
+  // When the DRAG toggle is off, chips are locked: presses are clicks only.
+  let dragInfo=null;
+  chipGroups.push(g);
+  g.addEventListener('pointerdown',ev=>{
+    if(ev.pointerType==='mouse'&&ev.button!==0)return;
+    if(!dragEnabled){dragInfo={moved:false};return;} // locked: click-only, native scroll preserved
+    ev.preventDefault();
+    svg.appendChild(g); // bring to front while dragging
+    const [sx,sy]=svgPt(ev);
+    dragInfo={ox:sx-p.x,oy:sy-p.y,moved:false};
+    try{g.setPointerCapture(ev.pointerId);}catch(e){}
+    g.style.cursor='grabbing';
+  });
+  g.addEventListener('pointermove',ev=>{
+    if(!dragInfo||!dragEnabled||dragInfo.ox===undefined)return;
+    const [sx,sy]=svgPt(ev);
+    const nx=Math.min(986-p.w,Math.max(14,sx-dragInfo.ox));
+    const ny=Math.min(364-p.h,Math.max(16,sy-dragInfo.oy));
+    if(!dragInfo.moved&&Math.hypot(nx-p.x,ny-p.y)<3)return;
+    dragInfo.moved=true;
+    p.x=nx;p.y=ny;
+    g.setAttribute('transform',`translate(${nx},${ny})`);
+    drawWires();
+  });
+  g.addEventListener('pointerup',()=>{
+    if(!dragInfo)return;
+    const wasClick=!dragInfo.moved;
+    dragInfo=null;
+    g.style.cursor=dragEnabled?'grab':'pointer';
+    if(wasClick)selectP(p);
+  });
+  g.addEventListener('pointercancel',()=>{dragInfo=null;g.style.cursor=dragEnabled?'grab':'pointer';});
+
   svg.appendChild(g);
 });
 
@@ -423,7 +515,7 @@ function applyPower(){
   document.getElementById('pe-icon').textContent=powerOn?'🔌':'⏻';
   document.getElementById('pe-txt').innerHTML=powerOn
     ?'TAP A COMPONENT<br><span style="font-size:16px;color:#bdab8e">to power it up</span>'
-    :'SYSTEM OFFLINE<br><span style="font-size:20px;color:#bdab8e">press the POWER switch on the top right of the board to boot up</span>';
+    :'<span style="font-size:20px;color:#bdab8e">SYSTEM OFFLINE</span><br><span style="font-size:20px;color:#bdab8e">press the POWER switch on the top right of the board to boot up</span>';
   if(scList)scList.style.display=powerOn?'flex':'none';
 }
 
@@ -513,6 +605,22 @@ function selectP(p){
   }
 }
 
+/* ---------- DRAG TOGGLE ---------- */
+function applyDrag(){
+  chipGroups.forEach(g=>{
+    g.style.cursor=dragEnabled?'grab':'pointer';
+    g.style.touchAction=dragEnabled?'none':'auto';
+  });
+  const b=document.getElementById('dragbtn');
+  if(b){
+    b.textContent=dragEnabled?'🔓 DRAG: ON':'🔒 DRAG: OFF';
+    b.style.color=dragEnabled?'#1a6b3a':'#6b5b45';
+    b.style.borderColor=dragEnabled?'#1a6b3a66':'#cfc7b6';
+  }
+}
+function toggleDrag(){dragEnabled=!dragEnabled;applyDrag();}
+window.toggleDrag=toggleDrag;
+
 function zm(d){
   zoom=d===0?1:Math.min(2,Math.max(0.5,zoom+d));
   document.getElementById('bbsvg').style.transform=`scale(${zoom})`;
@@ -520,13 +628,15 @@ function zm(d){
 window.zm=zm;
 window.selectP=selectP;
 
-// initialize power state instantly (no transition flash), then enable fades
+// initialize power + drag state instantly (no transition flash), then enable fades
 powerOn=POWER_ON_AT_START;
 applyPower();
+applyDrag();
 requestAnimationFrame(()=>{
   wireG.style.transition='opacity 0.45s';
   hintT.style.transition='opacity 0.45s';
   d1Glow.style.transition='opacity 0.3s';
+  swGlow.style.opacity=swGlow.style.opacity; // touch to flush
   swGlow.style.transition='opacity 0.3s';
 });
 }
