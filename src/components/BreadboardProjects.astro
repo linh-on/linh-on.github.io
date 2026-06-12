@@ -93,13 +93,14 @@
     <div class="board-col">
       <div class="rail rail-t" id="rt"></div>
       <div class="svg-area">
-        <svg id="bbsvg" viewBox="0 0 1000 580" preserveAspectRatio="xMidYMid meet" style="display:block; width:100%; height:100%; transform-origin:center;"></svg>
+        <svg id="bbsvg" viewBox="0 0 1000 580" preserveAspectRatio="xMidYMid slice" style="display:block; width:100%; height:100%; cursor:grab; touch-action:none;"></svg>
       </div>
       <div class="rail rail-b" id="rb"></div>
       <div class="foot">
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
           <button class="zb" id="dragbtn" onclick="toggleDrag()">🔓 DRAG: ON</button>
           <div class="fstatus" id="fstatus">● ALL SYSTEMS OPERATIONAL</div>
+          <div class="fstatus" style="color:#a09584">✋ DRAG BOARD TO PAN &nbsp;·&nbsp; CTRL+SCROLL TO ZOOM</div>
         </div>
         <div class="zbtns">
           <button class="zb" onclick="zm(-0.2)">− ZOOM</button>
@@ -134,6 +135,17 @@
 // @ts-nocheck
 function initBreadboard() {
 const NS='http://www.w3.org/2000/svg';
+
+/* ---------- BOARD EXTENT & CAMERA ----------
+ The breadboard is twice the default view in each direction, so zooming
+ out reveals MORE board instead of blank space, and the board can be
+ panned around by dragging any empty area. At maximum zoom-out the
+ visible area exactly fits inside the board (never past its edges). */
+const BASE_W=1000,BASE_H=580;            // camera size at zoom = 1 (the default view)
+const BX=-500,BY=-290,BW=2000,BH=1160;   // full board extent (default view sits centered)
+const CHANNELS=[-192,-8,176,360,544,728];// horizontal DIP-channel dividers across the board
+const ZMIN=Math.max(BASE_W/BW,BASE_H/BH);// fully zoomed out = board still fills the view
+const ZMAX=2;
 
 // Set to true to have the board already powered on when the page loads.
 const POWER_ON_AT_START=false;
@@ -175,7 +187,7 @@ const PROJECTS=[
  Routes are recomputed every drag frame by drawWires().
 */
 const WIRES=[
-  {a:{x:962,y:2},  b:{x:962,y:8},  color:'#d8281c'}, // supply -> POWER switch
+  {a:{rail:'top'}, b:{x:962,y:8},  color:'#d8281c'}, // supply: + rail -> POWER switch
   {a:{x:927,y:26}, b:{x:943,y:26}, color:'#d8281c'}, // switch -> D1 power indicator
   {a:{rail:'top'},    b:{p:'pawse',dx:40,dy:0},      color:'#d8281c'}, // VCC: top rail -> MCU
   {a:{rail:'bottom'}, b:{p:'arctos',dx:100,dy:92},   color:'#2e2e32'}, // GND: bottom rail -> motor driver
@@ -189,7 +201,7 @@ const WIRES=[
   {a:{p:'spider',dx:170,dy:46},   b:{p:'new',dx:0,dy:46},       color:'#7c3aed'}, // EXP: coprocessor -> expansion slot
 ];
 
-let zoom=1,selected=null,blinkT=[],powerOn=true,dragEnabled=DRAG_ON_AT_START;
+let selected=null,blinkT=[],powerOn=true,dragEnabled=DRAG_ON_AT_START;
 const chipGroups=[];
 const svg=document.getElementById('bbsvg');
 if(!svg) return;
@@ -209,14 +221,14 @@ f.appendChild(el('feDropShadow',{dx:'2',dy:'3',stdDeviation:'2.5','flood-color':
 defs.appendChild(f);
 svg.appendChild(defs);
 
-svg.appendChild(el('rect',{width:1000,height:580,fill:'#efeadd'}));
-svg.appendChild(el('rect',{width:1000,height:580,fill:'url(#h)'}));
-// two DIP-channel ravines split the board into three terminal sections
-[176,360].forEach(cy=>{
-  svg.appendChild(el('rect',{x:0,y:cy,width:1000,height:16,fill:'#e2dcca'}));
-  svg.appendChild(el('rect',{x:0,y:cy+2,width:1000,height:6,fill:'#d8d1bb'}));
-  svg.appendChild(el('line',{x1:0,y1:cy,x2:1000,y2:cy,stroke:'#c6bfa9','stroke-width':1}));
-  svg.appendChild(el('line',{x1:0,y1:cy+16,x2:1000,y2:cy+16,stroke:'#fbf8ef','stroke-width':1}));
+svg.appendChild(el('rect',{x:BX,y:BY,width:BW,height:BH,fill:'#efeadd'}));
+svg.appendChild(el('rect',{x:BX,y:BY,width:BW,height:BH,fill:'url(#h)'}));
+// DIP-channel ravines split the expanded board into terminal sections
+CHANNELS.forEach(cy=>{
+  svg.appendChild(el('rect',{x:BX,y:cy,width:BW,height:16,fill:'#e2dcca'}));
+  svg.appendChild(el('rect',{x:BX,y:cy+2,width:BW,height:6,fill:'#d8d1bb'}));
+  svg.appendChild(el('line',{x1:BX,y1:cy,x2:BX+BW,y2:cy,stroke:'#c6bfa9','stroke-width':1}));
+  svg.appendChild(el('line',{x1:BX,y1:cy+16,x2:BX+BW,y2:cy+16,stroke:'#fbf8ef','stroke-width':1}));
 });
 
 // Power bus rails: red (+) line on top, blue (−) line below, holes in groups of 5,
@@ -239,21 +251,8 @@ svg.appendChild(el('rect',{width:1000,height:580,fill:'url(#h)'}));
   const lb=document.createElement('div');lb.className='rline rline-blue';r.appendChild(lb);
 });
 
-// Row letters: five per terminal-strip section (A–E / F–J / K–O)
-[['ABCDE',36],['FGHIJ',220],['KLMNO',404]].forEach(([ls,y0])=>{
-  ls.split('').forEach((l,i)=>{
-    const y=y0+i*28;
-    svg.appendChild(tx(l,{x:4,y,fill:'#9a9280','font-size':9,'font-family':'monospace'}));
-    svg.appendChild(tx(l,{x:996,y,fill:'#9a9280','font-size':9,'font-family':'monospace','text-anchor':'end'}));
-  });
-});
-for(let i=1;i<=68;i++){
-  if(i%5===0){
-    const x=14+i*14.5;
-    svg.appendChild(tx(String(i),{x,y:13,fill:'#9a9280','font-size':8,'font-family':'monospace','text-anchor':'middle'}));
-    svg.appendChild(tx(String(i),{x,y:570,fill:'#9a9280','font-size':8,'font-family':'monospace','text-anchor':'middle'}));
-  }
-}
+// (row letters and edge column numbers removed — the board now extends
+//  past the default view, so edge labels would float mid-board)
 
 /* ---------- DYNAMIC JUMPER WIRES ---------- */
 const wireG=el('g');
@@ -280,7 +279,7 @@ function endPt(e,other){
   if(e.rail){
     const o=other?endPt(other):null;
     const x=o?o[0]:500;
-    return[x,e.rail==='top'?2:578];
+    return[x,e.rail==='top'?BY+2:BY+BH-2];
   }
   if(e.p){const q=pMap[e.p];return[q.x+e.dx,q.y+e.dy];}
   return[e.x,e.y];
@@ -355,19 +354,19 @@ let wireDrag=null;
 svg.addEventListener('pointermove',ev=>{
   if(!wireDrag)return;
   const[sx,sy]=svgPt(ev);
-  wireDrag.w[wireDrag.end]={x:Math.min(996,Math.max(4,sx)),y:Math.min(576,Math.max(2,sy))};
+  wireDrag.w[wireDrag.end]={x:Math.min(BX+BW-4,Math.max(BX+4,sx)),y:Math.min(BY+BH-2,Math.max(BY+2,sy))};
   drawWires();
 });
 // On release, re-plug the end if it was dropped on something:
-//  - near the top/bottom edge -> becomes a rail tap again
+//  - near the board's top/bottom edge -> becomes a rail tap again
 //  - on or near a chip (8px margin) -> snaps to the chip's nearest edge
 //    and follows that chip from then on
 svg.addEventListener('pointerup',()=>{
   if(!wireDrag)return;
   const w=wireDrag.w,end=wireDrag.end,e=w[end];
   if(e&&typeof e.x==='number'){
-    if(e.y<=12){w[end]={rail:'top'};}
-    else if(e.y>=566){w[end]={rail:'bottom'};}
+    if(e.y<=BY+12){w[end]={rail:'top'};}
+    else if(e.y>=BY+BH-12){w[end]={rail:'bottom'};}
     else{
       for(const p of PROJECTS){
         if(e.x>=p.x-8&&e.x<=p.x+p.w+8&&e.y>=p.y-8&&e.y<=p.y+p.h+8){
@@ -392,9 +391,10 @@ function makeDraggable(group,pos,minX,maxX,minY,maxY){
   let di=null;
   chipGroups.push(group); // picks up cursor + touch-action from the DRAG toggle
   group.addEventListener('pointerdown',ev=>{
-    if(!dragEnabled)return;
     if(ev.pointerType==='mouse'&&ev.button!==0)return;
-    ev.preventDefault();ev.stopPropagation();
+    ev.stopPropagation(); // don't start a board pan from a part
+    if(!dragEnabled)return;
+    ev.preventDefault();
     const[sx,sy]=svgPt(ev);
     di={ox:sx-pos.x,oy:sy-pos.y};
     try{group.setPointerCapture(ev.pointerId);}catch(e){}
@@ -413,13 +413,36 @@ function makeDraggable(group,pos,minX,maxX,minY,maxY){
 }
 
 // Convert a pointer event to SVG user coordinates. Derives scale from the
-// rendered bounding box, so it stays correct under the CSS zoom buttons.
-const VB={x:0,y:0,w:1000,h:580};
+// rendered bounding box + live camera viewBox ('slice' mode: scale is the
+// larger ratio, so the board always covers the container with no gaps).
+const VB={x:0,y:0,w:BASE_W,h:BASE_H};
 function svgPt(ev){
   const r=svg.getBoundingClientRect();
-  const s=Math.min(r.width/VB.w,r.height/VB.h);
+  const s=Math.max(r.width/VB.w,r.height/VB.h);
   const ox=(r.width-VB.w*s)/2,oy=(r.height-VB.h*s)/2;
   return[VB.x+(ev.clientX-r.left-ox)/s,VB.y+(ev.clientY-r.top-oy)/s];
+}
+
+/* ---------- CAMERA: zoom + pan over the expanded board ---------- */
+const cam={cx:BX+BW/2,cy:BY+BH/2,z:1};
+function applyCam(){
+  cam.z=Math.min(ZMAX,Math.max(ZMIN,cam.z));
+  const w=BASE_W/cam.z,h=BASE_H/cam.z;
+  // keep the camera inside the board so blank space never shows
+  cam.cx=Math.min(BX+BW-w/2,Math.max(BX+w/2,cam.cx));
+  cam.cy=Math.min(BY+BH-h/2,Math.max(BY+h/2,cam.cy));
+  VB.x=cam.cx-w/2;VB.y=cam.cy-h/2;VB.w=w;VB.h=h;
+  svg.setAttribute('viewBox',`${VB.x} ${VB.y} ${w} ${h}`);
+}
+// On narrow/tall containers 'slice' crops the sides, which could hide the
+// POWER switch. Fit-zoom guarantees the whole default region stays visible.
+function fitDefault(){
+  const r=svg.getBoundingClientRect();
+  if(!r.width||!r.height)return;
+  const a=r.width/BASE_W,b=r.height/BASE_H;
+  cam.z=Math.min(a,b)/Math.max(a,b); // ≤1; shrinks until the full default region fits
+  cam.cx=BX+BW/2;cam.cy=BY+BH/2;
+  applyCam();
 }
 
 drawWires();
@@ -436,7 +459,7 @@ r1G.appendChild(el('rect',{x:-15,y:-5,width:30,height:10,rx:5,fill:'#d9b38c',str
 });
 r1G.appendChild(tx('R1',{x:0,y:16,'font-size':6.5,'font-family':'monospace',fill:'#8a8273','text-anchor':'middle'}));
 svg.appendChild(r1G);
-makeDraggable(r1G,r1Pos,30,970,10,556);
+makeDraggable(r1G,r1Pos,BX+30,BX+BW-30,BY+10,BY+BH-24);
 
 // D1 power LED (lit only when switched on, draggable)
 const d1Pos={x:918,y:20};
@@ -451,7 +474,7 @@ d1G.appendChild(d1Dome);
 d1G.appendChild(el('circle',{cx:-1.8,cy:-2.5,r:1.6,fill:'#fff',opacity:0.7}));
 d1G.appendChild(tx('D1',{x:0,y:26,'font-size':6.5,'font-family':'monospace',fill:'#8a8273','text-anchor':'middle'}));
 svg.appendChild(d1G);
-makeDraggable(d1G,d1Pos,12,988,10,548);
+makeDraggable(d1G,d1Pos,BX+12,BX+BW-12,BY+10,BY+BH-32);
 
 // POWER push switch — round latching power button, top-right corner
 const swG=el('g',{transform:'translate(962,26)'});
@@ -470,6 +493,7 @@ const swSym=el('g',{stroke:'#88888c','stroke-width':1.9,fill:'none','stroke-line
 swSym.appendChild(el('path',{d:'M-4.2,-3.4 A5.8,5.8 0 1 0 4.2,-3.4'}));
 swSym.appendChild(el('line',{x1:0,y1:-7,x2:0,y2:-0.8}));
 swG.appendChild(swSym);
+swG.addEventListener('pointerdown',ev=>ev.stopPropagation()); // never pan from the switch
 swG.addEventListener('mousedown',()=>swCap.setAttribute('r','8.8'));
 swG.addEventListener('mouseup',()=>swCap.setAttribute('r','9.6'));
 swG.addEventListener('mouseleave',()=>swCap.setAttribute('r','9.6'));
@@ -563,6 +587,7 @@ PROJECTS.forEach(p=>{
   chipGroups.push(g);
   g.addEventListener('pointerdown',ev=>{
     if(ev.pointerType==='mouse'&&ev.button!==0)return;
+    ev.stopPropagation(); // chip presses select/drag the chip, never pan the board
     if(!dragEnabled){dragInfo={moved:false};return;} // locked: click-only, native scroll preserved
     ev.preventDefault();
     svg.appendChild(g);svg.appendChild(handleG); // chip to front, wire handles above it
@@ -574,8 +599,8 @@ PROJECTS.forEach(p=>{
   g.addEventListener('pointermove',ev=>{
     if(!dragInfo||!dragEnabled||dragInfo.ox===undefined)return;
     const [sx,sy]=svgPt(ev);
-    const nx=Math.min(990-p.w,Math.max(10,sx-dragInfo.ox));
-    const ny=Math.min(568-p.h,Math.max(12,sy-dragInfo.oy));
+    const nx=Math.min(BX+BW-10-p.w,Math.max(BX+10,sx-dragInfo.ox));
+    const ny=Math.min(BY+BH-12-p.h,Math.max(BY+12,sy-dragInfo.oy));
     if(!dragInfo.moved&&Math.hypot(nx-p.x,ny-p.y)<3)return;
     dragInfo.moved=true;
     p.x=nx;p.y=ny;
@@ -638,7 +663,7 @@ function applyPower(){
   document.getElementById('pe-icon').textContent=powerOn?'🔌':'⏻';
   document.getElementById('pe-txt').innerHTML=powerOn
     ?'TAP A COMPONENT<br><span style="font-size:16px;color:#bdab8e">to power it up</span>'
-    :'<span style="font-size:24px;color:#bdab8e;font-weight:bold;">SYSTEM OFFLINE</span><br><span style="font-size:24px;color:#bdab8e">press the POWER switch on the top right of the board to boot up</span>';
+    :'<span style="font-size:24px;color:#bdab8e; font-weight:bold;">SYSTEM OFFLINE</span><br><span style="font-size:24px;color:#bdab8e">press the POWER switch on the top right of the board to boot up</span>';
   if(scList)scList.style.display=powerOn?'flex':'none';
 }
 
@@ -745,16 +770,82 @@ function toggleDrag(){dragEnabled=!dragEnabled;applyDrag();drawWires();}
 window.toggleDrag=toggleDrag;
 
 function zm(d){
-  zoom=d===0?1:Math.min(2,Math.max(0.5,zoom+d));
-  document.getElementById('bbsvg').style.transform=`scale(${zoom})`;
+  if(d===0){fitDefault();return;} // RESET: recenter on the default view
+  cam.z=Math.min(ZMAX,Math.max(ZMIN,cam.z+d));
+  applyCam();
 }
 window.zm=zm;
 window.selectP=selectP;
+
+/* ---------- BOARD PANNING (drag empty board) + PINCH / CTRL+WHEEL ZOOM ---------- */
+// Chips, parts, wire handles and the switch all stopPropagation on
+// pointerdown, so anything that reaches the svg itself is "empty board".
+const panPtrs=new Map();
+let panInfo=null,pinchInfo=null;
+svg.addEventListener('pointerdown',ev=>{
+  if(ev.pointerType==='mouse'&&ev.button!==0)return;
+  panPtrs.set(ev.pointerId,[ev.clientX,ev.clientY]);
+  try{svg.setPointerCapture(ev.pointerId);}catch(e){}
+  if(panPtrs.size===1){
+    panInfo={x:ev.clientX,y:ev.clientY,cx:cam.cx,cy:cam.cy};
+    svg.style.cursor='grabbing';
+  }else if(panPtrs.size===2){
+    panInfo=null;
+    const[a,b]=[...panPtrs.values()];
+    pinchInfo={d:Math.hypot(a[0]-b[0],a[1]-b[1]),z:cam.z};
+  }
+});
+svg.addEventListener('pointermove',ev=>{
+  if(!panPtrs.has(ev.pointerId))return;
+  panPtrs.set(ev.pointerId,[ev.clientX,ev.clientY]);
+  if(pinchInfo&&panPtrs.size===2){
+    const[a,b]=[...panPtrs.values()];
+    const d=Math.hypot(a[0]-b[0],a[1]-b[1]);
+    if(pinchInfo.d>0){cam.z=pinchInfo.z*d/pinchInfo.d;applyCam();}
+    return;
+  }
+  if(!panInfo)return;
+  const r=svg.getBoundingClientRect();
+  const s=Math.max(r.width/VB.w,r.height/VB.h); // rendered px per board unit
+  cam.cx=panInfo.cx-(ev.clientX-panInfo.x)/s;
+  cam.cy=panInfo.cy-(ev.clientY-panInfo.y)/s;
+  applyCam();
+});
+function endPan(ev){
+  panPtrs.delete(ev.pointerId);
+  pinchInfo=null;
+  if(panPtrs.size===1){ // dropped from pinch to one finger: restart pan cleanly
+    const[[ ,pt]]=[...panPtrs.entries()];
+    panInfo={x:pt[0],y:pt[1],cx:cam.cx,cy:cam.cy};
+  }else{
+    panInfo=null;
+    svg.style.cursor='grab';
+  }
+}
+svg.addEventListener('pointerup',endPan);
+svg.addEventListener('pointercancel',endPan);
+
+// Ctrl/Cmd + scroll (and trackpad pinch) zooms toward the cursor
+svg.addEventListener('wheel',ev=>{
+  if(!ev.ctrlKey&&!ev.metaKey)return;
+  ev.preventDefault();
+  const[wx,wy]=svgPt(ev);
+  const oldZ=cam.z;
+  cam.z=Math.min(ZMAX,Math.max(ZMIN,cam.z*(ev.deltaY<0?1.12:1/1.12)));
+  // keep the board point under the cursor fixed while zooming
+  cam.cx=wx-(wx-cam.cx)*(oldZ/cam.z);
+  cam.cy=wy-(wy-cam.cy)*(oldZ/cam.z);
+  applyCam();
+},{passive:false});
+
+window.addEventListener('resize',applyCam);
 
 // initialize power + drag state instantly (no transition flash), then enable fades
 powerOn=POWER_ON_AT_START;
 applyPower();
 applyDrag();
+fitDefault();
+requestAnimationFrame(fitDefault); // refit once layout fully settles
 requestAnimationFrame(()=>{
   wireG.style.transition='opacity 0.45s';
   hintT.style.transition='opacity 0.45s';

@@ -43,13 +43,16 @@ function formatDate(dateStr: string): string {
   <section class="px-8 md:px-20 lg:px-32 py-12 flex flex-col lg:flex-row gap-10 items-center">
     <!-- Left: profile info -->
     <div class="flex flex-col items-center lg:items-start gap-5 lg:w-1/2">
-      <Image
-        src={profilePic}
-        alt="Linh On"
-        class="w-36 h-36 rounded-full object-cover border-4 border-gray-100 shadow-md"
-        width={144}
-        height={144}
-      />
+      <div class="relative">
+        <div class="speech-bubble">Hello, I'm Linh!</div>
+        <Image
+          src={profilePic}
+          alt="Linh On"
+          class="w-48 h-48 rounded-full object-cover border-4 border-gray-100 shadow-md"
+          width={192}
+          height={192}
+        />
+      </div>
       <div class="text-center lg:text-left">
         <h1 class="text-4xl font-bold text-gray-900 mb-2">Linh On</h1>
         <p class="text-lg text-gray-500 font-medium">Software Engineer &amp; Embedded Systems Engineer</p>
@@ -85,37 +88,43 @@ function formatDate(dateStr: string): string {
       </div>
     </div>
 
-    <!-- Right: static breadboard preview card -->
-    <div class="lg:w-1/2 w-full">
-      <div style="background:#e8e3d8;border-radius:10px;padding:20px;border:2px solid #c8c2b4;font-family:'Courier New',monospace;">
-        <div style="font-size:10px;color:#1a6b3a;letter-spacing:3px;font-weight:bold;margin-bottom:4px;">● PROJECT BREADBOARD</div>
-        <div style="font-size:9px;color:#999;margin-bottom:16px;">Interactive circuit board — 6 projects wired up</div>
-        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">
-          <div style="background:#0f1f16;border:1.5px solid #16a34a;border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:10px;">
-            <span style="font-size:18px;">🐾</span>
-            <div>
-              <div style="font-size:11px;font-weight:bold;color:#22c55e;letter-spacing:1px;">PAWSE</div>
-              <div style="font-size:8px;color:#666;">Python · MobileBERT · ESP32 · BLE</div>
-            </div>
-          </div>
-          <div style="background:#0c1628;border:1.5px solid #1d4ed8;border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:10px;">
-            <span style="font-size:18px;">♿</span>
-            <div>
-              <div style="font-size:11px;font-weight:bold;color:#60a5fa;letter-spacing:1px;">ABLEWARE</div>
-              <div style="font-size:8px;color:#666;">Python · Raspberry Pi · WebSocket · FastAPI</div>
-            </div>
-          </div>
-          <div style="background:#150e2a;border:1.5px solid #7c3aed;border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:10px;">
-            <span style="font-size:18px;">🦾</span>
-            <div>
-              <div style="font-size:11px;font-weight:bold;color:#a78bfa;letter-spacing:1px;">ARCTOS 6-DOF</div>
-              <div style="font-size:8px;color:#666;">Arduino · C++ · Python · 3D Printing</div>
-            </div>
-          </div>
+    <!-- Right: mini-breadboard preview card -->
+    <div class="lg:w-2/3 w-full">
+      <div class="bb-preview">
+        <div class="bbp-rail">
+          <span class="bbp-mark bbp-mark-red">+</span>
+          <span class="bbp-line bbp-line-red"></span>
+          <span class="bbp-mark bbp-mark-red">+</span>
         </div>
-        <a href="/projects" style="display:block;text-align:center;font-size:10px;color:#1a6b3a;letter-spacing:2px;padding:8px;border:1px solid #1a6b3a33;border-radius:4px;text-decoration:none;background:#1a6b3a0d;">
-          View Interactive Breadboard →
-        </a>
+
+        <div class="bbp-head">● PROJECT BREADBOARD</div>
+        <div class="bbp-sub">An interactive breadboard — explore each project as a hardware component.</div>
+
+        <div class="bbp-chips">
+          <a class="bbp-chip" href="/projects" style="--chip-bg:#ecfdf5;--chip-name:#16a34a;--led:#16a34a;">
+            <span class="bbp-led"></span>
+            <span class="bbp-name">PAWSE</span>
+            <span class="bbp-tech">Python · MobileBERT · ESP32 · BLE</span>
+          </a>
+          <a class="bbp-chip" href="/projects" style="--chip-bg:#eef2ff;--chip-name:#4523cb;--led:#4523cb;">
+            <span class="bbp-led"></span>
+            <span class="bbp-name">ABLEWARE</span>
+            <span class="bbp-tech">Python · Raspberry Pi · WebSocket · FastAPI</span>
+          </a>
+          <a class="bbp-chip" href="/projects" style="--chip-bg:#f5f3ff;--chip-name:#7c3aed;--led:#7c3aed;">
+            <span class="bbp-led"></span>
+            <span class="bbp-name">ARCTOS 6-DOF</span>
+            <span class="bbp-tech">Arduino · C++ · Python · 3D Printing</span>
+          </a>
+        </div>
+
+        <a href="/projects" class="bbp-cta">VIEW INTERACTIVE BREADBOARD <span>→</span></a>
+
+        <div class="bbp-rail bbp-rail-bottom">
+          <span class="bbp-mark bbp-mark-blue">−</span>
+          <span class="bbp-line bbp-line-blue"></span>
+          <span class="bbp-mark bbp-mark-blue">−</span>
+        </div>
       </div>
     </div>
   </section>
@@ -384,6 +393,142 @@ function formatDate(dateStr: string): string {
 </Layout>
 
 <style>
+  /* ── Speech bubble on profile picture ── */
+  .speech-bubble {
+    position: absolute;
+    top: -16px;
+    left: 68%;
+    background: #1a6b3a;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 8px 14px;
+    border-radius: 14px;
+    border-bottom-left-radius: 4px;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(26, 107, 58, 0.3);
+    animation: bubble-bob 3s ease-in-out infinite;
+    z-index: 10;
+  }
+  .speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 14px;
+    width: 11px;
+    height: 11px;
+    background: #1a6b3a;
+    transform: rotate(45deg);
+    border-radius: 2px;
+  }
+  @keyframes bubble-bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  /* ── Mini-breadboard preview card (mirrors the /projects board palette) ── */
+  .bb-preview {
+    font-family: 'Courier New', monospace;
+    background:
+      radial-gradient(#cdc6b4 1.1px, transparent 1.4px) 0 0 / 16px 16px,
+      #efeadd;
+    border: 1px solid #cfc7b6;
+    border-radius: 16px;
+    padding: 16px 22px;
+    box-shadow: 0 6px 18px rgba(90, 70, 40, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+  .bbp-rail {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .bbp-rail-bottom {
+    margin-bottom: 0;
+    margin-top: 14px;
+  }
+  .bbp-line { flex: 1; height: 2.5px; border-radius: 2px; }
+  .bbp-line-red { background: #d8281c; }
+  .bbp-line-blue { background: #2a5ac4; }
+  .bbp-mark { font-weight: bold; font-size: 14px; line-height: 1; }
+  .bbp-mark-red { color: #d8281c; }
+  .bbp-mark-blue { color: #2a5ac4; }
+  .bbp-head {
+    font-size: 20px;
+    letter-spacing: 3px;
+    font-weight: bold;
+    color: #1a6b3a;
+  }
+  .bbp-sub {
+    font-size: 16px;
+    font-weight: bold;
+    color: #8a7a64;
+    margin: 4px 0 14px;
+  }
+  .bbp-chips {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+ .bbp-chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--chip-bg, #f5f3ff);
+  border: 1.5px solid rgba(120, 113, 108, 0.25);
+  border-radius: 10px;
+  padding: 10px 14px;
+  text-decoration: none;
+  box-shadow: 0 3px 8px rgba(58, 46, 26, 0.12);
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+  .bbp-chip:hover {
+    transform: translateY(-2px);
+    border-color: #ee7a23;
+    box-shadow: 0 6px 14px rgba(58, 46, 26, 0.3);
+  }
+  .bbp-led {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--led, #4ade80);
+    box-shadow: 0 0 7px var(--led, #4ade80);
+    flex-shrink: 0;
+  }
+  .bbp-name {
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    color: var(--chip-name, #4ade80);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .bbp-tech {
+    color: #b8b8c0;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .bbp-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ee7a23;
+    color: #2b1505;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: 13px;
+    padding: 13px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .bbp-cta:hover { background: #e06a12; }
+
+  /* ── Section highlight (existing) ── */
   .section-label {
     color: #aaa;
     transition: color 0.4s ease, text-shadow 0.4s ease;
