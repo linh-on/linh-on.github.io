@@ -4,21 +4,27 @@
 <div class="bb-outer">
 <style is:global>
 .bb-outer, .bb-outer *{box-sizing:border-box;margin:0;padding:0;}
-.bb-outer{width:100%;height:720px;min-height:600px;display:block;}
-.wrap{font-family:'Courier New',monospace;background:#fdfaf3;padding:16px 20px 16px;border-radius:0;height:100%;display:flex;flex-direction:column;}
-.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
-.ttl{font-size:20px;color:#1a6b3a;letter-spacing:4px;font-weight:bold;}
-.leg{display:flex;gap:16px;font-size:13px;color:#8a7a64;flex-wrap:wrap;}
+.bb-outer{width:100%;height:min(820px,calc(100vh - 130px));min-height:540px;display:block;}
+.wrap{font-family:'Courier New',monospace;background:#fdfaf3;padding:12px 16px 12px;border-radius:0;height:100%;display:flex;flex-direction:column;}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
+.ttl{font-size:24px;color:#1a6b3a;letter-spacing:4px;font-weight:bold;}
+.leg{display:flex;gap:22px;font-size:24px;font-weight:bold;color:#6b5b45;flex-wrap:wrap;margin-left:auto;align-items:center;}
 .main{display:flex;gap:16px;flex:1;min-height:0;}
 
 /* ---------- BOARD ---------- */
 .board-col{flex:1 1 0;min-width:0;display:flex;flex-direction:column;background:#e9e4d8;border:1px solid #cfc7b6;border-radius:14px;overflow:hidden;box-shadow:0 4px 14px rgba(90,70,40,0.08), inset 0 1px 0 rgba(255,255,255,0.6);}
-.rail{height:18px;display:flex;align-items:center;padding:0 10px;gap:3px;flex-shrink:0;}
+.rail{height:36px;display:flex;flex-direction:column;justify-content:space-between;padding:5px 36px;flex-shrink:0;position:relative;}
 .rail-t{background:linear-gradient(#f0ece1,#e9e4d8);border-bottom:1px solid #d8d2c2;}
 .rail-b{background:linear-gradient(#e9e4d8,#f0ece1);border-top:1px solid #d8d2c2;}
-.rail-t::before{content:'+ − ';color:#c43a2a;font-size:10px;font-family:monospace;letter-spacing:2px;}
-.rail-b::before{content:'+ − ';color:#2a5ac4;font-size:10px;font-family:monospace;letter-spacing:2px;}
-.rdot{width:3px;height:3px;background:#bdb6a4;border-radius:50%;box-shadow:inset 0 1px 1px rgba(0,0,0,0.25);}
+.rline{height:2.5px;border-radius:2px;}
+.rline-red{background:#d8281c;}
+.rline-blue{background:#2a5ac4;}
+.rholes{display:flex;justify-content:space-between;align-items:center;flex:1;padding:3px 2px;}
+.rgrp{display:flex;gap:8px;}
+.rhole{width:5px;height:5px;background:#3a362c;border-radius:1px;box-shadow:0 0 0 2px #cdc6b4, inset 0 1px 1px rgba(0,0,0,0.6);}
+.rlbl{position:absolute;font-size:13px;font-weight:bold;font-family:monospace;line-height:1;}
+.rlbl-red{color:#d8281c;}
+.rlbl-blue{color:#2a5ac4;}
 .svg-area{flex:1;overflow:hidden;display:flex;min-height:0;background:#efeadd;}
 .foot{padding:7px 12px;display:flex;align-items:center;justify-content:space-between;background:#f0ece1;border-top:1px solid #d8d2c2;flex-wrap:wrap;gap:4px;flex-shrink:0;}
 .fstatus{font-size:11px;color:#1a6b3a;letter-spacing:1px;}
@@ -27,13 +33,13 @@
 .zb:hover{background:#f3eee2;color:#3a2e20;}
 
 /* ---------- DETAIL PANEL ---------- */
-.panel-col{flex:0 0 38%;max-width:420px;background:#faf3e4;border:1.5px solid #e9dcc3;border-radius:16px;display:flex;flex-direction:column;height:100%;overflow:hidden;box-shadow:0 6px 18px rgba(120,85,30,0.08);}
-.panel-hdr{padding:20px 20px 16px;border-bottom:1px solid #ecdfc6;background:#faf3e4;}
-.panel-name{font-size:21px;font-weight:900;letter-spacing:0.5px;margin-top:0;color:#2b2014;font-family:'Courier New',monospace;line-height:1.1;}
+.panel-col{flex:0 0 40%;max-width:460px;background:#faf3e4;border:1.5px solid #e9dcc3;border-radius:16px;display:flex;flex-direction:column;height:100%;overflow:hidden;box-shadow:0 6px 18px rgba(120,85,30,0.08);}
+.panel-hdr{padding:16px 18px 12px;border-bottom:1px solid #ecdfc6;background:#faf3e4;}
+.panel-name{font-size:19px;font-weight:900;letter-spacing:0.5px;margin-top:0;color:#2b2014;font-family:'Courier New',monospace;line-height:1.1;}
 .panel-sub{font-size:12px;color:#8a7a64;margin-top:4px;font-family:sans-serif;font-weight:400;letter-spacing:0;}
 .cls-btn{background:none;border:1px solid #d9cbab;color:#a08e72;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:14px;font-family:monospace;flex-shrink:0;transition:all 0.15s;line-height:1;}
 .cls-btn:hover{color:#3a2e20;border-color:#b49b73;background:#f3e9d4;}
-.panel-body{flex:1;overflow-y:auto;padding:18px 20px 24px;display:flex;flex-direction:column;gap:16px;background:#faf3e4;}
+.panel-body{flex:1;overflow-y:auto;padding:14px 18px 20px;display:flex;flex-direction:column;gap:14px;background:#faf3e4;}
 .pdiv{height:1px;background:#ecdfc6;margin:0;}
 .plbl{font-size:10px;letter-spacing:3px;font-weight:700;margin-bottom:10px;color:#6b5b45;font-family:'Courier New',monospace;}
 .pdesc{font-size:13px;color:#3a2e20;line-height:1.8;font-family:'Courier New',monospace;}
@@ -52,10 +58,10 @@
 .plink-main:hover{background:#e06a12;}
 .plinks{display:flex;flex-direction:column;gap:10px;}
 .pempty{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;align-items:center;justify-content:safe center;padding:16px;gap:10px;}
-.pempty-icon{font-size:64px;}
-.pempty-txt{font-size:16px;color:#a08e72;text-align:center;line-height:1.8;font-family:'Courier New',monospace;letter-spacing:2px;}
-.sc-list{width:100%;margin-top:10px;display:flex;flex-direction:column;gap:8px;}
-.scb{width:100%;background:#fdf8ee;border:1.5px solid #e5d7bb;color:#4a3c2a;padding:14px 16px;border-radius:10px;cursor:pointer;font-size:13px;font-family:monospace;text-align:left;letter-spacing:1.5px;transition:background 0.15s;font-weight:600;}
+.pempty-icon{font-size:48px;}
+.pempty-txt{font-size:14px;color:#a08e72;text-align:center;line-height:1.8;font-family:'Courier New',monospace;letter-spacing:2px;}
+.sc-list{width:100%;margin-top:8px;display:flex;flex-direction:column;gap:7px;}
+.scb{width:100%;background:#fdf8ee;border:1.5px solid #e5d7bb;color:#4a3c2a;padding:11px 14px;border-radius:10px;cursor:pointer;font-size:12px;font-family:monospace;text-align:left;letter-spacing:1.5px;transition:background 0.15s;font-weight:600;}
 .scb:hover{background:#f3e9d4;color:#2b2014;}
 
 /* ---------- RESPONSIVE ---------- */
@@ -64,12 +70,12 @@
   .wrap{height:auto;padding:14px 12px 16px;}
   .main{flex-direction:column;min-height:0;}
   .board-col{flex:none;width:100%;}
-  .svg-area{aspect-ratio:1000/380;}
+  .svg-area{aspect-ratio:1000/580;}
   .panel-col{flex:none;width:100%;max-width:none;height:auto;}
   .panel-body{overflow-y:visible;}
   .pempty{overflow-y:visible;}
   .ttl{font-size:17px;letter-spacing:3px;}
-  .leg{font-size:11px;gap:10px;}
+  .leg{font-size:13px;gap:14px;}
 }
 </style>
 
@@ -79,9 +85,6 @@
       <div class="ttl">● PROJECT BREADBOARD</div>
     </div>
     <div class="leg">
-      <span><span style="color:#dc2626">●</span> POWER</span>
-      <span><span style="color:#2563eb">●</span> SIGNAL</span>
-      <span><span style="color:#ca8a04">●</span> DATA</span>
       <span id="sys-status" style="color:#1a6b3a">● SYSTEM: IDLE</span>
     </div>
   </div>
@@ -90,7 +93,7 @@
     <div class="board-col">
       <div class="rail rail-t" id="rt"></div>
       <div class="svg-area">
-        <svg id="bbsvg" viewBox="0 0 1000 380" preserveAspectRatio="xMidYMid meet" style="display:block; width:100%; height:100%; transform-origin:center;"></svg>
+        <svg id="bbsvg" viewBox="0 0 1000 580" preserveAspectRatio="xMidYMid meet" style="display:block; width:100%; height:100%; transform-origin:center;"></svg>
       </div>
       <div class="rail rail-b" id="rb"></div>
       <div class="foot">
@@ -145,22 +148,23 @@ const DRAG_ON_AT_START=true;
    DEEP DIABETES (analog sensor) ──SIGNAL──> PAWSE
    OBSTACLE BOT (ToF sensor board) ──I2C DATA──> PAWSE
    PAWSE ──DATA+CLK──> ABLEWARE (display module)
-   PAWSE ──PWM──> ARCTOS (motor driver)
-   ABLEWARE ──> DRAMA TRACKER (memory IC) ──> SPIDER (coprocessor)
-   GND rail ──> OBSTACLE BOT
+   PAWSE ──PWM──> ARCTOS (motor driver, bottom section)
+   ABLEWARE ──> DRAMA TRACKER (memory IC) ──> SPIDER (coprocessor) ──> NEW (expansion slot)
+   GND rail ──> ARCTOS
  Components are draggable: wires are anchored to chips and re-route live.
  When the switch is OFF, nothing downstream has power: wires read dead,
  silkscreen text is dark, status LEDs are unlit, and chips don't respond to clicks.
 */
 
 const PROJECTS=[
-  {id:'pawse',name:'PAWSE',subtitle:'Smart Notification Classifier',bg:'#1b1b1f',border:'#16a34a',label:'#4ade80',icon:'🐾',x:40,y:28,w:250,h:122,pins:5,shape:'ic',tech:['Python','MobileBERT','ESP32','React Native','BLE','Supabase'],desc:'A phone lockbox that physically locks your phone during focus sessions, with AI-powered notification filtering.',highlights:['95%+ MobileBERT classifier accuracy','BLE hardware-software bridge','FreeRTOS firmware on ESP32','School mode with roster polling'],awards:['Semifinalist — UCI Stella Zhang New Venture Competition','Semifinalist — Beall & Butterworth 2026'],github:'https://github.com/linh-on/pawse',page:'/projects/pawse'},
-  {id:'ableware',name:'ABLEWARE',subtitle:'Assistive Lift System',bg:'#11301c',border:'#1d4ed8',label:'#6ee7a0',icon:'♿',x:340,y:32,w:230,h:115,pins:5,shape:'display',tech:['Python','Raspberry Pi','Arduino','WebSocket','FastAPI','TypeScript'],desc:'Voice-controlled assistive lift. A Pi listens for wake words and sends commands over WebSocket to a hub coordinating hardware and simulation.',highlights:['Wake word + Vosk voice pipeline','WebSocket hub architecture','PyBullet 3D simulation','React/TypeScript dashboard'],awards:['2nd Place — 2026 UCI MCS ICS Expo'],github:'https://github.com/EliyaKhajeiee/ableware-pi-final',page:'/projects/ableware'},
-  {id:'drama',name:'DRAMA TRACKER',subtitle:'Movie Web App',bg:'#231c0e',border:'#b45309',label:'#fcd34d',icon:'🎬',x:630,y:40,w:200,h:92,pins:3,shape:'ic',tech:['React.js','Node.js','PostgreSQL','Python','Flask','TMDB API'],desc:'Full-stack movie tracking app with a content-based filtering recommendation engine using TF-IDF cosine similarity.',highlights:['TF-IDF content filtering','TMDB API integration','Flask recommendation service','Vercel + Render deployed'],awards:[],github:'https://github.com/linh-on/drama-tracker',page:'/projects/drama-tracker'},
-  {id:'diabetes',name:'DEEP DIABETES',subtitle:'Risk Prediction Model',bg:'#16335e',border:'#0e7490',label:'#7dd3fc',icon:'🧬',x:40,y:250,w:200,h:92,pins:3,shape:'sensor',tech:['Python','PyTorch','Scikit-learn','Pandas','NumPy'],desc:'Deep MLP for diabetes risk prediction on CDC BRFSS 2015 data, outperforming baseline classifiers.',highlights:['Weighted BCE for imbalance','AdamW + CosineAnnealing LR','Early stopping on ROC-AUC','Feature ablation analysis'],awards:[],github:'https://github.com/juliethecao/deep-diabetes-risk',page:'/projects/deep-diabetes-risk'},
-  {id:'obstacle',name:'OBSTACLE BOT',subtitle:'Autonomous Avoidance Vehicle',bg:'#8f2424',border:'#b91c1c',label:'#ffe3c2',icon:'🚗',x:290,y:250,w:210,h:92,pins:3,shape:'sensor',tech:['Arduino','C++','VL53L1X ToF','TCA9548A','DRV8835'],desc:'Arduino-based autonomous vehicle that navigates around obstacles using time-of-flight distance sensors and differential drive motors.',highlights:['VL53L1X ToF sensor array','TCA9548A I2C multiplexer','DRV8835 motor driver control','Real-time avoidance logic'],awards:[],github:'https://github.com/linh-on',page:'/projects/obstacle-avoidance-vehicle'},
-  {id:'arctos',name:'ARCTOS 6-DOF',subtitle:'Robotic Arm',bg:'#1e1a2e',border:'#7c3aed',label:'#c4b5fd',icon:'🦾',x:560,y:250,w:200,h:92,pins:3,shape:'ic',tech:['Arduino','C++','Python','Arctos Studio','3D Printing'],desc:'6-DOF robotic arm using Arduino MEGA coordinating stepper motors across all joints for competition tasks.',highlights:['6-joint stepper motor control','Custom CAD end-effector','Waypoint programming','Cup stacking & weight lift'],awards:[],github:'https://github.com/linh-on',page:'/projects/arctos-robotic-arm'},
-  {id:'spider',name:'SPIDER DROID',subtitle:'Autonomous Robot',bg:'#241313',border:'#b91c1c',label:'#fca5a5',icon:'🕷️',x:810,y:250,w:170,h:92,pins:3,shape:'ic',tech:['Python','PyTorch','PPO','Jetson Nano','LiDAR'],desc:'3D-printed spider robot trained with PPO RL to walk autonomously across varied terrain, deployed on Jetson Nano.',highlights:['PPO reinforcement learning','LiDAR obstacle detection','Jetson Nano deployment','No external compute'],awards:[],github:'https://github.com/linh-on',page:'/projects/ai-spider-droid'},
+  {id:'pawse',name:'PAWSE',subtitle:'Smart Notification Classifier',bg:'#1b1b1f',border:'#16a34a',label:'#4ade80',icon:'🐾',x:130,y:36,w:250,h:122,pins:5,shape:'ic',tech:['Python','MobileBERT','ESP32','React Native','BLE','Supabase'],desc:'A phone lockbox that physically locks your phone during focus sessions, with AI-powered notification filtering.',highlights:['95%+ MobileBERT classifier accuracy','BLE hardware-software bridge','FreeRTOS firmware on ESP32','School mode with roster polling'],awards:['Semifinalist — UCI Stella Zhang New Venture Competition','Semifinalist — Beall & Butterworth 2026'],github:'https://github.com/linh-on/pawse',page:'/projects/pawse'},
+  {id:'ableware',name:'ABLEWARE',subtitle:'Assistive Lift System',bg:'#11301c',border:'#1d4ed8',label:'#6ee7a0',icon:'♿',x:530,y:33,w:230,h:115,pins:5,shape:'display',tech:['Python','Raspberry Pi','Arduino','WebSocket','FastAPI','TypeScript'],desc:'Voice-controlled assistive lift. A Pi listens for wake words and sends commands over WebSocket to a hub coordinating hardware and simulation.',highlights:['Wake word + Vosk voice pipeline','WebSocket hub architecture','PyBullet 3D simulation','React/TypeScript dashboard'],awards:['2nd Place — 2026 UCI MCS ICS Expo'],github:'https://github.com/EliyaKhajeiee/ableware-pi-final',page:'/projects/ableware'},
+  {id:'drama',name:'DRAMA TRACKER',subtitle:'Movie Web App',bg:'#231c0e',border:'#b45309',label:'#fcd34d',icon:'🎬',x:612,y:231,w:200,h:92,pins:3,shape:'ic',tech:['React.js','Node.js','PostgreSQL','Python','Flask','TMDB API'],desc:'Full-stack movie tracking app with a content-based filtering recommendation engine using TF-IDF cosine similarity.',highlights:['TF-IDF content filtering','TMDB API integration','Flask recommendation service','Vercel + Render deployed'],awards:[],github:'https://github.com/linh-on/drama-tracker',page:'/projects/drama-tracker'},
+  {id:'diabetes',name:'DEEP DIABETES',subtitle:'Risk Prediction Model',bg:'#16335e',border:'#0e7490',label:'#7dd3fc',icon:'🧬',x:80,y:233,w:200,h:92,pins:3,shape:'sensor',tech:['Python','PyTorch','Scikit-learn','Pandas','NumPy'],desc:'Deep MLP for diabetes risk prediction on CDC BRFSS 2015 data, outperforming baseline classifiers.',highlights:['Weighted BCE for imbalance','AdamW + CosineAnnealing LR','Early stopping on ROC-AUC','Feature ablation analysis'],awards:[],github:'https://github.com/juliethecao/deep-diabetes-risk',page:'/projects/deep-diabetes-risk'},
+  {id:'obstacle',name:'OBSTACLE BOT',subtitle:'Autonomous Avoidance Vehicle',bg:'#8f2424',border:'#b91c1c',label:'#ffe3c2',icon:'🚗',x:340,y:227,w:210,h:92,pins:3,shape:'sensor',tech:['Arduino','C++','VL53L1X ToF','TCA9548A','DRV8835'],desc:'Arduino-based autonomous vehicle that navigates around obstacles using time-of-flight distance sensors and differential drive motors.',highlights:['VL53L1X ToF sensor array','TCA9548A I2C multiplexer','DRV8835 motor driver control','Real-time avoidance logic'],awards:[],github:'https://github.com/linh-on',page:'/projects/obstacle-avoidance-vehicle'},
+  {id:'arctos',name:'ARCTOS 6-DOF',subtitle:'Robotic Arm',bg:'#1e1a2e',border:'#7c3aed',label:'#c4b5fd',icon:'🦾',x:122,y:427,w:200,h:92,pins:3,shape:'ic',tech:['Arduino','C++','Python','Arctos Studio','3D Printing'],desc:'6-DOF robotic arm using Arduino MEGA coordinating stepper motors across all joints for competition tasks.',highlights:['6-joint stepper motor control','Custom CAD end-effector','Waypoint programming','Cup stacking & weight lift'],awards:[],github:'https://github.com/linh-on',page:'/projects/arctos-robotic-arm'},
+  {id:'spider',name:'SPIDER DROID',subtitle:'Autonomous Robot',bg:'#241313',border:'#b91c1c',label:'#fca5a5',icon:'🕷️',x:460,y:440,w:170,h:92,pins:3,shape:'ic',tech:['Python','PyTorch','PPO','Jetson Nano','LiDAR'],desc:'3D-printed spider robot trained with PPO RL to walk autonomously across varied terrain, deployed on Jetson Nano.',highlights:['PPO reinforcement learning','LiDAR obstacle detection','Jetson Nano deployment','No external compute'],awards:[],github:'https://github.com/linh-on',page:'/projects/ai-spider-droid'},
+  {id:'new',name:'NEW',subtitle:'To be put in',bg:'#2a2a2e',border:'#9ca3af',label:'#e5e7eb',icon:'✨',x:740,y:440,w:200,h:92,pins:3,shape:'ic',tech:['TBD'],desc:'Reserved slot for an upcoming project.',highlights:[],awards:[],github:'https://github.com/linh-on',page:'#'},
 ];
 
 /*
@@ -174,14 +178,15 @@ const WIRES=[
   {a:{x:962,y:2},  b:{x:962,y:8},  color:'#d8281c'}, // supply -> POWER switch
   {a:{x:927,y:26}, b:{x:943,y:26}, color:'#d8281c'}, // switch -> D1 power indicator
   {a:{rail:'top'},    b:{p:'pawse',dx:40,dy:0},      color:'#d8281c'}, // VCC: top rail -> MCU
-  {a:{rail:'bottom'}, b:{p:'obstacle',dx:110,dy:92}, color:'#2e2e32'}, // GND: bottom rail -> obstacle board
+  {a:{rail:'bottom'}, b:{p:'arctos',dx:100,dy:92},   color:'#2e2e32'}, // GND: bottom rail -> motor driver
   {a:{p:'diabetes',dx:100,dy:0},  b:{p:'pawse',dx:100,dy:122},  color:'#2563eb'}, // SIGNAL: diabetes sensor -> MCU
-  {a:{p:'obstacle',dx:105,dy:0},  b:{p:'pawse',dx:160,dy:122},  color:'#e8a013'}, // I2C DATA: obstacle -> MCU
-  {a:{p:'pawse',dx:215,dy:122},   b:{p:'arctos',dx:40,dy:0},    color:'#f47b20'}, // PWM: MCU -> motor driver
-  {a:{p:'pawse',dx:250,dy:72},    b:{p:'ableware',dx:0,dy:68},  color:'#22a04a'}, // DATA: MCU -> display
-  {a:{p:'pawse',dx:250,dy:86},    b:{p:'ableware',dx:0,dy:82},  color:'#2563eb'}, // CLK:  MCU -> display
-  {a:{p:'ableware',dx:230,dy:16}, b:{p:'drama',dx:0,dy:8},      color:'#0ea5b7'}, // BUS: display -> memory IC
-  {a:{p:'drama',dx:190,dy:92},    b:{p:'spider',dx:10,dy:0},    color:'#c89b2a'}, // ADDR: memory IC -> coprocessor
+  {a:{p:'obstacle',dx:105,dy:0},  b:{p:'pawse',dx:160,dy:122},  color:'#e8a013', via:188}, // I2C DATA via channel 1
+  {a:{p:'pawse',dx:215,dy:122},   b:{p:'arctos',dx:40,dy:0},    color:'#f47b20', via:366}, // PWM via channel 2
+  {a:{p:'pawse',dx:250,dy:72},    b:{p:'ableware',dx:0,dy:75},  color:'#22a04a', lane:0.42}, // DATA: MCU -> display
+  {a:{p:'pawse',dx:250,dy:86},    b:{p:'ableware',dx:0,dy:89},  color:'#2563eb', lane:0.58}, // CLK:  MCU -> display
+  {a:{p:'ableware',dx:190,dy:115},b:{p:'drama',dx:108,dy:0},    color:'#0ea5b7'}, // BUS: display -> memory IC below
+  {a:{p:'drama',dx:190,dy:92},    b:{p:'spider',dx:85,dy:0},    color:'#c89b2a', via:370}, // ADDR via channel 2
+  {a:{p:'spider',dx:170,dy:46},   b:{p:'new',dx:0,dy:46},       color:'#7c3aed'}, // EXP: coprocessor -> expansion slot
 ];
 
 let zoom=1,selected=null,blinkT=[],powerOn=true,dragEnabled=DRAG_ON_AT_START;
@@ -204,24 +209,56 @@ f.appendChild(el('feDropShadow',{dx:'2',dy:'3',stdDeviation:'2.5','flood-color':
 defs.appendChild(f);
 svg.appendChild(defs);
 
-svg.appendChild(el('rect',{width:1000,height:380,fill:'#efeadd'}));
-svg.appendChild(el('rect',{width:1000,height:380,fill:'url(#h)'}));
-svg.appendChild(el('rect',{x:0,y:176,width:1000,height:16,fill:'#e2dcca'}));
-svg.appendChild(el('line',{x1:0,y1:176,x2:1000,y2:176,stroke:'#c6bfa9','stroke-width':1}));
-svg.appendChild(el('line',{x1:0,y1:192,x2:1000,y2:192,stroke:'#fbf8ef','stroke-width':1}));
+svg.appendChild(el('rect',{width:1000,height:580,fill:'#efeadd'}));
+svg.appendChild(el('rect',{width:1000,height:580,fill:'url(#h)'}));
+// two DIP-channel ravines split the board into three terminal sections
+[176,360].forEach(cy=>{
+  svg.appendChild(el('rect',{x:0,y:cy,width:1000,height:16,fill:'#e2dcca'}));
+  svg.appendChild(el('rect',{x:0,y:cy+2,width:1000,height:6,fill:'#d8d1bb'}));
+  svg.appendChild(el('line',{x1:0,y1:cy,x2:1000,y2:cy,stroke:'#c6bfa9','stroke-width':1}));
+  svg.appendChild(el('line',{x1:0,y1:cy+16,x2:1000,y2:cy+16,stroke:'#fbf8ef','stroke-width':1}));
+});
 
-['rt','rb'].forEach(id=>{const r=document.getElementById(id);if(!r)return;for(let i=0;i<60;i++){const d=document.createElement('div');d.className='rdot';r.appendChild(d);}});
+// Power bus rails: red (+) line on top, blue (−) line below, holes in groups of 5,
+// with +/− markings at both ends — same layout as a real half-size breadboard.
+['rt','rb'].forEach(id=>{
+  const r=document.getElementById(id);if(!r)return;
+  r.innerHTML='';
+  [['+','rlbl-red','top:2px;left:14px'],['+','rlbl-red','top:2px;right:14px'],
+   ['−','rlbl-blue','bottom:2px;left:14px'],['−','rlbl-blue','bottom:2px;right:14px']].forEach(([t,cls,pos])=>{
+    const s=document.createElement('span');s.className='rlbl '+cls;s.style.cssText=pos;s.textContent=t;r.appendChild(s);
+  });
+  const lr=document.createElement('div');lr.className='rline rline-red';r.appendChild(lr);
+  const holes=document.createElement('div');holes.className='rholes';
+  for(let gI=0;gI<10;gI++){
+    const grp=document.createElement('div');grp.className='rgrp';
+    for(let j=0;j<5;j++){const h=document.createElement('div');h.className='rhole';grp.appendChild(h);}
+    holes.appendChild(grp);
+  }
+  r.appendChild(holes);
+  const lb=document.createElement('div');lb.className='rline rline-blue';r.appendChild(lb);
+});
 
-'ABCDEFGHIJ'.split('').forEach((l,i)=>{
-  svg.appendChild(tx(l,{x:4,y:28+i*17,fill:'#9a9280','font-size':9,'font-family':'monospace'}));
+// Row letters: five per terminal-strip section (A–E / F–J / K–O)
+[['ABCDE',36],['FGHIJ',220],['KLMNO',404]].forEach(([ls,y0])=>{
+  ls.split('').forEach((l,i)=>{
+    const y=y0+i*28;
+    svg.appendChild(tx(l,{x:4,y,fill:'#9a9280','font-size':9,'font-family':'monospace'}));
+    svg.appendChild(tx(l,{x:996,y,fill:'#9a9280','font-size':9,'font-family':'monospace','text-anchor':'end'}));
+  });
 });
 for(let i=1;i<=68;i++){
-  if(i%5===0)svg.appendChild(tx(String(i),{x:14+i*14.5,y:13,fill:'#9a9280','font-size':8,'font-family':'monospace','text-anchor':'middle'}));
+  if(i%5===0){
+    const x=14+i*14.5;
+    svg.appendChild(tx(String(i),{x,y:13,fill:'#9a9280','font-size':8,'font-family':'monospace','text-anchor':'middle'}));
+    svg.appendChild(tx(String(i),{x,y:570,fill:'#9a9280','font-size':8,'font-family':'monospace','text-anchor':'middle'}));
+  }
 }
 
 /* ---------- DYNAMIC JUMPER WIRES ---------- */
 const wireG=el('g');
 svg.appendChild(wireG);
+const handleG=el('g'); // endpoint grab handles — appended above the chips later
 
 function routeD(pts,r=6){
   let d=`M${pts[0][0]},${pts[0][1]}`;
@@ -243,72 +280,167 @@ function endPt(e,other){
   if(e.rail){
     const o=other?endPt(other):null;
     const x=o?o[0]:500;
-    return[x,e.rail==='top'?2:378];
+    return[x,e.rail==='top'?2:578];
   }
   if(e.p){const q=pMap[e.p];return[q.x+e.dx,q.y+e.dy];}
   return[e.x,e.y];
 }
 
-// Manhattan route between two anchor points: straight if aligned,
-// otherwise a single elbow pair along the dominant axis.
+// Manhattan route between two anchor points.
+//  via:  route through a fixed horizontal lane (the center channel) — keeps
+//        cross-board wires parallel instead of crossing at random midpoints
+//  lane: fraction along the dominant axis where the elbow sits (default 0.5),
+//        so parallel wires like DATA/CLK don't share the same elbow
 function wirePts(w){
   const A=endPt(w.a,w.b),B=endPt(w.b,w.a);
   const pts=[A];
-  if(Math.abs(A[0]-B[0])>2&&Math.abs(A[1]-B[1])>2){
+  // a via lane is only honored while it actually lies between the two ends —
+  // drag an end past the lane and the wire collapses to a direct route
+  const useVia=typeof w.via==='number'
+    &&w.via>Math.min(A[1],B[1])+6
+    &&w.via<Math.max(A[1],B[1])-6;
+  if(useVia){
+    pts.push([A[0],w.via],[B[0],w.via]);
+  }else if(Math.abs(A[0]-B[0])>2&&Math.abs(A[1]-B[1])>2){
+    const t=(typeof w.lane==='number')?w.lane:0.5;
     if(Math.abs(B[0]-A[0])>Math.abs(B[1]-A[1])){
-      const mx=(A[0]+B[0])/2;
+      const mx=A[0]+(B[0]-A[0])*t;
       pts.push([mx,A[1]],[mx,B[1]]);
     }else{
-      const my=(A[1]+B[1])/2;
+      const my=A[1]+(B[1]-A[1])*t;
       pts.push([A[0],my],[B[0],my]);
     }
   }
   pts.push(B);
-  return pts;
+  // drop consecutive duplicates so collinear vias don't create zero-length kinks
+  const out=[];
+  pts.forEach(pt=>{
+    const l=out[out.length-1];
+    if(!l||Math.abs(l[0]-pt[0])>0.5||Math.abs(l[1]-pt[1])>0.5)out.push(pt);
+  });
+  return out;
 }
 
 function drawWires(){
   while(wireG.firstChild)wireG.removeChild(wireG.firstChild);
+  while(handleG.firstChild)handleG.removeChild(handleG.firstChild);
   WIRES.forEach(w=>{
     const pts=wirePts(w);
     const d=routeD(pts);
     wireG.appendChild(el('path',{d,stroke:'#3a2e1a',opacity:0.15,'stroke-width':4.4,fill:'none','stroke-linecap':'round','stroke-linejoin':'round',transform:'translate(1.4,2.2)'}));
     wireG.appendChild(el('path',{d,stroke:w.color,'stroke-width':3.4,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'}));
     wireG.appendChild(el('path',{d,stroke:'#ffffff',opacity:0.38,'stroke-width':1,fill:'none','stroke-linecap':'round',transform:'translate(-0.5,-0.8)'}));
-    [pts[0],pts[pts.length-1]].forEach(([px,py])=>{
-      wireG.appendChild(el('circle',{cx:px,cy:py,r:2.3,fill:'#9c9c9c',stroke:'#6e6e6e','stroke-width':0.6}));
+    // endpoint ferrules + invisible grab handles (drag to unplug/re-route a wire end)
+    [['a',pts[0]],['b',pts[pts.length-1]]].forEach(([end,[px,py]])=>{
+      handleG.appendChild(el('circle',{cx:px,cy:py,r:2.3,fill:'#9c9c9c',stroke:'#6e6e6e','stroke-width':0.6}));
+      const grab=el('circle',{cx:px,cy:py,r:7,fill:'transparent'});
+      grab.style.cursor=dragEnabled?'grab':'default';
+      grab.style.touchAction='none';
+      grab.addEventListener('pointerdown',ev=>{
+        if(!dragEnabled)return;
+        if(ev.pointerType==='mouse'&&ev.button!==0)return;
+        ev.preventDefault();ev.stopPropagation();
+        try{svg.setPointerCapture(ev.pointerId);}catch(e){}
+        wireDrag={w,end};
+      });
+      handleG.appendChild(grab);
     });
   });
 }
 
+// Wire-end dragging: handles are rebuilt every frame, so the move/up
+// listeners live on the svg itself, which persists across redraws.
+// Dragging a chip-attached end unplugs it into a free {x,y} endpoint.
+let wireDrag=null;
+svg.addEventListener('pointermove',ev=>{
+  if(!wireDrag)return;
+  const[sx,sy]=svgPt(ev);
+  wireDrag.w[wireDrag.end]={x:Math.min(996,Math.max(4,sx)),y:Math.min(576,Math.max(2,sy))};
+  drawWires();
+});
+// On release, re-plug the end if it was dropped on something:
+//  - near the top/bottom edge -> becomes a rail tap again
+//  - on or near a chip (8px margin) -> snaps to the chip's nearest edge
+//    and follows that chip from then on
+svg.addEventListener('pointerup',()=>{
+  if(!wireDrag)return;
+  const w=wireDrag.w,end=wireDrag.end,e=w[end];
+  if(e&&typeof e.x==='number'){
+    if(e.y<=12){w[end]={rail:'top'};}
+    else if(e.y>=566){w[end]={rail:'bottom'};}
+    else{
+      for(const p of PROJECTS){
+        if(e.x>=p.x-8&&e.x<=p.x+p.w+8&&e.y>=p.y-8&&e.y<=p.y+p.h+8){
+          let dx=Math.min(p.w,Math.max(0,e.x-p.x));
+          let dy=Math.min(p.h,Math.max(0,e.y-p.y));
+          const dL=dx,dR=p.w-dx,dT=dy,dB=p.h-dy;
+          const m=Math.min(dL,dR,dT,dB);
+          if(m===dL)dx=0;else if(m===dR)dx=p.w;else if(m===dT)dy=0;else dy=p.h;
+          w[end]={p:p.id,dx,dy};
+          break;
+        }
+      }
+    }
+    drawWires();
+  }
+  wireDrag=null;
+});
+svg.addEventListener('pointercancel',()=>{wireDrag=null;});
+
+// Generic drag for small board parts (R1, D1). Honors the DRAG toggle.
+function makeDraggable(group,pos,minX,maxX,minY,maxY){
+  let di=null;
+  chipGroups.push(group); // picks up cursor + touch-action from the DRAG toggle
+  group.addEventListener('pointerdown',ev=>{
+    if(!dragEnabled)return;
+    if(ev.pointerType==='mouse'&&ev.button!==0)return;
+    ev.preventDefault();ev.stopPropagation();
+    const[sx,sy]=svgPt(ev);
+    di={ox:sx-pos.x,oy:sy-pos.y};
+    try{group.setPointerCapture(ev.pointerId);}catch(e){}
+    group.style.cursor='grabbing';
+  });
+  group.addEventListener('pointermove',ev=>{
+    if(!di)return;
+    const[sx,sy]=svgPt(ev);
+    pos.x=Math.min(maxX,Math.max(minX,sx-di.ox));
+    pos.y=Math.min(maxY,Math.max(minY,sy-di.oy));
+    group.setAttribute('transform',`translate(${pos.x},${pos.y})`);
+  });
+  const endPart=()=>{di=null;group.style.cursor=dragEnabled?'grab':'pointer';};
+  group.addEventListener('pointerup',endPart);
+  group.addEventListener('pointercancel',endPart);
+}
+
 // Convert a pointer event to SVG user coordinates. Derives scale from the
 // rendered bounding box, so it stays correct under the CSS zoom buttons.
+const VB={x:0,y:0,w:1000,h:580};
 function svgPt(ev){
   const r=svg.getBoundingClientRect();
-  const s=Math.min(r.width/1000,r.height/380);
-  const ox=(r.width-1000*s)/2,oy=(r.height-380*s)/2;
-  return[(ev.clientX-r.left-ox)/s,(ev.clientY-r.top-oy)/s];
+  const s=Math.min(r.width/VB.w,r.height/VB.h);
+  const ox=(r.width-VB.w*s)/2,oy=(r.height-VB.h*s)/2;
+  return[VB.x+(ev.clientX-r.left-ox)/s,VB.y+(ev.clientY-r.top-oy)/s];
 }
 
 drawWires();
 
 /* ---------- POWER INDICATOR CIRCUIT: POWER switch -> D1 -> R1 ---------- */
-function desig(x,y,label){svg.appendChild(tx(label,{x,y,'font-size':6.5,'font-family':'monospace',fill:'#8a8273','text-anchor':'middle'}));}
 
-// R1 current-limiting resistor
-(function(){
-  const g=el('g',{transform:'translate(868,22)'});
-  g.appendChild(el('line',{x1:-26,y1:0,x2:26,y2:0,stroke:'#9c9c9c','stroke-width':1.6,'stroke-linecap':'round'}));
-  g.appendChild(el('rect',{x:-15,y:-5,width:30,height:10,rx:5,fill:'#d9b38c',stroke:'#b98e60','stroke-width':0.8,filter:'url(#cshadow)'}));
-  [['#7a3b12',-9],['#1a1a1a',-3],['#d8281c',3],['#c89b2a',9]].forEach(([c,bx])=>{
-    g.appendChild(el('rect',{x:bx-1.4,y:-5,width:2.8,height:10,fill:c,opacity:0.9}));
-  });
-  svg.appendChild(g);
-})();
-desig(868,38,'R1');
+// R1 current-limiting resistor (draggable)
+const r1Pos={x:868,y:22};
+const r1G=el('g',{transform:`translate(${r1Pos.x},${r1Pos.y})`});
+r1G.appendChild(el('line',{x1:-26,y1:0,x2:26,y2:0,stroke:'#9c9c9c','stroke-width':1.6,'stroke-linecap':'round'}));
+r1G.appendChild(el('rect',{x:-15,y:-5,width:30,height:10,rx:5,fill:'#d9b38c',stroke:'#b98e60','stroke-width':0.8,filter:'url(#cshadow)'}));
+[['#7a3b12',-9],['#1a1a1a',-3],['#d8281c',3],['#c89b2a',9]].forEach(([c,bx])=>{
+  r1G.appendChild(el('rect',{x:bx-1.4,y:-5,width:2.8,height:10,fill:c,opacity:0.9}));
+});
+r1G.appendChild(tx('R1',{x:0,y:16,'font-size':6.5,'font-family':'monospace',fill:'#8a8273','text-anchor':'middle'}));
+svg.appendChild(r1G);
+makeDraggable(r1G,r1Pos,30,970,10,556);
 
-// D1 power LED (lit only when switched on)
-const d1G=el('g',{transform:'translate(918,20)'});
+// D1 power LED (lit only when switched on, draggable)
+const d1Pos={x:918,y:20};
+const d1G=el('g',{transform:`translate(${d1Pos.x},${d1Pos.y})`});
 const d1Glow=el('circle',{cx:0,cy:0,r:11,fill:'#ff5b3a'});
 d1Glow.style.opacity=0;
 d1G.appendChild(d1Glow);
@@ -317,8 +449,9 @@ d1G.appendChild(el('line',{x1:3,y1:4,x2:3,y2:12,stroke:'#9c9c9c','stroke-width':
 const d1Dome=el('path',{d:'M-6,4 L-6,-2 A6,6 0 0,1 6,-2 L6,4 Z',fill:'#7a2a22',stroke:'#00000022','stroke-width':0.6,filter:'url(#cshadow)'});
 d1G.appendChild(d1Dome);
 d1G.appendChild(el('circle',{cx:-1.8,cy:-2.5,r:1.6,fill:'#fff',opacity:0.7}));
+d1G.appendChild(tx('D1',{x:0,y:26,'font-size':6.5,'font-family':'monospace',fill:'#8a8273','text-anchor':'middle'}));
 svg.appendChild(d1G);
-desig(918,46,'D1');
+makeDraggable(d1G,d1Pos,12,988,10,548);
 
 // POWER push switch — round latching power button, top-right corner
 const swG=el('g',{transform:'translate(962,26)'});
@@ -361,25 +494,14 @@ PROJECTS.forEach(p=>{
 
   if(p.shape==='sensor'){
     const strokeC=p.id==='obstacle'?'#4a0e0e':'#0c2244';
-    const tp=Math.max(4,Math.floor(W/26));
-    for(let i=1;i<=tp;i++){
-      const px=W/(tp+1)*i;
-      g.appendChild(el('rect',{x:px-1.2,y:H,width:2.4,height:10,fill:'#b8b8b8',stroke:'#8a8a8a','stroke-width':0.4}));
-    }
     const body=el('rect',{width:W,height:H,rx:7,fill:p.bg,stroke:strokeC,'stroke-width':1.5,filter:'url(#cshadow)'});
     g.appendChild(body);p._body=body;p._baseStroke=strokeC;
     [[10,10],[W-10,10],[10,H-10],[W-10,H-10]].forEach(([cx,cy])=>{
       g.appendChild(el('circle',{cx,cy,r:4.5,fill:'none',stroke:'#c8a93e','stroke-width':2}));
       g.appendChild(el('circle',{cx,cy,r:2.2,fill:'#efeadd'}));
     });
-    g.appendChild(el('path',{d:`M26,${H-18} H${W-26} M26,${H-13} H${W-40}`,stroke:'#ffffff',opacity:0.25,'stroke-width':1,fill:'none'}));
   }
   else if(p.shape==='display'){
-    const tp=Math.max(4,Math.floor(W/26));
-    for(let i=1;i<=tp;i++){
-      const px=W/(tp+1)*i;
-      g.appendChild(el('rect',{x:px-1.2,y:-10,width:2.4,height:10,fill:'#b8b8b8',stroke:'#8a8a8a','stroke-width':0.4}));
-    }
     const body=el('rect',{width:W,height:H,rx:7,fill:p.bg,stroke:'#0a1f10','stroke-width':1.5,filter:'url(#cshadow)'});
     g.appendChild(body);p._body=body;p._baseStroke='#0a1f10';
     [[9,9],[W-9,9],[9,H-9],[W-9,H-9]].forEach(([cx,cy])=>{
@@ -391,41 +513,39 @@ PROJECTS.forEach(p=>{
     g.appendChild(el('rect',{x:22,y:24,width:(W-44)*0.4,height:H-52,fill:'#fff',opacity:0.04}));
   }
   else{
-    const ps=p.pins,step=H/(ps+1);
-    for(let i=1;i<=ps;i++){
-      g.appendChild(el('path',{d:`M-9,${step*i-5} h9 v4 h-9 l-3,3 v-10 Z`,fill:'#b8b8b8',stroke:'#8a8a8a','stroke-width':0.5}));
-      g.appendChild(el('path',{d:`M${W},${step*i-5} h9 l3,3 v-10 l-3,3 h-9 Z`,fill:'#b8b8b8',stroke:'#8a8a8a','stroke-width':0.5}));
-    }
-    const tpCount=Math.max(3,Math.floor(W/40));
-    for(let i=1;i<=tpCount;i++){
-      const px=W/(tpCount+1)*i;
-      g.appendChild(el('rect',{x:px-1.5,y:-9,width:3,height:9,fill:'#b8b8b8',stroke:'#8a8a8a','stroke-width':0.4}));
-    }
     const body=el('rect',{width:W,height:H,rx:5,fill:p.bg,stroke:'#3a3a3a','stroke-width':1.5,filter:'url(#cshadow)'});
     g.appendChild(body);p._body=body;p._baseStroke='#3a3a3a';
     g.appendChild(el('rect',{x:3,y:3,width:W-6,height:H*0.32,rx:4,fill:'#fff',opacity:0.05}));
     g.appendChild(el('circle',{cx:W-20,cy:H-14,r:4,fill:'none',stroke:'#fff',opacity:0.08,'stroke-width':1}));
     g.appendChild(el('circle',{cx:13,cy:H-12,r:3,fill:'#000',stroke:'#ffffff22','stroke-width':1}));
-    g.appendChild(el('path',{d:`M${W/2-10},0 A10,10 0 0,1 ${W/2+10},0`,fill:'#15151a',stroke:'#000','stroke-width':0.8}));
   }
 
-  // status LED
-  const led=el('circle',{cx:W-14,cy:15,r:5.5,fill:'#111',stroke:'#00000055','stroke-width':1});
-  const ledInner=el('circle',{cx:W-14,cy:15,r:3.5,fill:p.shape==='display'?'#4ade80':(p.id==='obstacle'?'#ffd49a':p.border),opacity:0.25});
+  // status LED — pulled inward on boards with corner screw holes
+  const ledX=p.shape==='ic'?W-14:W-28;
+  const ledY=p.shape==='ic'?15:17;
+  const led=el('circle',{cx:ledX,cy:ledY,r:5.5,fill:'#111',stroke:'#00000055','stroke-width':1});
+  const ledInner=el('circle',{cx:ledX,cy:ledY,r:3.5,fill:p.shape==='display'?'#4ade80':(p.id==='obstacle'?'#ffd49a':p.border),opacity:0.25});
   g.appendChild(led);g.appendChild(ledInner);
   p._led=led;p._ledInner=ledInner;
 
   // silkscreen text lives in its own group so it can go dark when power is off
   const tg=el('g');
   tg.style.transition='opacity 0.45s';
-  const iconY=p.h>110?34:27;
-  tg.appendChild(tx(p.icon,{x:p.shape==='display'?26:14,y:iconY,'font-size':p.h>110?20:15,'font-family':'sans-serif'}));
-  const nameY=p.h>110?60:46;
-  tg.appendChild(tx(p.name,{x:W/2,y:nameY,'text-anchor':'middle','font-size':p.h>110?14:11.5,'font-weight':'bold','font-family':'Courier New,monospace',fill:p.label,'letter-spacing':1.2}));
-  tg.appendChild(tx(p.subtitle,{x:W/2,y:nameY+14,'text-anchor':'middle','font-size':p.h>110?10:8.5,'font-family':'Courier New,monospace',fill:subFill}));
-  const techY=p.h>110?90:71;
-  tg.appendChild(tx(p.tech.slice(0,p.h>110?3:2).join(' · '),{x:W/2,y:techY,'text-anchor':'middle','font-size':7.5,'font-family':'Courier New,monospace',fill:techFill}));
-  tg.appendChild(tx(`${p.id.slice(0,4).toUpperCase()}-${200+Math.floor(p.x/10)*3}`,{x:p.shape==='ic'?22:20,y:H-7,'font-size':6,'font-family':'Courier New,monospace',fill:'#ffffff33'}));
+  // Per-component text formatting. Defaults come from chip size; any project
+  // can override any field individually by adding fmt:{...} to its entry, e.g.
+  //   fmt:{nameSize:16,techY:78}  or  fmt:{iconX:20,subDY:18}
+  const big=p.h>110;
+  const F=Object.assign(
+    big?{iconX:14,iconY:34,iconSize:20,nameDX:28,nameDY:-3,nameSize:14,subDY:20,subSize:10,techY:84,techSize:7.5,techCount:3}
+       :{iconX:14,iconY:27,iconSize:15,nameDX:22,nameDY:-2,nameSize:11.5,subDY:16,subSize:8.5,techY:68,techSize:7.5,techCount:2},
+    p.shape==='display'?{iconX:26}:{},
+    p.fmt||{}
+  );
+  tg.appendChild(tx(p.icon,{x:F.iconX,y:F.iconY,'font-size':F.iconSize,'font-family':'sans-serif'}));
+  tg.appendChild(tx(p.name,{x:F.iconX+F.nameDX,y:F.iconY+F.nameDY,'text-anchor':'start','font-size':F.nameSize,'font-weight':'bold','font-family':'Courier New,monospace',fill:p.label,'letter-spacing':1.2}));
+  tg.appendChild(tx(p.subtitle,{x:F.iconX,y:F.iconY+F.subDY,'text-anchor':'start','font-size':F.subSize,'font-family':'Courier New,monospace',fill:subFill}));
+  tg.appendChild(tx(p.tech.slice(0,F.techCount).join(' · '),{x:F.iconX,y:F.techY,'text-anchor':'start','font-size':F.techSize,'font-family':'Courier New,monospace',fill:techFill}));
+  tg.appendChild(tx(`${p.id.slice(0,4).toUpperCase()}-${200+Math.floor(p.x/10)*3}`,{x:p.shape==='ic'?22:28,y:H-8,'font-size':6,'font-family':'Courier New,monospace',fill:'#ffffff33'}));
   g.appendChild(tg);
   p._tg=tg;
 
@@ -445,7 +565,7 @@ PROJECTS.forEach(p=>{
     if(ev.pointerType==='mouse'&&ev.button!==0)return;
     if(!dragEnabled){dragInfo={moved:false};return;} // locked: click-only, native scroll preserved
     ev.preventDefault();
-    svg.appendChild(g); // bring to front while dragging
+    svg.appendChild(g);svg.appendChild(handleG); // chip to front, wire handles above it
     const [sx,sy]=svgPt(ev);
     dragInfo={ox:sx-p.x,oy:sy-p.y,moved:false};
     try{g.setPointerCapture(ev.pointerId);}catch(e){}
@@ -454,8 +574,8 @@ PROJECTS.forEach(p=>{
   g.addEventListener('pointermove',ev=>{
     if(!dragInfo||!dragEnabled||dragInfo.ox===undefined)return;
     const [sx,sy]=svgPt(ev);
-    const nx=Math.min(986-p.w,Math.max(14,sx-dragInfo.ox));
-    const ny=Math.min(364-p.h,Math.max(16,sy-dragInfo.oy));
+    const nx=Math.min(990-p.w,Math.max(10,sx-dragInfo.ox));
+    const ny=Math.min(568-p.h,Math.max(12,sy-dragInfo.oy));
     if(!dragInfo.moved&&Math.hypot(nx-p.x,ny-p.y)<3)return;
     dragInfo.moved=true;
     p.x=nx;p.y=ny;
@@ -473,6 +593,8 @@ PROJECTS.forEach(p=>{
 
   svg.appendChild(g);
 });
+svg.appendChild(handleG); // wire endpoint handles render above all chips
+drawWires(); // rebuild now that the handle layer is live
 
 const scList=document.getElementById('sc-list');
 if(scList){
@@ -496,6 +618,7 @@ function applyPower(){
   d1Glow.style.opacity=powerOn?0.45:0;
   // downstream wires read dead when unpowered
   wireG.style.opacity=powerOn?1:0.3;
+  handleG.style.opacity=powerOn?1:0.3;
   // chip silkscreen goes dark, status LEDs unlit
   PROJECTS.forEach(p=>{
     p._tg.style.opacity=powerOn?1:0;
@@ -515,7 +638,7 @@ function applyPower(){
   document.getElementById('pe-icon').textContent=powerOn?'🔌':'⏻';
   document.getElementById('pe-txt').innerHTML=powerOn
     ?'TAP A COMPONENT<br><span style="font-size:16px;color:#bdab8e">to power it up</span>'
-    :'<span style="font-size:20px;color:#bdab8e">SYSTEM OFFLINE</span><br><span style="font-size:20px;color:#bdab8e">press the POWER switch on the top right of the board to boot up</span>';
+    :'<span style="font-size:24px;color:#bdab8e;font-weight:bold;">SYSTEM OFFLINE</span><br><span style="font-size:24px;color:#bdab8e">press the POWER switch on the top right of the board to boot up</span>';
   if(scList)scList.style.display=powerOn?'flex':'none';
 }
 
@@ -618,7 +741,7 @@ function applyDrag(){
     b.style.borderColor=dragEnabled?'#1a6b3a66':'#cfc7b6';
   }
 }
-function toggleDrag(){dragEnabled=!dragEnabled;applyDrag();}
+function toggleDrag(){dragEnabled=!dragEnabled;applyDrag();drawWires();}
 window.toggleDrag=toggleDrag;
 
 function zm(d){
