@@ -1,33 +1,74 @@
 ---
 title: "Ableware"
-summary: "A voice-controlled assistive lift system built with Raspberry Pi and Arduino. Won 2nd place at the 2026 UCI MCS ICS Expo."
-tags: ["Python", "TypeScript", "Raspberry Pi", "Arduino", "WebSocket", "FastAPI", "Embedded Systems", "Assistive Technology"]
+summary: "A voice-controlled assistive lift system that lets users with limited mobility operate a physical lift completely hands-free, built with Raspberry Pi, Arduino, and a real-time WebSocket architecture coordinating hardware, simulation, and a live dashboard."
+tags:
+  [
+    "Python",
+    "TypeScript",
+    "Raspberry Pi",
+    "Arduino",
+    "WebSocket",
+    "FastAPI",
+    "Embedded Systems",
+    "Assistive Technology",
+  ]
 startDate: 2025-09-01
 endDate: 2026-06-01
-url: "https://github.com/EliyaKhajeiee/ableware-pi-final"
-cover: ../../assets/images/hourglass.jpg
+github: "https://github.com/EliyaKhajeiee/ableware-pi-final"
+award: "2nd Place, 2026 UCI MCS ICS Expo"
+role: "Embedded Systems & Backend Engineer"
+timeline: "Sep 2025 to Jun 2026"
 ---
 
 ## Overview
 
-Ableware is a voice-controlled assistive lift system designed to help users with limited mobility control a physical lift using just their voice. A Raspberry Pi listens for a wake word ("Ableware"), recognizes a command, and sends it over WebSocket to a hub server that coordinates the lift hardware, a 3D simulation, and a real-time dashboard — all at the same time. Won 2nd place at the 2026 UCI MCS ICS Expo.
+Ableware is a voice-controlled assistive lift system designed for people with limited mobility. A Raspberry Pi continuously listens for the wake word "Ableware", recognizes a spoken command, and sends it over WebSocket to a central hub server. The hub coordinates three things at once: the physical lift hardware driven by an Arduino, a 3D physics simulation, and a live web dashboard.
 
-## Role
-
-Embedded Systems & Backend Engineer — worked on the Arduino actuator driver, the WebSocket communication pipeline between the Pi and the hub server, and integrating the voice command flow end to end.
+The project won 2nd place at the 2026 UCI MCS ICS Expo.
 
 ## Problem
 
-People with limited mobility often can't operate lift systems that require physical buttons or touch input. We wanted to build something that lets users control a lift completely hands-free using natural voice commands.
+Many lift systems require physical buttons, levers, or touchscreens, which makes them difficult or impossible to operate for users with limited hand mobility. The goal was a lift that can be controlled entirely hands-free using natural voice commands, with no buttons and no touch input at any point in the workflow.
 
-## Solution
+## My Role
 
-Built a distributed system where a Raspberry Pi handles wake word detection and voice recognition, a FastAPI hub server acts as the central coordinator, and an Arduino drives the physical actuator. The hub also serves a live dashboard and feeds a 3D PyBullet simulation so the team can test without needing the hardware connected.
+I worked as the embedded systems and backend engineer on the team. My contributions included:
 
-## Technical Details
-- Raspberry Pi runs a Vosk-based speech recognition pipeline with a custom ONNX wake word model ("Ableware")
-- Voice commands (up, down, start, stop, left, right) are sent to a FastAPI hub over WebSocket
-- Hub server coordinates between the Pi, the 3D simulation, and the Arduino hardware in real time
-- Arduino C++ firmware drives the physical lift actuator based on commands forwarded from the hub
-- React/TypeScript dashboard displays live system state, updated every 250ms via WebSocket polling
-- PyBullet 3D simulation allows full testing of the lift mechanics without physical hardware
+- Writing the Arduino C++ firmware that drives the physical lift actuator
+- Building the WebSocket communication pipeline between the Raspberry Pi and the hub server
+- Integrating the full voice command flow end to end, from wake word detection through to physical motion
+
+## Key Features
+
+- **Hands-free voice control.** A custom ONNX wake word model listens for "Ableware", then a Vosk speech recognition pipeline interprets commands such as up, down, start, stop, left, and right.
+- **Real-time distributed architecture.** A FastAPI hub server coordinates the Pi, the Arduino, the simulation, and the dashboard simultaneously over WebSocket.
+- **Live dashboard.** A React/TypeScript dashboard shows system state in real time, refreshing every 250ms.
+- **Hardware-free testing.** A PyBullet 3D simulation mirrors the lift mechanics, so the team could develop and test the full command pipeline without the physical hardware connected.
+
+## Tech Stack
+
+- **Voice pipeline:** Raspberry Pi, Vosk speech recognition, custom ONNX wake word model
+- **Hub server:** Python with FastAPI, WebSocket communication
+- **Hardware control:** Arduino with C++ firmware driving the lift actuator
+- **Dashboard:** React with TypeScript
+- **Simulation:** PyBullet 3D physics simulation
+
+## Development Process
+
+The system was designed hub-first. Defining the WebSocket message protocol early let the voice pipeline, simulation, dashboard, and firmware all be developed in parallel against the same contract. The PyBullet simulation served as a stand-in for the hardware from day one, which meant the voice-to-motion pipeline was fully working in simulation before the Arduino firmware was finished. Once the firmware was ready, swapping the simulated lift for the real actuator required no changes to the rest of the system.
+
+## Challenges & Solutions
+
+- **Coordinating multiple real-time clients.** The hub had to keep the Pi, the simulation, the dashboard, and the Arduino in sync without one slow client blocking the others. Structuring the hub around asynchronous WebSocket handlers in FastAPI kept every channel responsive.
+- **Reliable wake word detection.** Generic speech recognition alone triggered too many false positives. Training a dedicated ONNX wake word model for "Ableware" made activation consistent before any command parsing began.
+- **Bridging high-level commands to hardware.** Voice commands arrive as text, but the actuator needs precise timed signals. The Arduino firmware translates forwarded hub commands into safe, bounded motor actions.
+
+## Final Result
+
+A working end-to-end system: a user speaks a command, and within moments the physical lift responds, the 3D simulation mirrors the motion, and the dashboard updates live. The project was demoed at the 2026 UCI MCS ICS Expo, where it earned 2nd place.
+
+## What I Learned
+
+- Defining a clear message protocol early is what makes a distributed team fast. Everyone built against the same contract and integration was nearly painless.
+- A good simulation pays for itself many times over. Most of the pipeline was validated before the hardware existed.
+- Assistive technology raises the bar on reliability. When the user depends on the system physically, "usually works" is not acceptable, and that mindset shaped every engineering decision on the project.

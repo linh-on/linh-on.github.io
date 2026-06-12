@@ -1,33 +1,68 @@
 ---
 title: "Deep Diabetes Risk"
-summary: "A deep learning project that predicts diabetes risk from CDC health survey data using a Deep MLP built in PyTorch, outperforming baseline models like Logistic Regression and KNN."
-tags: ["Python", "PyTorch", "Scikit-learn", "Pandas", "NumPy", "Machine Learning", "Deep Learning", "Jupyter Notebook"]
+summary: "A deep learning project that predicts diabetes risk from CDC health survey data. A custom Deep MLP built in PyTorch outperforms Logistic Regression, KNN, and Naive Bayes baselines, with a full preprocessing, training, and evaluation pipeline."
+tags:
+  [
+    "Python",
+    "PyTorch",
+    "Scikit-learn",
+    "Pandas",
+    "NumPy",
+    "Machine Learning",
+    "Deep Learning",
+    "Jupyter Notebook",
+  ]
 startDate: 2025-09-01
 endDate: 2026-06-01
-url: "https://github.com/juliethecao/deep-diabetes-risk"
+github: "https://github.com/juliethecao/deep-diabetes-risk"
+status: "Completed"
+role: "ML Engineer"
+timeline: "Sep 2025 to Jun 2026"
 cover: ../../assets/images/hourglass.jpg
 ---
 
 ## Overview
 
-Deep Diabetes Risk is a machine learning project that predicts binary diabetes status from 21 tabular health indicators sourced from the CDC BRFSS 2015 survey dataset. The project compares baseline models against a custom Deep MLP built in PyTorch, with full preprocessing, training, evaluation, and visualization pipelines.
-
-## Role
-
-ML Engineer — built the Deep MLP architecture and training pipeline, and handled model evaluation including metrics comparison, ROC/PR curves, confusion matrix, feature ablation, and publication-ready plots against baseline models.
+Deep Diabetes Risk is a machine learning project that predicts binary diabetes status from 21 tabular health indicators in the CDC BRFSS 2015 survey dataset. The project builds a custom Deep MLP in PyTorch and rigorously compares it against classical baselines, with complete preprocessing, training, evaluation, and visualization pipelines producing publication-ready results.
 
 ## Problem
 
-Diabetes affects millions of people, and early risk prediction from routine health survey data could help flag at-risk individuals before clinical diagnosis. The challenge was building a model that handles real-world class imbalance and generalizes well across diverse health indicators.
+Diabetes affects millions of people, and early risk prediction from routine health survey data could flag at-risk individuals before a clinical diagnosis. The technical challenge is twofold: the dataset is heavily class-imbalanced, since most respondents are not diabetic, and the model needs to generalize across a diverse mix of health indicators rather than memorizing patterns in the training data.
 
-## Solution
+## My Role
 
-Trained a Deep MLP using PyTorch with weighted BCE loss to handle class imbalance, AdamW optimizer, and a CosineAnnealingLR scheduler. Used early stopping based on validation ROC-AUC to prevent overfitting. Evaluated the model against Logistic Regression, KNN, and Gaussian Naive Bayes baselines across multiple metrics.
+As the ML engineer on the project, I built the Deep MLP architecture and its full training pipeline, and owned model evaluation end to end. That included the metrics comparison across all models, ROC and PR curves, the confusion matrix, feature ablation studies, and the publication-ready plots used to present results against the baselines.
 
-## Technical Details
-- Dataset: CDC BRFSS 2015 — 21 health indicator features, binary diabetes classification
-- Deep MLP built in PyTorch with weighted BCE loss for class imbalance handling
-- Optimizer: AdamW with CosineAnnealingLR scheduling and early stopping on validation ROC-AUC
-- Stratified 70/15/15 train/val/test split with standardized numeric features
-- Evaluation outputs: ROC curves, PR curves, calibration plots, confusion matrix, feature ablation, and metrics comparison table across all models
-- Baseline comparisons: Logistic Regression, KNN, Gaussian Naive Bayes (via Scikit-learn)
+## Key Features
+
+- **Custom Deep MLP in PyTorch** with weighted BCE loss to directly counter class imbalance.
+- **Rigorous baseline comparison** against Logistic Regression, KNN, and Gaussian Naive Bayes implemented with Scikit-learn.
+- **Comprehensive evaluation suite** producing ROC curves, PR curves, calibration plots, a confusion matrix, feature ablation results, and a cross-model metrics table.
+- **Disciplined data methodology** using a stratified 70/15/15 train/validation/test split with standardized numeric features.
+
+## Tech Stack
+
+- **Modeling:** PyTorch (Deep MLP), Scikit-learn (baseline models)
+- **Data:** Pandas and NumPy for preprocessing the CDC BRFSS 2015 dataset (21 features, binary target)
+- **Training:** AdamW optimizer, CosineAnnealingLR scheduler, weighted BCE loss, early stopping on validation ROC-AUC
+- **Environment:** Jupyter Notebook with Matplotlib-based visualization
+
+## Development Process
+
+The project started with exploratory analysis and preprocessing: cleaning the BRFSS data, standardizing numeric features, and creating a stratified 70/15/15 split so every subset reflected the true class distribution. The classical baselines were trained first to establish honest reference points. The Deep MLP was then developed iteratively, tuning depth, width, and regularization while monitoring validation ROC-AUC, with early stopping preventing overfitting. The final phase focused on evaluation: generating every comparison plot and the feature ablation study so the model's gains and behavior could be clearly demonstrated.
+
+## Challenges & Solutions
+
+- **Severe class imbalance.** A model that always predicts "no diabetes" scores deceptively well on accuracy. Weighted BCE loss penalized missed positive cases, and evaluation centered on ROC-AUC and PR curves instead of raw accuracy.
+- **Overfitting on tabular data.** Deep networks easily memorize tabular datasets. Early stopping on validation ROC-AUC, combined with the cosine annealing schedule, kept the model honest on held-out data.
+- **Fair model comparison.** Comparing models trained under different conditions produces misleading conclusions. Every model was evaluated on the identical held-out test split with the same metric suite.
+
+## Final Result
+
+The Deep MLP outperformed all three classical baselines on the held-out test set, with the full evaluation suite, including ROC, PR, and calibration plots plus feature ablation, documenting where and why the gains occur. The project demonstrates a complete, reproducible ML workflow from raw survey data to defensible conclusions.
+
+## What I Learned
+
+- Handling class imbalance starts with the loss function and the metrics, not just resampling. Accuracy alone would have hidden the real story of this dataset.
+- Strong baselines are essential. Without Logistic Regression, KNN, and Naive Bayes as reference points, "the deep model works" would be an empty claim.
+- Evaluation is half the project. Producing clear, honest plots and ablations took as much engineering care as building the model itself, and is what makes results trustworthy.

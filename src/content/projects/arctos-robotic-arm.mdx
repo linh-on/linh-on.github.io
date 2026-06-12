@@ -1,81 +1,69 @@
 ---
-title: 6-DOF Robotic Arm (Arctos)
-summary: A 6-degree-of-freedom robotic arm built with 3D-printed components, controlled via Python, Arduino, and C++, using Arctos Studio for motion planning and inverse kinematics.
+title: "6-DOF Robotic Arm (Arctos)"
+summary: "A fully 3D-printed, 6-degree-of-freedom robotic arm based on the open-source Arctos design, controlled through custom Arduino C++ firmware, a Python orchestration layer, and Arctos Studio for inverse kinematics and motion planning."
 tags:
-    - Python
-    - Arduino
-    - C++
-    - Arctos Studio
-    - 3D Printing
+  [
+    "Python",
+    "Arduino",
+    "C++",
+    "Arctos Studio",
+    "3D Printing",
+    "Robotics",
+    "Embedded Systems",
+  ]
 startDate: 2024-03-01
 endDate: 2024-06-30
+github: "https://github.com/linh-on"
+status: "Completed"
+role: "Hardware & Software Engineer"
+timeline: "Mar 2024 to Jun 2024"
 author: Linh On
-url: https://github.com/linh-on
 cover: ../../assets/images/hourglass.jpg
 ---
 
-## Table of Contents
-1. [Overview](#overview)
-2. [Role](#role)
-3. [Problem](#problem)
-4. [Goal](#goal)
-5. [Solution](#solution)
-6. [Challenges and Learnings](#challenges-and-learnings)
-7. [Final Thoughts](#final-thoughts)
-
----
-
 ## Overview
-**Arctos 6-DOF Robotic Arm** is a fully 3D-printed, 6-degree-of-freedom robotic arm based on the open-source Arctos design. The arm is controlled via a custom Python orchestration layer, Arduino-based firmware written in C++, and Arctos Studio for graphical motion planning and inverse kinematics.
 
----
+This project is a fully 3D-printed, 6-degree-of-freedom robotic arm based on the open-source Arctos design. The arm combines three layers of control: Arduino firmware written in C++ for real-time motor control, a custom Python layer for scripted motion sequences, and Arctos Studio for graphical motion planning and inverse kinematics.
 
-## 👨‍💻 Role
-**Hardware & Software Engineer** — responsible for assembly, firmware development, and high-level control software.
+## Problem
 
----
+Off-the-shelf robotic arms are expensive and offer limited customizability for learning and experimentation. Building an open-source, 3D-printable alternative makes hands-on work in robotics, kinematics, and embedded systems accessible at a fraction of the cost, while exposing every layer of the stack instead of hiding it behind a vendor's software.
 
-## ❓ Problem
-Off-the-shelf robotic arms are expensive and offer limited customizability for research and educational purposes. An open-source, 3D-printable alternative enables hands-on learning in robotics, kinematics, and embedded systems at low cost.
+## My Role
 
----
+I was the sole hardware and software engineer on this build. I assembled and calibrated the full mechanical structure, developed and flashed the Arduino firmware, and wrote the Python control layer that drives programmable motion sequences over serial.
 
-## 🎯 Goal
-1. Assemble and calibrate a fully functional 6-DOF robotic arm from 3D-printed components.
-2. Write and flash reliable firmware to the Arduino controllers for precise servo and stepper motor control.
-3. Integrate Python-based high-level control to enable programmable motion sequences.
+## Key Features
 
----
+- **Six degrees of freedom.** Full shoulder, elbow, wrist, and gripper range of motion, enabling complex poses and pick-and-place tasks.
+- **Inverse kinematics.** Arctos Studio computes joint angles from target end-effector positions, so motion can be planned in world coordinates rather than raw joint angles.
+- **Scripted motion sequences.** A Python serial interface sends high-level commands to the firmware, making programmable pick-and-place routines simple to write and repeat.
+- **Fully 3D-printed structure.** Every structural component is printed in PLA/PETG, keeping the build inexpensive and easy to modify or repair.
 
-## ✨ Solution
+## Tech Stack
 
-### Hardware
-- **Structure:** All structural components 3D-printed using PLA/PETG with joints designed for each degree of freedom.
-- **Actuators:** Stepper motors at each joint driven by Arduino-compatible motor drivers.
-- **Electronics:** Arduino board manages low-level PWM signals; components wired for clean power distribution.
+- **Structure:** 3D-printed PLA/PETG components with joints designed for each degree of freedom
+- **Actuators:** Stepper motors at each joint, driven by Arduino-compatible motor drivers
+- **Firmware:** Arduino C++ handling real-time motor stepping, limit switches, and serial command parsing
+- **Control:** Python layer sending high-level motion commands over serial
+- **Motion planning:** Arctos Studio for graphical inverse kinematics and joint angle planning, exporting G-code-style commands
 
-### Software
-- **Arduino Firmware (C++):** Handles real-time motor stepping, limit switches, and serial command parsing.
-- **Python Control Layer:** Sends high-level motion commands over serial to the Arduino, enabling scripted sequences.
-- **Arctos Studio:** Provides graphical inverse kinematics and joint angle planning, exporting G-code-style commands.
+## Development Process
 
-### Key Features
-1. **6 Degrees of Freedom:** Full shoulder, elbow, wrist, and gripper range of motion.
-2. **Inverse Kinematics:** Arctos Studio computes joint angles from target end-effector positions.
-3. **Python Scripted Sequences:** Programmable pick-and-place routines via Python serial interface.
+The build progressed from the ground up: printing and assembling the structural components, wiring the steppers and drivers with clean power distribution, then bringing up the firmware one joint at a time. Once each joint moved reliably with proper limit-switch handling, the Python serial layer was added for multi-joint scripted sequences, and finally Arctos Studio was integrated for inverse-kinematics-based planning. Each layer was validated before the next was built on top of it.
 
----
+## Challenges & Solutions
 
-## ⚙️ Challenges and Learnings
-1. **Mechanical Tolerance:** 3D-printed parts required iterative calibration to eliminate backlash in joints.
-2. **Firmware Reliability:** Debouncing limit switches and managing stepper acceleration curves in C++ required careful tuning.
-3. **Coordinate Frames:** Understanding the transformation between world coordinates and joint space was the steepest learning curve.
+- **Mechanical tolerance.** 3D-printed parts introduced backlash in the joints. Iterative reprinting and calibration of the joint assemblies tightened the tolerances until motion was repeatable.
+- **Firmware reliability.** Noisy limit switches and abrupt stepper motion caused missed steps and jitter. Debouncing the switches and tuning the stepper acceleration curves in C++ produced smooth, dependable motion.
+- **Coordinate frames.** Translating between world coordinates and joint space was the steepest learning curve of the project. Working through the kinematic transformations by hand, and verifying them against Arctos Studio's output, made the math concrete.
 
----
+## Final Result
 
-## ✨ Final Thoughts
-1. **Embedded and software skills complement each other** — getting the arm working required equal parts hardware debugging and software design.
-2. **Open-source robotics** is a powerful educational tool; the Arctos community provided invaluable documentation.
-3. This project deepened my interest in combining embedded systems with higher-level AI/ML for autonomous manipulation.
+A working 6-DOF robotic arm that executes repeatable, programmable pick-and-place routines, planned graphically through inverse kinematics and executed through custom firmware. The total cost was a fraction of a comparable commercial arm.
 
----
+## What I Learned
+
+- Embedded and software skills are complementary. Getting the arm working required equal parts hardware debugging and software design, and neither could be skipped.
+- Open-source robotics is a powerful learning tool. The Arctos community's documentation made it possible to focus effort on the engineering rather than reverse-engineering.
+- This project deepened my interest in combining embedded systems with higher-level AI and ML for autonomous manipulation, a direction I continued in later robotics work.

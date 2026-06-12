@@ -1,34 +1,89 @@
 ---
 title: "Pawse"
-summary: "A phone lockbox productivity system that physically locks your phone during focus sessions, controlled by a mobile app with AI-powered notification filtering. Semifinalist at the UCI Stella Zhang New Venture Competition and the Beall & Butterworth Product Design Competition 2026."
-tags: ["React Native", "Expo", "Arduino", "C++", "Python", "PyTorch", "Supabase", "BLE", "FastAPI", "Machine Learning", "Embedded Systems", "Mobile"]
+summary: "A productivity system that pairs a physical phone lockbox with a mobile app. An ESP32-controlled box locks your phone during focus sessions while an on-device AI classifier decides which notifications are urgent enough to interrupt you."
+tags:
+  [
+    "React Native",
+    "Expo",
+    "Arduino",
+    "C++",
+    "Python",
+    "PyTorch",
+    "Supabase",
+    "BLE",
+    "FastAPI",
+    "Machine Learning",
+    "Embedded Systems",
+    "Mobile",
+  ]
 startDate: 2025-09-01
 endDate: 2026-06-01
-url: "https://github.com/linh-on/pawse"
-cover: ../../assets/images/hourglass.jpg
+github: "https://github.com/linh-on/pawse"
+award: "Semifinalist, UCI Stella Zhang New Venture Competition & Beall and Butterworth Product Design Competition 2026"
+role: "Co-founder & CTO"
+timeline: "Sep 2025 to Jun 2026"
 ---
 
 ## Overview
 
-Pawse is a productivity system that combines a physical phone lockbox with a mobile app to help users stay focused. The box is controlled by an ESP32 microcontroller over Bluetooth — when a focus session starts, the app locks the box and an AI classifier decides which notifications are important enough to interrupt the session. Built by a five-person team. Semifinalist at the UCI Stella Zhang New Venture Competition and the Beall & Butterworth Product Design Competition 2026.
+Pawse is a productivity system built by a five-person team that combines custom hardware, a mobile app, and machine learning. A physical lockbox holds the user's phone during focus sessions. The box is driven by an ESP32 microcontroller and communicates with a React Native app over Bluetooth Low Energy. While a session is active, an AI classifier screens incoming notifications and only lets truly urgent ones interrupt the user.
 
-## Role
-
-Co-founder, CTO & CEO — led the technical architecture across firmware, mobile, and AI. Personally built the ESP32 firmware in Arduino/C++, the MobileBERT-based notification classifier, the BLE communication layer between the hardware and app, and multiple React Native screens including HomeScreen, ActiveSessionScreen, GracePeriodScreen, SchoolScreen, StatsScreen, SettingsScreen, and ProfileScreen.
+The project reached the semifinals of both the UCI Stella Zhang New Venture Competition and the Beall and Butterworth Product Design Competition in 2026, where it was presented with a full pitch deck, financial model, and live hardware demo.
 
 ## Problem
 
-Most productivity apps rely on willpower — notifications still come in and phones are still reachable. We wanted something with a physical consequence: if your phone is locked in a box, you actually can't use it.
+Most productivity apps rely on willpower. Notifications still arrive, and the phone is still within reach, so a single buzz is enough to break a deep work session. At the same time, fully blocking everything is not realistic: some notifications, like a call from a family member or a time-sensitive alert, genuinely matter.
 
-## Solution
+Pawse solves both problems at once. The lockbox adds a real physical barrier, and the AI filter makes sure that barrier only opens when something actually important happens.
 
-Built a lockbox controlled by a servo motor and ESP32, paired with a React Native app over BLE. An Android native notification listener captures incoming notifications and routes them through a MobileBERT classifier (95% accuracy) to decide if they're urgent enough to trigger a grace period — giving the user a short window to unlock the box if needed. All session data syncs to Supabase.
+## My Role
 
-## Technical Details
-- ESP32 firmware in Arduino/C++ with FreeRTOS-safe architecture controlling servo, LCD, and physical buttons
-- BLE communication between ESP32 and React Native app with MTU truncation handling
-- MobileBERT notification classifier trained on Google Colab, reaching 95% accuracy with TF-IDF fallback
-- Classifier deployed as a FastAPI/Docker API on Hugging Face Spaces
-- React Native/Expo mobile app with Supabase backend for session tracking and user data
-- Android native notification listener integration for real-time notification capture
-- School mode with teacher-student session flow for classroom use
+As co-founder and CTO, I owned the technical architecture across all three layers of the system: firmware, mobile, and machine learning. My hands-on contributions included:
+
+- Writing the complete ESP32 firmware in Arduino/C++, controlling the servo lock, LCD display, and physical buttons
+- Building the BLE communication layer between the hardware and the app
+- Training and deploying the MobileBERT notification classifier
+- Developing the majority of the app's screens, including Home, Active Session, Grace Period, School, Stats, Settings, and Profile
+
+## Key Features
+
+- **Physical lockout.** A servo-driven lockbox physically secures the phone for the duration of a focus session, removing the temptation entirely.
+- **AI notification filtering.** An on-device notification listener routes every incoming notification through a MobileBERT classifier that reaches 95% accuracy on urgency detection, with a TF-IDF model as a lightweight fallback.
+- **Grace period flow.** When the classifier flags a notification as urgent, the user gets a short window to unlock the box, so emergencies are never locked away.
+- **School mode.** A teacher-student session flow designed for classroom use, letting a teacher start and manage sessions for a group of students.
+- **Session tracking and stats.** All session data syncs to Supabase, powering streaks, history, and progress statistics in the app.
+
+## Tech Stack
+
+- **Hardware:** ESP32 microcontroller, servo motor, LCD display, physical buttons, 3D-printed enclosure
+- **Firmware:** Arduino/C++ with a FreeRTOS-safe task architecture
+- **Mobile:** React Native with Expo, native Android notification listener module
+- **Backend:** Supabase for authentication and session data
+- **Machine Learning:** MobileBERT classifier built in PyTorch, trained on Google Colab, served through a FastAPI app in Docker on Hugging Face Spaces
+- **Communication:** Bluetooth Low Energy between the app and the ESP32
+
+## Development Process
+
+The system was built in parallel tracks. The firmware started as a simple servo controller and grew into a FreeRTOS-safe architecture that manages the lock, LCD, buttons, and BLE connection without blocking. On the mobile side, I built the core session flow first, then layered in the native Android notification listener, the grace period logic, and school mode.
+
+For the classifier, I collected and labeled notification data, fine-tuned MobileBERT on Google Colab, and benchmarked it against a TF-IDF baseline. The final model was packaged behind a FastAPI endpoint in Docker so the app could call it as a simple API, with the TF-IDF model kept as an offline fallback.
+
+The enclosure went through several 3D-printed iterations to fit the electronics cleanly and survive everyday handling, and the whole system was rehearsed end to end for live competition demos.
+
+## Challenges & Solutions
+
+- **BLE message truncation.** Long JSON payloads were silently cut off by the BLE MTU limit, corrupting commands between the app and the box. I implemented MTU negotiation and message chunking so payloads of any size arrive intact.
+- **Firmware stability.** Early firmware crashed when BLE callbacks and the main loop touched shared state at the same time. Restructuring around FreeRTOS-safe tasks and queues eliminated the race conditions.
+- **Reliable notification capture.** React Native alone cannot read Android notifications, so I integrated a native Android notification listener and bridged it into the app's JavaScript layer.
+- **Class imbalance in training data.** Urgent notifications are rare, which skewed the classifier. Careful dataset balancing and evaluation against the TF-IDF baseline brought the MobileBERT model to 95% accuracy.
+
+## Final Result
+
+A fully working end-to-end product: a phone goes into the box, a session starts from the app, unimportant notifications stay silent, and an urgent one triggers a grace period that unlocks the box. Pawse was demoed live as a semifinalist at two UCI entrepreneurship competitions, backed by a complete pitch deck and financial model.
+
+## What I Learned
+
+- Hardware, mobile, and ML each fail in different ways, and integrating them taught me to design clear contracts between layers so problems can be isolated quickly.
+- Real-time embedded systems demand discipline around shared state. FreeRTOS task safety is not optional once BLE callbacks enter the picture.
+- A smaller model that ships, like MobileBERT with a TF-IDF fallback, beats a larger model that only runs in a notebook.
+- Presenting to competition judges sharpened my ability to explain deep technical work in plain language, a skill that matters as much as the engineering itself.
