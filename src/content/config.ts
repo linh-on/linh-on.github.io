@@ -42,7 +42,7 @@ const projects = defineCollection({
       // new fields
       github: z.string().optional(),
       demo: z.string().optional(),
-      award: z.string().optional(),
+      award: z.union([z.string(), z.array(z.string())]).optional(),
       status: z.string().optional(),
       role: z.string().optional(),
       timeline: z.string().optional(),
