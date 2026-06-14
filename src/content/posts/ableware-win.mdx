@@ -1,0 +1,44 @@
+---
+title: "How We Won 2nd Place with Ableware"
+author: "Linh On"
+publishDate: 2026-06-10
+tags: ["Ableware", "Robotics", "Teamwork"]
+description: "The story of building a lift you can run with just your voice, and how my team took home 2nd place at the 2026 UCI MCS ICS Expo."
+cover:
+  src: ../../assets/images/ableware-win.png
+  alt: "A cute robot with a 2nd place medal"
+---
+
+## A quick win to share
+
+My team and I won 2nd place at the 2026 UCI MCS ICS Expo with a project called Ableware, and I still get a little excited every time I think about it. So I wanted to write down the whole story, from the first idea to standing there at the expo while the judges looked at our work.
+
+## The idea
+
+Ableware is a lift you can control with just your voice. We made it for people who have a hard time moving around and cannot easily press buttons or tap a screen. The whole point was to make something they could run completely hands-free, just by talking to it.
+
+The way it works is pretty simple to explain, even if it took a while to build. A small computer called a Raspberry Pi sits and waits to hear the wake word "Ableware." Once it hears that, it figures out what you said next, like up, down, or stop. Then it passes that command to a main server, and the server moves the real lift, updates a 3D model on screen, and refreshes a live dashboard, all at the same time.
+
+## What I worked on
+
+I focused on the hardware and the back-end, which is the behind-the-scenes part that connects everything. I wrote the code that drives the Arduino and the lift motor, and I built the link that lets the Raspberry Pi and the main server talk to each other. I also connected the whole voice flow from start to finish, so that talking into the microphone actually made the lift move.
+
+One thing I learned fast is that getting two different computers to talk to each other in real time is harder than it sounds. The Raspberry Pi had to send its commands the moment it heard them, and the server had to catch them and react right away. We used a kind of live connection called a WebSocket to make that happen.
+
+## The part that was hard
+
+The trickiest part was testing. We did not always have the real lift hardware ready and plugged in, so we built a 3D model of the lift on the computer using a tool called PyBullet. That way we could test how the lift would move without needing the physical parts every single time. This saved us so much time, and it meant more than one person could work on the project at once.
+
+There were also plenty of small bugs that ate up whole afternoons. A command would get sent but not received, or the wake word would not trigger, or the motor would move the wrong way. Every fix felt small on its own, but together they added up to something that actually worked.
+
+## Expo day
+
+Walking into the expo with a project that worked was a great feeling. We set everything up, ran through it a few times to make sure the voice control was solid, and then waited for the judges. Explaining the project out loud made me realize how much I had learned, since I could talk about the hardware, the server, and the voice flow without even thinking about it.
+
+When they announced that we got 2nd place, the whole team was thrilled. It was proof that all the late nights and the long bug hunts were worth it.
+
+## What I took away
+
+The biggest thing I learned is that a real project pulls from a lot of different skills at once. I had to think about the hardware, the code that runs the motor, and the software that ties it all together. None of those pieces work alone, and getting them to cooperate is most of the challenge.
+
+I also learned how much a good team matters. We split up the work, helped each other when someone got stuck, and kept each other motivated. Ableware would not exist without all of us, and 2nd place felt like a win we earned together.

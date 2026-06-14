@@ -16,47 +16,148 @@ interface Props {
 
 const {id, title, description, publishDate, tags, cover} = Astro.props as Props;
 
-const post = {
-    id,
-    data: {
-        title,
-        description,
-        publishDate,
-        tags,
-        cover,
-    },
-};
+// cute rotating pastel palette for tag pills
+const palette = [
+    {bg: "#ffe4f0", fg: "#d6478f"},
+    {bg: "#def7ec", fg: "#1f9e63"},
+    {bg: "#ece9fe", fg: "#6d4bd6"},
+    {bg: "#ffeede", fg: "#d97a37"},
+    {bg: "#e0f2fe", fg: "#2a7fc4"},
+];
+
+const niceDate = publishDate.toLocaleDateString("en-US", {
+    month: "long", day: "numeric", year: "numeric",
+});
 ---
 
-<a href=`/blog/${id}` aria-label=`Read post about ${title}` class="flex flex-col md:flex-row md:items-center gap-4">
-    <!--post cover-->
-    <div class="flex-none w-full md:w-40 h-40 overflow-hidden rounded-xl">
-        <Image transition:name={`${post.id}-image`} src={post.data.cover.src} alt={post.data.cover.alt ?? title}
-               class="w-full h-full object-cover rounded-xl"/>
+<a href={`/blog/${id}`} aria-label={`Read post about ${title}`} class="cute-card group">
+    <div class="cute-media">
+        <Image
+            transition:name={`${id}-image`}
+            src={cover.src}
+            alt={cover.alt ?? title}
+            class="cute-img"
+        />
     </div>
-    <!--post info-->
-    <div class="flex flex-col gap-2">
-        <div class="flex items-center gap-1.5">
-            <div class="flex items-center gap-1">
-                <ClockIcon class="w-4 h-4 text-gray-500"/>
-                <time class="text-sm text-gray-500" datetime={post.data.publishDate.toISOString()}>
-                    {post.data.publishDate.toDateString()}
-                </time>
-            </div>
-            <span class=" text-gray-500">
-                                        &middot;
-                                    </span>
-            <div class="flex gap-2">
-                {post.data.tags.map((tag) => (
-                        <span class="text-sm text-gray-500">
-                                                    #{tag}
-                                                </span>
-                ))}
-            </div>
+
+    <div class="cute-body">
+        <span class="date-pill">
+            <ClockIcon class="w-3.5 h-3.5" />
+            <time datetime={publishDate.toISOString()}>{niceDate}</time>
+        </span>
+
+        <h3 class="cute-title">{title}</h3>
+        <p class="cute-desc">{description}</p>
+
+        <div class="tag-row">
+            {tags.map((tag, i) => (
+                <span class="tag" style={`background:${palette[i % palette.length].bg};color:${palette[i % palette.length].fg};`}>
+                    #{tag}
+                </span>
+            ))}
         </div>
-        <h3 class="text-xl font-bold">{post.data.title}</h3>
-        <div class="flex flex-col gap-4">
-            <p class="text-sm">{post.data.description}</p>
-        </div>
+
+        <span class="read-more">Read the story <span class="arrow">&rarr;</span></span>
     </div>
 </a>
+
+<style>
+    .cute-card {
+        display: flex;
+        flex-direction: column;
+        background: #ffffff;
+        border: 2px solid #f2e6f5;
+        border-radius: 26px;
+        overflow: hidden;
+        box-shadow: 0 8px 22px rgba(160, 120, 190, 0.10);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        text-decoration: none;
+        height: 100%;
+    }
+    .cute-card:hover {
+        transform: translateY(-6px);
+        border-color: #f7c5e6;
+        box-shadow: 0 16px 34px rgba(160, 120, 190, 0.22);
+    }
+
+    .cute-media {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        background: linear-gradient(135deg, #fdeffa, #eef0ff);
+    }
+    .cute-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.35s ease;
+    }
+    .cute-card:hover .cute-img { transform: scale(1.05); }
+
+    .cute-body {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px 22px 22px;
+    }
+
+    .date-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        align-self: flex-start;
+        background: #fbf0fb;
+        color: #b06aa6;
+        font-size: 12.5px;
+        font-weight: 600;
+        padding: 5px 12px;
+        border-radius: 999px;
+    }
+
+    .cute-title {
+        font-size: 21px;
+        font-weight: 800;
+        line-height: 1.25;
+        color: #3a2e44;
+        margin: 2px 0;
+    }
+    .cute-card:hover .cute-title { color: #c0468f; }
+
+    .cute-desc {
+        font-size: 14.5px;
+        line-height: 1.55;
+        color: #6b6472;
+    }
+
+    .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 4px;
+    }
+    .tag {
+        font-size: 12px;
+        font-weight: 700;
+        padding: 4px 11px;
+        border-radius: 999px;
+    }
+
+    .read-more {
+        margin-top: 8px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #c0468f;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .arrow { transition: transform 0.2s ease; }
+    .cute-card:hover .arrow { transform: translateX(4px); }
+
+    @media (prefers-color-scheme: dark) {
+        .cute-card { background: #1b1722; border-color: #2e2738; box-shadow: 0 8px 22px rgba(0,0,0,0.35); }
+        .cute-title { color: #f3eafa; }
+        .cute-desc { color: #c3b9cf; }
+        .date-pill { background: #2a2233; color: #e8a6da; }
+    }
+</style>

@@ -5,7 +5,6 @@ import BackBtn from "../../components/BackBtn.astro";
 import {Image} from "astro:assets";
 import BackToTop from "../../components/BackToTop.astro";
 
-
 export async function getStaticPaths() {
     const posts = await getCollection('posts');
     return posts.map(post => ({
@@ -15,27 +14,73 @@ export async function getStaticPaths() {
 }
 
 const {post} = Astro.props;
-
-const {title, description, publishDate, tags, cover} = post.data;
-
+const {title, description, publishDate, tags, cover, author} = post.data;
 const {Content} = await render(post);
+
+const niceDate = publishDate.toLocaleDateString("en-US", {
+    month: "long", day: "numeric", year: "numeric",
+});
+
+const words = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
+const readingTime = Math.max(1, Math.round(words / 200));
 ---
 <Layout title={title} description={description} imageOg={cover.src.src} scrollSmooth={true}>
-    <>
-        <div class="flex justify-center mt-10">
+    <article class="mx-auto max-w-3xl px-6 py-12 md:py-16">
+        <div class="mb-8">
             <BackBtn/>
         </div>
-        <div class="flex flex-col gap-6 justify-center items-center">
-            <h1 class="text-3xl font-bold text-center">{title}</h1>
-            <p class="text-sm text-n500 dark:text-primary-dark ">
-                {tags.join(', ')}
+
+        <header class="mb-8">
+            <div class="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-500">
+                <time datetime={publishDate.toISOString()}>{niceDate}</time>
+                {author && (<><span class="text-gray-300">·</span><span>{author}</span></>)}
+                <span class="text-gray-300">·</span>
+                <span>{readingTime} min read</span>
+            </div>
+
+            <h1 class="mb-4 text-3xl font-bold leading-tight text-gray-900 md:text-4xl">
+                {title}
+            </h1>
+
+            <p class="mb-5 text-lg leading-relaxed text-gray-500">
+                {description}
             </p>
-        </div>
-        <Image transition:name={`${post.id}-image`} class="rounded-2xl h-[400px] object-cover" src={cover.src}
-               alt="Main project image"/>
-        <article id="article" class="mt-8 prose dark:prose-invert">
+
+            <div class="flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                    <span class="rounded-full border border-gray-200 bg-gray-100 px-3 py-0.5 text-xs font-medium text-gray-600">
+                        #{tag}
+                    </span>
+                ))}
+            </div>
+        </header>
+
+        <Image
+            transition:name={`${post.id}-image`}
+            src={cover.src}
+            alt={cover.alt ?? title}
+            class="mb-10 w-full rounded-2xl border border-gray-100 object-cover"
+        />
+
+        <div class="post-body prose prose-lg max-w-none dark:prose-invert">
             <Content/>
-        </article>
-        <BackToTop />
-    </>
+        </div>
+
+        <BackToTop/>
+    </article>
 </Layout>
+
+<style>
+    .post-body :global(h2) {
+        margin-top: 2.2em;
+        margin-bottom: 0.7em;
+        font-weight: 700;
+        padding-bottom: 0.3em;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .post-body :global(p) { line-height: 1.75; }
+    .post-body :global(a) {
+        color: #15803d;
+        text-underline-offset: 3px;
+    }
+</style>

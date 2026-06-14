@@ -1,0 +1,50 @@
+---
+title: "Building Pawse and Becoming a Semifinalist"
+author: "Linh On"
+publishDate: 2026-03-15
+tags: ["Pawse", "Hardware", "Machine Learning"]
+description: "How my team built a box that locks your phone away while you focus, and made it to the semifinals at two competitions in 2026."
+cover:
+  src: ../../assets/images/pawse-win.png
+  alt: "A cute smiling lockbox with a paw print and a star"
+---
+
+## The win I want to talk about
+
+Pawse made it to the semifinals at the UCI Stella Zhang New Venture Competition and the Beall & Butterworth Product Design Competition 2026. For a project that started as a simple idea between friends, getting that far felt amazing. Here is the story of how we built it and what it taught me.
+
+## Why we made it
+
+Most focus apps only work if you have a ton of willpower. Your notifications still pop up, and your phone is still sitting right there in your hand, waiting for you to grab it. We wanted something with a real consequence. If your phone is locked inside a box, you simply cannot use it.
+
+So that is exactly what we built. Pawse is a real box that locks your phone away, and it pairs with a phone app. When you start a focus session, the app tells the box to lock, and now your phone is out of reach until your session is done.
+
+## The smart part
+
+Here is the piece I am most proud of. We did not want the box to block everything, because sometimes a notification really does matter, like a call from a family member. So we built a small AI model that reads your incoming notifications and decides which ones are important enough to interrupt you.
+
+That model reaches about 95% accuracy, which means it gets it right almost every time. If something important comes in, the box gives you a short window to unlock it in case you really need your phone. The rest of the noise just gets ignored, which is the whole point.
+
+## What I worked on
+
+I was a co-founder and I led the tech side, so I had my hands in a lot of parts. I wrote the code that runs on the chip inside the box, called an ESP32, which controls the lock motor, the small screen, and the buttons. I built the AI model that sorts notifications. I set up the Bluetooth link so the box and the app could talk to each other. And I made several screens in the app, like the Home, Active Session, and Settings screens.
+
+Juggling all of those parts taught me how to keep a big project organized. When one piece changed, I had to think about how it affected everything else.
+
+## The bugs that taught me the most
+
+Two problems stick out in my memory. The first was a Bluetooth bug where long messages between the box and the app kept getting cut off. It took a while to figure out, but tracking it down taught me a lot about how devices actually send data back and forth.
+
+The second was making sure the code on the ESP32 chip did not crash into itself. The chip had to do several jobs at once, like watch the buttons, run the motor, and update the screen, and I had to set it up so those jobs did not trip over each other. Getting that stable felt like a real milestone.
+
+## The competitions
+
+Pitching Pawse at the competitions was a whole new skill. It is one thing to build something, and another thing to stand in front of judges and explain why it matters in just a few minutes. We worked hard on our pitch, our demo, and the numbers behind the idea.
+
+Making it to the semifinals at both the Stella Zhang New Venture Competition and the Beall & Butterworth Product Design Competition was a huge moment for us. It meant people outside our team saw the value in what we made.
+
+## What I learned
+
+The biggest lesson was that building the product is only half the work. The other half is being able to explain it clearly and show people why it is worth their attention. I also learned how much a team can do when everyone owns their part and trusts each other to handle it.
+
+Pawse pushed me to grow as an engineer and as a teammate, and reaching the semifinals was a reward I will not forget.
