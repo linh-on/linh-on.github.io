@@ -64,6 +64,10 @@
 .scb{width:100%;background:#fdf8ee;border:1.5px solid #e5d7bb;color:#4a3c2a;padding:11px 14px;border-radius:10px;cursor:pointer;font-size:12px;font-family:monospace;text-align:left;letter-spacing:1.5px;transition:background 0.15s;font-weight:600;}
 .scb:hover{background:#f3e9d4;color:#2b2014;}
 
+/* flowing "current" dashes along the energized power-indicator loop */
+.bb-flow{stroke-dasharray:4 11;animation:bbflow 0.55s linear infinite;}
+@keyframes bbflow{to{stroke-dashoffset:-15;}}
+
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 880px){
   .bb-outer{height:auto;min-height:0;}
@@ -154,8 +158,12 @@ const DRAG_ON_AT_START=true;
 
 /*
  CIRCUIT TOPOLOGY:
-   SUPPLY ──[POWER push switch, top-right corner]──> +RAIL
-   +RAIL ──> D1 power-indicator LED ──> R1 current-limiting resistor (lit only when switched on)
+   POWER-ON INDICATOR LOOP (top-right, fully traced):
+     +RAIL ──> POWER push switch ──> D1 LED (anode→cathode) ──> −RAIL
+     A real series loop: current leaves the + rail, passes through the
+     latching POWER button, lights the D1 indicator LED, and returns to
+     the − rail. When the switch is OFF the loop is broken: the traces go
+     grey, no current animates, and the LED stays dark.
    +RAIL ──> PAWSE (MCU / brain)
    DEEP DIABETES (analog sensor) ──SIGNAL──> PAWSE
    OBSTACLE BOT (ToF sensor board) ──I2C DATA──> PAWSE
@@ -169,14 +177,14 @@ const DRAG_ON_AT_START=true;
 */
 
 const PROJECTS=[
-  {id:'pawse',name:'PAWSE',subtitle:'Smart Notification Classifier',bg:'#1b1b1f',border:'#16a34a',label:'#4ade80',icon:'🐾',x:130,y:36,w:250,h:122,pins:5,shape:'ic',tech:['Python','MobileBERT','ESP32','React Native','BLE','Supabase'],desc:'A phone lockbox that physically locks your phone during focus sessions, with AI-powered notification filtering.',highlights:['95%+ MobileBERT classifier accuracy','BLE hardware-software bridge','FreeRTOS firmware on ESP32','School mode with roster polling'],awards:['Semifinalist — UCI Stella Zhang New Venture Competition','Semifinalist — Beall & Butterworth 2026'],github:'https://github.com/linh-on/pawse',page:'/projects/pawse'},
-  {id:'ableware',name:'ABLEWARE',subtitle:'Assistive Lift System',bg:'#11301c',border:'#1d4ed8',label:'#6ee7a0',icon:'♿',x:530,y:33,w:230,h:115,pins:5,shape:'display',tech:['Python','Raspberry Pi','Arduino','WebSocket','FastAPI','TypeScript'],desc:'Voice-controlled assistive lift. A Pi listens for wake words and sends commands over WebSocket to a hub coordinating hardware and simulation.',highlights:['Wake word + Vosk voice pipeline','WebSocket hub architecture','PyBullet 3D simulation','React/TypeScript dashboard'],awards:['2nd Place — 2026 UCI MCS ICS Expo'],github:'https://github.com/EliyaKhajeiee/ableware-pi-final',page:'/projects/ableware'},
-  {id:'drama',name:'DRAMA TRACKER',subtitle:'Movie Web App',bg:'#231c0e',border:'#b45309',label:'#fcd34d',icon:'🎬',x:612,y:231,w:200,h:92,pins:3,shape:'ic',tech:['React.js','Node.js','PostgreSQL','Python','Flask','TMDB API'],desc:'Full-stack movie tracking app with a content-based filtering recommendation engine using TF-IDF cosine similarity.',highlights:['TF-IDF content filtering','TMDB API integration','Flask recommendation service','Vercel + Render deployed'],awards:[],github:'https://github.com/linh-on/drama-tracker',page:'/projects/drama-tracker'},
-  {id:'diabetes',name:'DEEP DIABETES',subtitle:'Risk Prediction Model',bg:'#16335e',border:'#0e7490',label:'#7dd3fc',icon:'🧬',x:80,y:233,w:200,h:92,pins:3,shape:'sensor',tech:['Python','PyTorch','Scikit-learn','Pandas','NumPy'],desc:'Deep MLP for diabetes risk prediction on CDC BRFSS 2015 data, outperforming baseline classifiers.',highlights:['Weighted BCE for imbalance','AdamW + CosineAnnealing LR','Early stopping on ROC-AUC','Feature ablation analysis'],awards:[],github:'https://github.com/juliethecao/deep-diabetes-risk',page:'/projects/deep-diabetes-risk'},
-  {id:'obstacle',name:'OBSTACLE BOT',subtitle:'Autonomous Avoidance Vehicle',bg:'#8f2424',border:'#b91c1c',label:'#ffe3c2',icon:'🚗',x:340,y:227,w:210,h:92,pins:3,shape:'sensor',tech:['Arduino','C++','VL53L1X ToF','TCA9548A','DRV8835'],desc:'Arduino-based autonomous vehicle that navigates around obstacles using time-of-flight distance sensors and differential drive motors.',highlights:['VL53L1X ToF sensor array','TCA9548A I2C multiplexer','DRV8835 motor driver control','Real-time avoidance logic'],awards:[],github:'https://github.com/linh-on',page:'/projects/obstacle-avoidance-vehicle'},
-  {id:'arctos',name:'ARCTOS 6-DOF',subtitle:'Robotic Arm',bg:'#1e1a2e',border:'#7c3aed',label:'#c4b5fd',icon:'🦾',x:122,y:427,w:200,h:92,pins:3,shape:'ic',tech:['Arduino','C++','Python','Arctos Studio','3D Printing'],desc:'6-DOF robotic arm using Arduino MEGA coordinating stepper motors across all joints for competition tasks.',highlights:['6-joint stepper motor control','Custom CAD end-effector','Waypoint programming','Cup stacking & weight lift'],awards:[],github:'https://github.com/linh-on',page:'/projects/arctos-robotic-arm'},
-  {id:'spider',name:'SPIDER DROID',subtitle:'Autonomous Robot',bg:'#241313',border:'#b91c1c',label:'#fca5a5',icon:'🕷️',x:460,y:440,w:170,h:92,pins:3,shape:'ic',tech:['Python','PyTorch','PPO','Jetson Nano','LiDAR'],desc:'3D-printed spider robot trained with PPO RL to walk autonomously across varied terrain, deployed on Jetson Nano.',highlights:['PPO reinforcement learning','LiDAR obstacle detection','Jetson Nano deployment','No external compute'],awards:[],github:'https://github.com/linh-on',page:'/projects/ai-spider-droid'},
-  {id:'new',name:'NEW',subtitle:'To be put in',bg:'#2a2a2e',border:'#9ca3af',label:'#e5e7eb',icon:'✨',x:740,y:440,w:200,h:92,pins:3,shape:'ic',tech:['TBD'],desc:'Reserved slot for an upcoming project.',highlights:[],awards:[],github:'https://github.com/linh-on',page:'#'},
+  {id:'pawse',name:'PAWSE',subtitle:'Smart Notification Classifier',bg:'#1b1b1f',border:'#16a34a',label:'#4ade80',icon:'🐾',x:130,y:36,w:250,h:122,pins:5,shape:'ic',tech:['Python','MobileBERT','ESP32','React Native','BLE','Supabase'],desc:'A phone lockbox that physically locks your phone during focus sessions, with AI-powered notification filtering.',highlights:['95%+ MobileBERT classifier accuracy','BLE hardware-software bridge','FreeRTOS firmware on ESP32','School mode with roster polling'],awards:['Semifinalist — UCI Stella Zhang New Venture Competition','Semifinalist — Beall & Butterworth 2026'],github:'https://github.com/linh-on/pawse',page:'/projects/pawse',fmt:{subDY:25,subSize:12,techDY:48,techSize:10}},
+  {id:'ableware',name:'ABLEWARE',subtitle:'Assistive Lift System',bg:'#11301c',border:'#1d4ed8',label:'#6ee7a0',icon:'♿',x:530,y:33,w:230,h:115,pins:5,shape:'display',tech:['Python','Raspberry Pi','Arduino','WebSocket','FastAPI','TypeScript'],desc:'Voice-controlled assistive lift. A Pi listens for wake words and sends commands over WebSocket to a hub coordinating hardware and simulation.',highlights:['Wake word + Vosk voice pipeline','WebSocket hub architecture','PyBullet 3D simulation','React/TypeScript dashboard'],awards:['2nd Place — 2026 UCI MCS ICS Expo'],github:'https://github.com/EliyaKhajeiee/ableware-pi-final',page:'/projects/ableware',fmt:{subDY:25,subSize:11.5,techDY:46,techSize:8.5}},
+  {id:'drama',name:'DRAMA TRACKER',subtitle:'Movie Web App',bg:'#231c0e',border:'#b45309',label:'#fcd34d',icon:'🎬',x:612,y:231,w:200,h:92,pins:3,shape:'ic',tech:['React.js','Node.js','PostgreSQL','Python','Flask','TMDB API'],desc:'Full-stack movie tracking app with a content-based filtering recommendation engine using TF-IDF cosine similarity.',highlights:['TF-IDF content filtering','TMDB API integration','Flask recommendation service','Vercel + Render deployed'],awards:[],github:'https://github.com/linh-on/drama-tracker',page:'/projects/drama-tracker',fmt:{subDY:18,techDY:37}},
+  {id:'diabetes',name:'DEEP DIABETES',subtitle:'Risk Prediction Model',bg:'#16335e',border:'#0e7490',label:'#7dd3fc',icon:'🧬',x:80,y:233,w:200,h:92,pins:3,shape:'sensor',tech:['Python','PyTorch','Scikit-learn','Pandas','NumPy'],desc:'Deep MLP for diabetes risk prediction on CDC BRFSS 2015 data, outperforming baseline classifiers.',highlights:['Weighted BCE for imbalance','AdamW + CosineAnnealing LR','Early stopping on ROC-AUC','Feature ablation analysis'],awards:[],github:'https://github.com/juliethecao/deep-diabetes-risk',page:'/projects/deep-diabetes-risk',fmt:{subDY:18,techDY:37}},
+  {id:'obstacle',name:'OBSTACLE BOT',subtitle:'Autonomous Avoidance Vehicle',bg:'#8f2424',border:'#b91c1c',label:'#ffe3c2',icon:'🚗',x:340,y:227,w:210,h:92,pins:3,shape:'sensor',tech:['Arduino','C++','VL53L1X ToF','TCA9548A','DRV8835'],desc:'Arduino-based autonomous vehicle that navigates around obstacles using time-of-flight distance sensors and differential drive motors.',highlights:['VL53L1X ToF sensor array','TCA9548A I2C multiplexer','DRV8835 motor driver control','Real-time avoidance logic'],awards:[],github:'https://github.com/linh-on',page:'/projects/obstacle-avoidance-vehicle',fmt:{subDY:18,subSize:10,techDY:36}},
+  {id:'arctos',name:'ARCTOS 6-DOF',subtitle:'Robotic Arm',bg:'#1e1a2e',border:'#7c3aed',label:'#c4b5fd',icon:'🦾',x:122,y:427,w:200,h:92,pins:3,shape:'ic',tech:['Arduino','C++','Python','Arctos Studio','3D Printing'],desc:'6-DOF robotic arm using Arduino MEGA coordinating stepper motors across all joints for competition tasks.',highlights:['6-joint stepper motor control','Custom CAD end-effector','Waypoint programming','Cup stacking & weight lift'],awards:[],github:'https://github.com/linh-on',page:'/projects/arctos-robotic-arm',fmt:{subDY:18,techDY:37}},
+  {id:'spider',name:'SPIDER DROID',subtitle:'Autonomous Robot',bg:'#241313',border:'#b91c1c',label:'#fca5a5',icon:'🕷️',x:460,y:440,w:170,h:92,pins:3,shape:'ic',tech:['Python','PyTorch','PPO','Jetson Nano','LiDAR'],desc:'3D-printed spider robot trained with PPO RL to walk autonomously across varied terrain, deployed on Jetson Nano.',highlights:['PPO reinforcement learning','LiDAR obstacle detection','Jetson Nano deployment','No external compute'],awards:[],github:'https://github.com/linh-on',page:'/projects/ai-spider-droid',fmt:{subDY:18,techDY:37,techSize:8.5}},
+  {id:'new',name:'NEW',subtitle:'To be put in',bg:'#2a2a2e',border:'#9ca3af',label:'#e5e7eb',icon:'✨',x:740,y:440,w:200,h:92,pins:3,shape:'ic',tech:['TBD'],desc:'Reserved slot for an upcoming project.',highlights:[],awards:[],github:'https://github.com/linh-on',page:'#',fmt:{subDY:18,techDY:37}},
 ];
 
 /*
@@ -187,8 +195,6 @@ const PROJECTS=[
  Routes are recomputed every drag frame by drawWires().
 */
 const WIRES=[
-  {a:{rail:'top'}, b:{x:962,y:8},  color:'#d8281c'}, // supply: + rail -> POWER switch
-  {a:{x:927,y:26}, b:{x:943,y:26}, color:'#d8281c'}, // switch -> D1 power indicator
   {a:{rail:'top'},    b:{p:'pawse',dx:40,dy:0},      color:'#d8281c'}, // VCC: top rail -> MCU
   {a:{rail:'bottom'}, b:{p:'arctos',dx:100,dy:92},   color:'#2e2e32'}, // GND: bottom rail -> motor driver
   {a:{p:'diabetes',dx:100,dy:0},  b:{p:'pawse',dx:100,dy:122},  color:'#2563eb'}, // SIGNAL: diabetes sensor -> MCU
@@ -257,6 +263,15 @@ CHANNELS.forEach(cy=>{
 /* ---------- DYNAMIC JUMPER WIRES ---------- */
 const wireG=el('g');
 svg.appendChild(wireG);
+/* ---------- POWER-CIRCUIT TRACE LAYER ----------
+ The POWER switch -> D1 LED indicator loop is drawn as live traces in its
+ own layer, sitting just above the jumper wires but below the chips and the
+ switch/LED bodies. Both endpoints tap the top power rail, so the loop reads
+ as a real series circuit: +RAIL -> button -> LED anode/cathode -> -RAIL. */
+const pcG=el('g');
+svg.appendChild(pcG);
+const BC={x:840,y:70};   // POWER button centre (fixed anchor for the + rail tap)
+let d1Pos=null;          // D1 LED centre (assigned + made draggable below)
 const handleG=el('g'); // endpoint grab handles — appended above the chips later
 
 function routeD(pts,r=6){
@@ -345,6 +360,43 @@ function drawWires(){
       handleG.appendChild(grab);
     });
   });
+  drawPC();
+}
+
+/* ---------- POWER-INDICATOR LOOP (live traces) ----------
+ Three series segments forming the real loop, re-routed every frame so the
+ D1 LED can be dragged anywhere and the traces follow:
+   1) + rail  -> POWER button left terminal   (red)
+   2) button right terminal -> D1 anode        (red)
+   3) D1 cathode -> − rail                      (blue)
+ Powered: traces take their rail colours and a white "current" dash flows
+ along them. Unpowered: traces go dead grey, no flow. */
+const RAILY=4; // y where a trace meets the top power rail
+function drawPC(){
+  if(!d1Pos)return;                 // LED not built yet (first drawWires call)
+  while(pcG.firstChild)pcG.removeChild(pcG.firstChild);
+  const R=26,LEAD=18;
+  const bx=BC.x,by=BC.y,lx=d1Pos.x,ly=d1Pos.y;
+  const segs=[
+    {pts:[[bx-R,RAILY],[bx-R,by]],      col:'#d8281c'}, // + rail -> button (left terminal)
+    {pts:[[bx+R,by],[lx-LEAD,ly]],      col:'#d8281c'}, // button -> LED anode
+    {pts:[[lx+LEAD,ly],[lx+LEAD,RAILY]],col:'#2a5ac4'}, // LED cathode -> − rail
+  ];
+  segs.forEach(s=>{
+    const d=routeD(s.pts);
+    pcG.appendChild(el('path',{d,stroke:'#3a2e1a',opacity:0.15,'stroke-width':5.2,fill:'none','stroke-linecap':'round','stroke-linejoin':'round',transform:'translate(1.4,2.2)'}));
+    pcG.appendChild(el('path',{d,stroke:powerOn?s.col:'#9a958c','stroke-width':4.2,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'}));
+    pcG.appendChild(el('path',{d,stroke:'#ffffff',opacity:0.32,'stroke-width':1.1,fill:'none','stroke-linecap':'round',transform:'translate(-0.5,-0.8)'}));
+    if(powerOn){
+      const flow=el('path',{d,stroke:'#ffffff',opacity:0.9,'stroke-width':2,fill:'none','stroke-linecap':'round'});
+      flow.setAttribute('class','bb-flow');
+      pcG.appendChild(flow);
+    }
+  });
+  // solder pads at every terminal
+  [[bx-R,by],[bx+R,by],[lx-LEAD,ly],[lx+LEAD,ly]].forEach(([px,py])=>{
+    pcG.appendChild(el('circle',{cx:px,cy:py,r:2.8,fill:'#bdbdbd',stroke:'#7a7a7a','stroke-width':0.7}));
+  });
 }
 
 // Wire-end dragging: handles are rebuilt every frame, so the move/up
@@ -386,8 +438,9 @@ svg.addEventListener('pointerup',()=>{
 });
 svg.addEventListener('pointercancel',()=>{wireDrag=null;});
 
-// Generic drag for small board parts (R1, D1). Honors the DRAG toggle.
-function makeDraggable(group,pos,minX,maxX,minY,maxY){
+// Generic drag for small board parts (the D1 LED). Honors the DRAG toggle.
+// onMove (optional) fires every drag frame, e.g. to re-route attached traces.
+function makeDraggable(group,pos,minX,maxX,minY,maxY,onMove){
   let di=null;
   chipGroups.push(group); // picks up cursor + touch-action from the DRAG toggle
   group.addEventListener('pointerdown',ev=>{
@@ -406,6 +459,7 @@ function makeDraggable(group,pos,minX,maxX,minY,maxY){
     pos.x=Math.min(maxX,Math.max(minX,sx-di.ox));
     pos.y=Math.min(maxY,Math.max(minY,sy-di.oy));
     group.setAttribute('transform',`translate(${pos.x},${pos.y})`);
+    if(onMove)onMove();
   });
   const endPart=()=>{di=null;group.style.cursor=dragEnabled?'grab':'pointer';};
   group.addEventListener('pointerup',endPart);
@@ -447,59 +501,57 @@ function fitDefault(){
 
 drawWires();
 
-/* ---------- POWER INDICATOR CIRCUIT: POWER switch -> D1 -> R1 ---------- */
+/* ---------- POWER-ON INDICATOR CIRCUIT: POWER switch -> D1 LED ----------
+ The current-limiting resistor has been removed for clarity. The loop now
+ reads cleanly: + rail -> POWER button -> D1 LED -> − rail (see drawPC). */
 
-// R1 current-limiting resistor (draggable)
-const r1Pos={x:868,y:22};
-const r1G=el('g',{transform:`translate(${r1Pos.x},${r1Pos.y})`});
-r1G.appendChild(el('line',{x1:-26,y1:0,x2:26,y2:0,stroke:'#9c9c9c','stroke-width':1.6,'stroke-linecap':'round'}));
-r1G.appendChild(el('rect',{x:-15,y:-5,width:30,height:10,rx:5,fill:'#d9b38c',stroke:'#b98e60','stroke-width':0.8,filter:'url(#cshadow)'}));
-[['#7a3b12',-9],['#1a1a1a',-3],['#d8281c',3],['#c89b2a',9]].forEach(([c,bx])=>{
-  r1G.appendChild(el('rect',{x:bx-1.4,y:-5,width:2.8,height:10,fill:c,opacity:0.9}));
-});
-r1G.appendChild(tx('R1',{x:0,y:16,'font-size':6.5,'font-family':'monospace',fill:'#8a8273','text-anchor':'middle'}));
-svg.appendChild(r1G);
-makeDraggable(r1G,r1Pos,BX+30,BX+BW-30,BY+10,BY+BH-24);
-
-// D1 power LED (lit only when switched on, draggable)
-const d1Pos={x:918,y:20};
+// D1 power LED — large 5mm-style indicator, lit only when switched on (draggable)
+d1Pos={x:920,y:70};
 const d1G=el('g',{transform:`translate(${d1Pos.x},${d1Pos.y})`});
-const d1Glow=el('circle',{cx:0,cy:0,r:11,fill:'#ff5b3a'});
+const d1Glow=el('circle',{cx:0,cy:0,r:22,fill:'#ff5b3a'});
 d1Glow.style.opacity=0;
 d1G.appendChild(d1Glow);
-d1G.appendChild(el('line',{x1:-3,y1:4,x2:-3,y2:14,stroke:'#9c9c9c','stroke-width':1.4}));
-d1G.appendChild(el('line',{x1:3,y1:4,x2:3,y2:12,stroke:'#9c9c9c','stroke-width':1.4}));
-const d1Dome=el('path',{d:'M-6,4 L-6,-2 A6,6 0 0,1 6,-2 L6,4 Z',fill:'#7a2a22',stroke:'#00000022','stroke-width':0.6,filter:'url(#cshadow)'});
+// short leads from the body out to the trace terminals
+d1G.appendChild(el('line',{x1:-18,y1:0,x2:-10,y2:0,stroke:'#b4b4b4','stroke-width':2.6,'stroke-linecap':'round'}));
+d1G.appendChild(el('line',{x1:10,y1:0,x2:18,y2:0,stroke:'#b4b4b4','stroke-width':2.6,'stroke-linecap':'round'}));
+// outer rim + main coloured dome (d1Dome is recoloured by power state)
+d1G.appendChild(el('circle',{cx:0,cy:0,r:11,fill:'#5a1f19',stroke:'#00000033','stroke-width':0.8,filter:'url(#cshadow)'}));
+const d1Dome=el('circle',{cx:0,cy:0,r:9.5,fill:'#7a2a22'});
 d1G.appendChild(d1Dome);
-d1G.appendChild(el('circle',{cx:-1.8,cy:-2.5,r:1.6,fill:'#fff',opacity:0.7}));
-d1G.appendChild(tx('D1',{x:0,y:26,'font-size':6.5,'font-family':'monospace',fill:'#8a8273','text-anchor':'middle'}));
+// flat side = cathode (−) marker, the classic LED orientation cue
+d1G.appendChild(el('rect',{x:7,y:-7.5,width:3,height:15,rx:1,fill:'#3a1410',opacity:0.85}));
+// specular highlight
+d1G.appendChild(el('ellipse',{cx:-3.2,cy:-3.2,rx:3.4,ry:2.4,fill:'#ffffff',opacity:0.6}));
+d1G.appendChild(tx('D1',{x:0,y:30,'font-size':10,'font-family':'monospace',fill:'#8a8273','text-anchor':'middle','font-weight':'bold'}));
 svg.appendChild(d1G);
-makeDraggable(d1G,d1Pos,BX+12,BX+BW-12,BY+10,BY+BH-32);
+makeDraggable(d1G,d1Pos,BX+24,BX+BW-24,BY+24,BY+BH-30,drawPC);
 
-// POWER push switch — round latching power button, top-right corner
-const swG=el('g',{transform:'translate(962,26)'});
+// POWER push switch — large round latching power button, top-right
+const swG=el('g',{transform:`translate(${BC.x},${BC.y})`});
 swG.style.cursor='pointer';
-const swGlow=el('circle',{r:24,fill:'#2aa84a'});
+const swGlow=el('circle',{r:34,fill:'#2aa84a'});
 swGlow.style.opacity=0;
 swG.appendChild(swGlow);
-swG.appendChild(el('circle',{r:18,fill:'#c4c4c8',stroke:'#8a8a8e','stroke-width':1.2,filter:'url(#cshadow)'}));
-swG.appendChild(el('circle',{r:14.5,fill:'#dcdce0',stroke:'#aaaaae','stroke-width':0.7}));
-const swRing=el('circle',{r:11.8,fill:'none',stroke:'#4a4a4e','stroke-width':2});
+swG.appendChild(el('circle',{r:26,fill:'#c4c4c8',stroke:'#8a8a8e','stroke-width':1.6,filter:'url(#cshadow)'}));
+swG.appendChild(el('circle',{r:21,fill:'#dcdce0',stroke:'#aaaaae','stroke-width':1}));
+const swRing=el('circle',{r:17,fill:'none',stroke:'#4a4a4e','stroke-width':2.8});
 swG.appendChild(swRing);
-const swCap=el('circle',{r:9.6,fill:'#2e2e32',stroke:'#1a1a1c','stroke-width':0.7});
+const swCap=el('circle',{r:14,fill:'#2e2e32',stroke:'#1a1a1c','stroke-width':1});
 swG.appendChild(swCap);
-swG.appendChild(el('circle',{cx:-2.8,cy:-3.2,r:2.6,fill:'#fff',opacity:0.12}));
-const swSym=el('g',{stroke:'#88888c','stroke-width':1.9,fill:'none','stroke-linecap':'round'});
-swSym.appendChild(el('path',{d:'M-4.2,-3.4 A5.8,5.8 0 1 0 4.2,-3.4'}));
-swSym.appendChild(el('line',{x1:0,y1:-7,x2:0,y2:-0.8}));
+swG.appendChild(el('circle',{cx:-4,cy:-4.6,r:3.8,fill:'#fff',opacity:0.12}));
+const swSym=el('g',{stroke:'#88888c','stroke-width':2.8,fill:'none','stroke-linecap':'round'});
+swSym.appendChild(el('path',{d:'M-6,-5 A8.4,8.4 0 1 0 6,-5'}));
+swSym.appendChild(el('line',{x1:0,y1:-10.5,x2:0,y2:-1.2}));
 swG.appendChild(swSym);
 swG.addEventListener('pointerdown',ev=>ev.stopPropagation()); // never pan from the switch
-swG.addEventListener('mousedown',()=>swCap.setAttribute('r','8.8'));
-swG.addEventListener('mouseup',()=>swCap.setAttribute('r','9.6'));
-swG.addEventListener('mouseleave',()=>swCap.setAttribute('r','9.6'));
+swG.addEventListener('mousedown',()=>swCap.setAttribute('r','13'));
+swG.addEventListener('mouseup',()=>swCap.setAttribute('r','14'));
+swG.addEventListener('mouseleave',()=>swCap.setAttribute('r','14'));
 swG.addEventListener('click',togglePower);
 svg.appendChild(swG);
-svg.appendChild(tx('POWER',{x:962,y:54,'font-size':7.5,'font-family':'monospace',fill:'#8a8273','text-anchor':'middle','font-weight':'bold','letter-spacing':1}));
+svg.appendChild(tx('POWER',{x:BC.x,y:BC.y+40,'font-size':11,'font-family':'monospace',fill:'#8a8273','text-anchor':'middle','font-weight':'bold','letter-spacing':1.5}));
+
+drawPC(); // initial render of the loop traces now that the button + LED exist
 
 // boot instruction shown on the board while the system is off
 const hintT=tx('⏻  SYSTEM OFF! PLEASE PRESS THE POWER SWITCH TO BOOT',{x:500,y:190,'text-anchor':'middle','font-size':20,'font-weight':'bold','font-family':'Courier New,monospace',fill:'#6b5b45','letter-spacing':2});
@@ -513,8 +565,8 @@ svg.appendChild(hintT);
 PROJECTS.forEach(p=>{
   const g=el('g',{transform:`translate(${p.x},${p.y})`});
   const W=p.w,H=p.h;
-  const subFill=p.shape==='ic'?'#b8b8c0':'#ece4d4';
-  const techFill=p.shape==='ic'?'#8e8e98':'#d2c6b0';
+  const subFill=p.shape==='ic'?'#c4c4cc':'#f1ebde';
+  const techFill=p.shape==='ic'?'#a7a7b6':'#e6dcc6';
 
   if(p.shape==='sensor'){
     const strokeC=p.id==='obstacle'?'#4a0e0e':'#0c2244';
@@ -555,21 +607,22 @@ PROJECTS.forEach(p=>{
   // silkscreen text lives in its own group so it can go dark when power is off
   const tg=el('g');
   tg.style.transition='opacity 0.45s';
-  // Per-component text formatting. Defaults come from chip size; any project
-  // can override any field individually by adding fmt:{...} to its entry, e.g.
-  //   fmt:{nameSize:16,techY:78}  or  fmt:{iconX:20,subDY:18}
+  // Per-component text formatting. Sizes default by chip size, but each
+  // project sets its OWN spacing via fmt:{...} in the PROJECTS array so the
+  // tech-stack line sits a deliberate distance under the subtitle on every
+  // chip (techDY is measured DOWN from the icon baseline, like subDY).
   const big=p.h>110;
   const F=Object.assign(
-    big?{iconX:14,iconY:34,iconSize:20,nameDX:28,nameDY:-3,nameSize:14,subDY:20,subSize:10,techY:84,techSize:7.5,techCount:3}
-       :{iconX:14,iconY:27,iconSize:15,nameDX:22,nameDY:-2,nameSize:11.5,subDY:16,subSize:8.5,techY:68,techSize:7.5,techCount:2},
+    big?{iconX:15,iconY:37,iconSize:23,nameDX:30,nameDY:-4,nameSize:17,subDY:24,subSize:12,techDY:44,techSize:9.5,techCount:3}
+       :{iconX:14,iconY:29,iconSize:18,nameDX:25,nameDY:-3,nameSize:13.5,subDY:18,subSize:10.5,techDY:37,techSize:9,techCount:2},
     p.shape==='display'?{iconX:26}:{},
     p.fmt||{}
   );
   tg.appendChild(tx(p.icon,{x:F.iconX,y:F.iconY,'font-size':F.iconSize,'font-family':'sans-serif'}));
   tg.appendChild(tx(p.name,{x:F.iconX+F.nameDX,y:F.iconY+F.nameDY,'text-anchor':'start','font-size':F.nameSize,'font-weight':'bold','font-family':'Courier New,monospace',fill:p.label,'letter-spacing':1.2}));
   tg.appendChild(tx(p.subtitle,{x:F.iconX,y:F.iconY+F.subDY,'text-anchor':'start','font-size':F.subSize,'font-family':'Courier New,monospace',fill:subFill}));
-  tg.appendChild(tx(p.tech.slice(0,F.techCount).join(' · '),{x:F.iconX,y:F.techY,'text-anchor':'start','font-size':F.techSize,'font-family':'Courier New,monospace',fill:techFill}));
-  tg.appendChild(tx(`${p.id.slice(0,4).toUpperCase()}-${200+Math.floor(p.x/10)*3}`,{x:p.shape==='ic'?22:28,y:H-8,'font-size':6,'font-family':'Courier New,monospace',fill:'#ffffff33'}));
+  tg.appendChild(tx(p.tech.slice(0,F.techCount).join(' · '),{x:F.iconX,y:F.iconY+F.techDY,'text-anchor':'start','font-size':F.techSize,'font-family':'Courier New,monospace',fill:techFill,'font-weight':500}));
+  tg.appendChild(tx(`${p.id.slice(0,4).toUpperCase()}-${200+Math.floor(p.x/10)*3}`,{x:p.shape==='ic'?22:28,y:H-8,'font-size':8,'font-family':'Courier New,monospace',fill:'#ffffff4d'}));
   g.appendChild(tg);
   p._tg=tg;
 
@@ -644,6 +697,7 @@ function applyPower(){
   // downstream wires read dead when unpowered
   wireG.style.opacity=powerOn?1:0.3;
   handleG.style.opacity=powerOn?1:0.3;
+  drawPC(); // re-colour the power-indicator loop + toggle current flow
   // chip silkscreen goes dark, status LEDs unlit
   PROJECTS.forEach(p=>{
     p._tg.style.opacity=powerOn?1:0;
