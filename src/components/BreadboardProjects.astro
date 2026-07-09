@@ -4,7 +4,7 @@
 <div class="bb-outer">
 <style is:global>
 .bb-outer, .bb-outer *{box-sizing:border-box;margin:0;padding:0;}
-.bb-outer{width:100%;height:calc(100vh - 130px);min-height:540px;display:block;}
+.bb-outer{width:100%;height:100%;min-height:540px;display:block;}
 .wrap{font-family:'Courier New',monospace;background:#fdfaf3;padding:12px 16px 12px;border-radius:0;height:100%;display:flex;flex-direction:column;}
 .hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
 .ttl{font-size:24px;color:#1a6b3a;letter-spacing:4px;font-weight:bold;}
@@ -741,6 +741,7 @@ function togglePower(){
   }else{
     powerOn=true;
   }
+  try{sessionStorage.setItem('bb-power',powerOn?'1':'0');}catch(e){} // survives leaving + coming back
   applyPower();
 }
 
@@ -904,8 +905,12 @@ svg.addEventListener('wheel',ev=>{
 
 window.addEventListener('resize',applyCam);
 
-// initialize power + drag state instantly (no transition flash), then enable fades
-powerOn=POWER_ON_AT_START;
+// initialize power + drag state instantly (no transition flash), then enable fades.
+// A power state saved earlier in this browser session wins over the default,
+// so navigating to a project and coming back doesn't shut the system down.
+let savedPower=null;
+try{savedPower=sessionStorage.getItem('bb-power');}catch(e){}
+powerOn=savedPower===null?POWER_ON_AT_START:savedPower==='1';
 applyPower();
 applyDrag();
 fitDefault();
