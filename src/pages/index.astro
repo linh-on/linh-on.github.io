@@ -35,6 +35,14 @@ function formatDate(dateStr: string): string {
   const d = new Date(dateStr);
   return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 }
+
+// Range label for a role: "Jul 2026", "Feb 2026 — Jun 2026", or "Feb 2026 — Present"
+function formatRange(start: string, end?: string): string {
+  const s = formatDate(start);
+  if (!end) return `${s} — Present`;
+  const e = formatDate(end);
+  return s === e ? s : `${s} — ${e}`;
+}
 ---
 
 <Layout title="Linh On | Portfolio" description="Software Engineer & Embedded Systems Engineer — MS CS student at UC Irvine" scrollSmooth={true}>
@@ -247,17 +255,47 @@ function formatDate(dateStr: string): string {
                   <p class="text-gray-500 text-sm mt-0.5">{job.company} · {job.location}</p>
                 </div>
                 <span class="font-mono text-xs px-2.5 py-1 rounded-md shrink-0" style="background:#f0fdf4;color:#22c55e;border:1px solid #bbf7d0;">
-                  {formatDate(job.startDate)} — {job.endDate ? formatDate(job.endDate) : 'Present'}
+                  {formatRange(job.startDate, job.currentJob ? undefined : job.endDate)}
                 </span>
               </div>
-              <ul class="space-y-1.5">
-                {job.goals.map(goal => (
-                  <li class="flex gap-2 text-gray-700 text-base leading-relaxed">
-                    <span class="flex-shrink-0 mt-0.5" style="color:#9ca3af;">▸</span>
-                    {goal}
-                  </li>
-                ))}
-              </ul>
+              {job.roles ? (
+                <div class="relative mt-4">
+                  <div class="absolute w-px bg-gray-200 pointer-events-none" style="left:5px;top:10px;bottom:10px;"></div>
+                  <div class="space-y-6">
+                    {job.roles.map((role, i) => (
+                      <div class="relative" style="padding-left:30px;">
+                        <div
+                          class="absolute rounded-full border-2 border-white shadow"
+                          style={`width:12px;height:12px;left:0;top:5px;background:${i === 0 ? '#22c55e' : '#9ca3af'};`}
+                        ></div>
+                        <div class="flex flex-wrap items-start justify-between gap-2 mb-1.5">
+                          <h4 class="font-semibold text-gray-900">{role.title}</h4>
+                          <span class="font-mono text-xs px-2.5 py-1 rounded-md shrink-0" style="background:#f9fafb;color:#6b7280;border:1px solid #e5e7eb;">
+                            {formatRange(role.startDate, role.endDate)}
+                          </span>
+                        </div>
+                        <ul class="space-y-1.5">
+                          {role.goals.map(goal => (
+                            <li class="flex gap-2 text-gray-700 text-base leading-relaxed">
+                              <span class="flex-shrink-0 mt-0.5" style="color:#9ca3af;">▸</span>
+                              {goal}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <ul class="space-y-1.5">
+                  {job.goals.map(goal => (
+                    <li class="flex gap-2 text-gray-700 text-base leading-relaxed">
+                      <span class="flex-shrink-0 mt-0.5" style="color:#9ca3af;">▸</span>
+                      {goal}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
         ))}

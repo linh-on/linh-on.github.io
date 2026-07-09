@@ -1,3 +1,10 @@
+interface RolePeriod {
+  title: string;
+  startDate: string;
+  endDate?: string;
+  goals: string[];
+}
+
 interface WorkExperience {
   title: string;
   startDate: string;
@@ -7,9 +14,44 @@ interface WorkExperience {
   description: string;
   goals: string[];
   currentJob: boolean;
+  // Progression track: multiple roles held within the same organization,
+  // rendered as a connected mini-timeline inside one experience card
+  // (newest role first). When set, `goals` on the entry itself is unused.
+  roles?: RolePeriod[];
 }
 
 const workExperience: WorkExperience[] = [
+  {
+    title: "ICS Summer Academy — Intelligent Robotics",
+    startDate: "2025-02-01",
+    company: "UCI Donald Bren School of ICS",
+    location: "Irvine, CA",
+    description:
+      "Progressed from volunteering on the session's autonomous robot demo to leading the program assistant team for the July session.",
+    goals: [],
+    roles: [
+      {
+        title: "Lead Program Assistant",
+        startDate: "2026-07-01",
+        endDate: "2026-07-31",
+        goals: [
+          "Lead the program assistant team for the Intelligent Robotics session, supporting daily lectures and labs where 30+ high school students design and build autonomous driving robots.",
+          "Mentor students through hands-on lab work spanning Arduino programming in C, circuit building, and robot assembly, debugging both code and hardware issues on the spot.",
+          "Coordinate daily session logistics between instructors and staff, preparing lab materials and robot kits and keeping the program schedule running smoothly.",
+        ],
+      },
+      {
+        title: "Robotics Assistant (Volunteer)",
+        startDate: "2025-02-01",
+        goals: [
+          "Collaborate with the instructing professor to design, build, and iterate on the autonomous driving robot demo used as the reference platform for the Intelligent Robotics curriculum.",
+          "Develop and test the robot across its full stack — Arduino firmware in C, sensor and motor circuitry, and chassis assembly — so the build is reliable and reproducible by students.",
+          "Refine the demo through repeated build-test cycles, documenting issues and fixes to shape the hands-on lab instructions used during the program.",
+        ],
+      },
+    ],
+    currentJob: true,
+  },
   {
     title: "AI Research Assistant & Web Development Intern",
     startDate: "2026-01-01",

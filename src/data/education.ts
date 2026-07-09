@@ -11,7 +11,7 @@ interface Education {
 const education: Education[] = [
     {
         title: "Master of Science in Computer Science",
-        startDate: "2025-03-01",
+        startDate: "2025-09-01",
         endDate: "",
         school: "University of California, Irvine",
         location: "Irvine, CA",
