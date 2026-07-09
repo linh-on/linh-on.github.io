@@ -4,7 +4,7 @@
 <div class="bb-outer">
 <style is:global>
 .bb-outer, .bb-outer *{box-sizing:border-box;margin:0;padding:0;}
-.bb-outer{width:100%;height:min(820px,calc(100vh - 130px));min-height:540px;display:block;}
+.bb-outer{width:100%;height:calc(100vh - 130px);min-height:540px;display:block;}
 .wrap{font-family:'Courier New',monospace;background:#fdfaf3;padding:12px 16px 12px;border-radius:0;height:100%;display:flex;flex-direction:column;}
 .hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
 .ttl{font-size:24px;color:#1a6b3a;letter-spacing:4px;font-weight:bold;}
@@ -102,9 +102,9 @@
       <div class="rail rail-b" id="rb"></div>
       <div class="foot">
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-          <button class="zb" id="dragbtn" onclick="toggleDrag()">🔓 DRAG: ON</button>
+          <button class="zb" id="dragbtn" onclick="toggleDrag()">DRAG: ON</button>
           <div class="fstatus" id="fstatus">● ALL SYSTEMS OPERATIONAL</div>
-          <div class="fstatus" style="color:#a09584">✋ DRAG BOARD TO PAN &nbsp;·&nbsp; CTRL+SCROLL TO ZOOM</div>
+          <div class="fstatus" style="color:#a09584">DRAG BOARD TO PAN &nbsp;·&nbsp; CTRL+SCROLL TO ZOOM</div>
         </div>
         <div class="zbtns">
           <button class="zb" onclick="zm(-0.2)">− ZOOM</button>
@@ -121,7 +121,7 @@
           <div style="font-size:13px;color:#8a7a64;margin-top:6px;font-family:sans-serif" id="pe-sub">Select a chip to inspect</div>
         </div>
         <div class="pempty">
-          <div class="pempty-icon" id="pe-icon">🔌</div>
+          <div class="pempty-icon" id="pe-icon">⏻</div>
           <div class="pempty-txt" id="pe-txt">TAP A COMPONENT<br><span style="font-size:11px;color:#bdab8e">to power it up</span></div>
           <div class="sc-list" id="sc-list"></div>
         </div>
@@ -177,14 +177,14 @@ const DRAG_ON_AT_START=true;
 */
 
 const PROJECTS=[
-  {id:'pawse',name:'PAWSE',subtitle:'Smart Notification Classifier',bg:'#1b1b1f',border:'#16a34a',label:'#4ade80',icon:'🐾',x:130,y:36,w:250,h:122,pins:5,shape:'ic',tech:['Python','MobileBERT','ESP32','React Native','BLE','Supabase'],desc:'A phone lockbox that physically locks your phone during focus sessions, with AI-powered notification filtering.',highlights:['95%+ MobileBERT classifier accuracy','BLE hardware-software bridge','FreeRTOS firmware on ESP32','School mode with roster polling'],awards:['Semifinalist — UCI Stella Zhang New Venture Competition','Semifinalist — Beall & Butterworth 2026'],github:'https://github.com/linh-on/pawse',page:'/projects/pawse',fmt:{subDY:25,subSize:12,techDY:48,techSize:10}},
-  {id:'ableware',name:'ABLEWARE',subtitle:'Assistive Lift System',bg:'#11301c',border:'#1d4ed8',label:'#6ee7a0',icon:'♿',x:530,y:33,w:230,h:115,pins:5,shape:'display',tech:['Python','Raspberry Pi','Arduino','WebSocket','FastAPI','TypeScript'],desc:'Voice-controlled assistive lift. A Pi listens for wake words and sends commands over WebSocket to a hub coordinating hardware and simulation.',highlights:['Wake word + Vosk voice pipeline','WebSocket hub architecture','PyBullet 3D simulation','React/TypeScript dashboard'],awards:['2nd Place — 2026 UCI MCS ICS Expo'],github:'https://github.com/EliyaKhajeiee/ableware-pi-final',page:'/projects/ableware',fmt:{subDY:25,subSize:11.5,techDY:46,techSize:8.5}},
-  {id:'drama',name:'DRAMA TRACKER',subtitle:'Movie Web App',bg:'#231c0e',border:'#b45309',label:'#fcd34d',icon:'🎬',x:612,y:231,w:200,h:92,pins:3,shape:'ic',tech:['React.js','Node.js','PostgreSQL','Python','Flask','TMDB API'],desc:'Full-stack movie tracking app with a content-based filtering recommendation engine using TF-IDF cosine similarity.',highlights:['TF-IDF content filtering','TMDB API integration','Flask recommendation service','Vercel + Render deployed'],awards:[],github:'https://github.com/linh-on/drama-tracker',page:'/projects/drama-tracker',fmt:{subDY:18,techDY:37}},
-  {id:'diabetes',name:'DEEP DIABETES',subtitle:'Risk Prediction Model',bg:'#16335e',border:'#0e7490',label:'#7dd3fc',icon:'🧬',x:80,y:233,w:200,h:92,pins:3,shape:'sensor',tech:['Python','PyTorch','Scikit-learn','Pandas','NumPy'],desc:'Deep MLP for diabetes risk prediction on CDC BRFSS 2015 data, outperforming baseline classifiers.',highlights:['Weighted BCE for imbalance','AdamW + CosineAnnealing LR','Early stopping on ROC-AUC','Feature ablation analysis'],awards:[],github:'https://github.com/juliethecao/deep-diabetes-risk',page:'/projects/deep-diabetes-risk',fmt:{subDY:18,techDY:37}},
-  {id:'obstacle',name:'OBSTACLE BOT',subtitle:'Autonomous Avoidance Vehicle',bg:'#8f2424',border:'#b91c1c',label:'#ffe3c2',icon:'🚗',x:340,y:227,w:210,h:92,pins:3,shape:'sensor',tech:['Arduino','C++','VL53L1X ToF','TCA9548A','DRV8835'],desc:'Arduino-based autonomous vehicle that navigates around obstacles using time-of-flight distance sensors and differential drive motors.',highlights:['VL53L1X ToF sensor array','TCA9548A I2C multiplexer','DRV8835 motor driver control','Real-time avoidance logic'],awards:[],github:'https://github.com/linh-on',page:'/projects/obstacle-avoidance-vehicle',fmt:{subDY:18,subSize:10,techDY:36}},
-  {id:'arctos',name:'ARCTOS 6-DOF',subtitle:'Robotic Arm',bg:'#1e1a2e',border:'#7c3aed',label:'#c4b5fd',icon:'🦾',x:122,y:427,w:200,h:92,pins:3,shape:'ic',tech:['Arduino','C++','Python','Arctos Studio','3D Printing'],desc:'6-DOF robotic arm using Arduino MEGA coordinating stepper motors across all joints for competition tasks.',highlights:['6-joint stepper motor control','Custom CAD end-effector','Waypoint programming','Cup stacking & weight lift'],awards:[],github:'https://github.com/linh-on',page:'/projects/arctos-robotic-arm',fmt:{subDY:18,techDY:37}},
-  {id:'spider',name:'SPIDER DROID',subtitle:'Autonomous Robot',bg:'#241313',border:'#b91c1c',label:'#fca5a5',icon:'🕷️',x:460,y:440,w:170,h:92,pins:3,shape:'ic',tech:['Python','PyTorch','PPO','Jetson Nano','LiDAR'],desc:'3D-printed spider robot trained with PPO RL to walk autonomously across varied terrain, deployed on Jetson Nano.',highlights:['PPO reinforcement learning','LiDAR obstacle detection','Jetson Nano deployment','No external compute'],awards:[],github:'https://github.com/linh-on',page:'/projects/ai-spider-droid',fmt:{subDY:18,techDY:37,techSize:8.5}},
-  {id:'new',name:'NEW',subtitle:'To be put in',bg:'#2a2a2e',border:'#9ca3af',label:'#e5e7eb',icon:'✨',x:740,y:440,w:200,h:92,pins:3,shape:'ic',tech:['TBD'],desc:'Reserved slot for an upcoming project.',highlights:[],awards:[],github:'https://github.com/linh-on',page:'#',fmt:{subDY:18,techDY:37}},
+  {id:'pawse',name:'PAWSE',subtitle:'Smart Notification Classifier',bg:'#1b1b1f',border:'#16a34a',label:'#4ade80',x:30,y:22,w:270,h:140,pins:5,shape:'ic',tech:['Python','MobileBERT','ESP32','React Native','BLE','Supabase'],desc:'A phone lockbox that physically locks your phone during focus sessions, with AI-powered notification filtering.',highlights:['95%+ MobileBERT classifier accuracy','BLE hardware-software bridge','FreeRTOS firmware on ESP32','School mode with roster polling'],awards:['Semifinalist — UCI Stella Zhang New Venture Competition','Semifinalist — Beall & Butterworth 2026'],github:'https://github.com/linh-on/pawse',page:'/projects/pawse',fmt:{subDY:27,subSize:13,techDY:52,techSize:11}},
+  {id:'ableware',name:'ABLEWARE',subtitle:'Assistive Lift System',bg:'#11301c',border:'#1d4ed8',label:'#6ee7a0',x:420,y:24,w:260,h:135,pins:5,shape:'display',tech:['Python','Raspberry Pi','Arduino','WebSocket','FastAPI','TypeScript'],desc:'Voice-controlled assistive lift. A Pi listens for wake words and sends commands over WebSocket to a hub coordinating hardware and simulation.',highlights:['Wake word + Vosk voice pipeline','WebSocket hub architecture','PyBullet 3D simulation','React/TypeScript dashboard'],awards:['2nd Place — 2026 UCI MCS ICS Expo'],github:'https://github.com/EliyaKhajeiee/ableware-pi-final',page:'/projects/ableware',fmt:{subDY:27,subSize:12.5,techDY:50,techSize:9.5}},
+  {id:'drama',name:'DRAMA TRACKER',subtitle:'Movie Web App',bg:'#231c0e',border:'#b45309',label:'#fcd34d',x:740,y:225,w:230,h:115,pins:3,shape:'ic',tech:['React.js','Node.js','PostgreSQL','Python','Flask','TMDB API'],desc:'Full-stack movie tracking app with a content-based filtering recommendation engine using TF-IDF cosine similarity.',highlights:['TF-IDF content filtering','TMDB API integration','Flask recommendation service','Vercel + Render deployed'],awards:[],github:'https://github.com/linh-on/drama-tracker',page:'/projects/drama-tracker',fmt:{subDY:21,techDY:42}},
+  {id:'diabetes',name:'DEEP DIABETES',subtitle:'Risk Prediction Model',bg:'#16335e',border:'#0e7490',label:'#7dd3fc',x:30,y:225,w:230,h:115,pins:3,shape:'sensor',tech:['Python','PyTorch','Scikit-learn','Pandas','NumPy'],desc:'Deep MLP for diabetes risk prediction on CDC BRFSS 2015 data, outperforming baseline classifiers.',highlights:['Weighted BCE for imbalance','AdamW + CosineAnnealing LR','Early stopping on ROC-AUC','Feature ablation analysis'],awards:[],github:'https://github.com/juliethecao/deep-diabetes-risk',page:'/projects/deep-diabetes-risk',fmt:{subDY:21,techDY:42}},
+  {id:'obstacle',name:'OBSTACLE BOT',subtitle:'Autonomous Avoidance Vehicle',bg:'#8f2424',border:'#b91c1c',label:'#ffe3c2',x:385,y:222,w:240,h:115,pins:3,shape:'sensor',tech:['Arduino','C++','VL53L1X ToF','TCA9548A','DRV8835'],desc:'Arduino-based autonomous vehicle that navigates around obstacles using time-of-flight distance sensors and differential drive motors.',highlights:['VL53L1X ToF sensor array','TCA9548A I2C multiplexer','DRV8835 motor driver control','Real-time avoidance logic'],awards:[],github:'https://github.com/linh-on',page:'/projects/obstacle-avoidance-vehicle',fmt:{subDY:21,subSize:11,techDY:42}},
+  {id:'arctos',name:'ARCTOS 6-DOF',subtitle:'Robotic Arm',bg:'#1e1a2e',border:'#7c3aed',label:'#c4b5fd',x:30,y:415,w:230,h:115,pins:3,shape:'ic',tech:['Arduino','C++','Python','Arctos Studio','3D Printing'],desc:'6-DOF robotic arm using Arduino MEGA coordinating stepper motors across all joints for competition tasks.',highlights:['6-joint stepper motor control','Custom CAD end-effector','Waypoint programming','Cup stacking & weight lift'],awards:[],github:'https://github.com/linh-on',page:'/projects/arctos-robotic-arm',fmt:{subDY:21,techDY:42}},
+  {id:'spider',name:'SPIDER DROID',subtitle:'Autonomous Robot',bg:'#241313',border:'#b91c1c',label:'#fca5a5',x:400,y:420,w:200,h:115,pins:3,shape:'ic',tech:['Python','PyTorch','PPO','Jetson Nano','LiDAR'],desc:'3D-printed spider robot trained with PPO RL to walk autonomously across varied terrain, deployed on Jetson Nano.',highlights:['PPO reinforcement learning','LiDAR obstacle detection','Jetson Nano deployment','No external compute'],awards:[],github:'https://github.com/linh-on',page:'/projects/ai-spider-droid',fmt:{subDY:21,techDY:42,techSize:9.5}},
+  {id:'new',name:'NEW',subtitle:'To be put in',bg:'#2a2a2e',border:'#9ca3af',label:'#e5e7eb',x:740,y:420,w:230,h:115,pins:3,shape:'ic',tech:['TBD'],desc:'Reserved slot for an upcoming project.',highlights:[],awards:[],github:'https://github.com/linh-on',page:'#',fmt:{subDY:21,techDY:42}},
 ];
 
 /*
@@ -196,15 +196,15 @@ const PROJECTS=[
 */
 const WIRES=[
   {a:{rail:'top'},    b:{p:'pawse',dx:40,dy:0},      color:'#d8281c'}, // VCC: top rail -> MCU
-  {a:{rail:'bottom'}, b:{p:'arctos',dx:100,dy:92},   color:'#2e2e32'}, // GND: bottom rail -> motor driver
-  {a:{p:'diabetes',dx:100,dy:0},  b:{p:'pawse',dx:100,dy:122},  color:'#2563eb'}, // SIGNAL: diabetes sensor -> MCU
-  {a:{p:'obstacle',dx:105,dy:0},  b:{p:'pawse',dx:160,dy:122},  color:'#e8a013', via:188}, // I2C DATA via channel 1
-  {a:{p:'pawse',dx:215,dy:122},   b:{p:'arctos',dx:40,dy:0},    color:'#f47b20', via:366}, // PWM via channel 2
-  {a:{p:'pawse',dx:250,dy:72},    b:{p:'ableware',dx:0,dy:75},  color:'#22a04a', lane:0.42}, // DATA: MCU -> display
-  {a:{p:'pawse',dx:250,dy:86},    b:{p:'ableware',dx:0,dy:89},  color:'#2563eb', lane:0.58}, // CLK:  MCU -> display
-  {a:{p:'ableware',dx:190,dy:115},b:{p:'drama',dx:108,dy:0},    color:'#0ea5b7'}, // BUS: display -> memory IC below
-  {a:{p:'drama',dx:190,dy:92},    b:{p:'spider',dx:85,dy:0},    color:'#c89b2a', via:370}, // ADDR via channel 2
-  {a:{p:'spider',dx:170,dy:46},   b:{p:'new',dx:0,dy:46},       color:'#7c3aed'}, // EXP: coprocessor -> expansion slot
+  {a:{rail:'bottom'}, b:{p:'arctos',dx:100,dy:115},  color:'#2e2e32'}, // GND: bottom rail -> motor driver
+  {a:{p:'diabetes',dx:115,dy:0},  b:{p:'pawse',dx:100,dy:140},  color:'#2563eb'}, // SIGNAL: diabetes sensor -> MCU
+  {a:{p:'obstacle',dx:120,dy:0},  b:{p:'pawse',dx:170,dy:140},  color:'#e8a013', via:188}, // I2C DATA via channel 1
+  {a:{p:'pawse',dx:235,dy:140},   b:{p:'arctos',dx:40,dy:0},    color:'#f47b20', via:366}, // PWM via channel 2
+  {a:{p:'pawse',dx:270,dy:80},    b:{p:'ableware',dx:0,dy:85},  color:'#22a04a', lane:0.42}, // DATA: MCU -> display
+  {a:{p:'pawse',dx:270,dy:94},    b:{p:'ableware',dx:0,dy:99},  color:'#2563eb', lane:0.58}, // CLK:  MCU -> display
+  {a:{p:'ableware',dx:215,dy:135},b:{p:'drama',dx:120,dy:0},    color:'#0ea5b7'}, // BUS: display -> memory IC below
+  {a:{p:'drama',dx:215,dy:115},   b:{p:'spider',dx:100,dy:0},   color:'#c89b2a', via:370}, // ADDR via channel 2
+  {a:{p:'spider',dx:200,dy:57},   b:{p:'new',dx:0,dy:57},       color:'#7c3aed'}, // EXP: coprocessor -> expansion slot
 ];
 
 let selected=null,blinkT=[],powerOn=true,dragEnabled=DRAG_ON_AT_START;
@@ -270,7 +270,11 @@ svg.appendChild(wireG);
  as a real series circuit: +RAIL -> button -> LED anode/cathode -> -RAIL. */
 const pcG=el('g');
 svg.appendChild(pcG);
-const BC={x:840,y:70};   // POWER button centre (fixed anchor for the + rail tap)
+const BC={x:905,y:64};   // POWER button centre — top-right corner (draggable; traces re-route live)
+const SW_SCALE=1.35;         // POWER button enlargement factor
+const SW_R=26*SW_SCALE;      // scaled outer radius — where the traces terminate
+const D1_SCALE=1.25;         // D1 LED enlargement factor
+const D1_LEAD=18*D1_SCALE;   // scaled LED lead length
 let d1Pos=null;          // D1 LED centre (assigned + made draggable below)
 const handleG=el('g'); // endpoint grab handles — appended above the chips later
 
@@ -371,11 +375,11 @@ function drawWires(){
    3) D1 cathode -> − rail                      (blue)
  Powered: traces take their rail colours and a white "current" dash flows
  along them. Unpowered: traces go dead grey, no flow. */
-const RAILY=4; // y where a trace meets the top power rail
+const RAILY=BY+2; // traces run to the true top edge of the board (the + / − rails), never cut mid-board
 function drawPC(){
   if(!d1Pos)return;                 // LED not built yet (first drawWires call)
   while(pcG.firstChild)pcG.removeChild(pcG.firstChild);
-  const R=26,LEAD=18;
+  const R=SW_R,LEAD=D1_LEAD;
   const bx=BC.x,by=BC.y,lx=d1Pos.x,ly=d1Pos.y;
   const segs=[
     {pts:[[bx-R,RAILY],[bx-R,by]],      col:'#d8281c'}, // + rail -> button (left terminal)
@@ -393,8 +397,8 @@ function drawPC(){
       pcG.appendChild(flow);
     }
   });
-  // solder pads at every terminal
-  [[bx-R,by],[bx+R,by],[lx-LEAD,ly],[lx+LEAD,ly]].forEach(([px,py])=>{
+  // solder pads at every terminal + where each trace taps the rails
+  [[bx-R,by],[bx+R,by],[lx-LEAD,ly],[lx+LEAD,ly],[bx-R,RAILY],[lx+LEAD,RAILY]].forEach(([px,py])=>{
     pcG.appendChild(el('circle',{cx:px,cy:py,r:2.8,fill:'#bdbdbd',stroke:'#7a7a7a','stroke-width':0.7}));
   });
 }
@@ -449,19 +453,24 @@ function makeDraggable(group,pos,minX,maxX,minY,maxY,onMove){
     if(!dragEnabled)return;
     ev.preventDefault();
     const[sx,sy]=svgPt(ev);
-    di={ox:sx-pos.x,oy:sy-pos.y};
+    di={ox:sx-pos.x,oy:sy-pos.y,moved:false};
     try{group.setPointerCapture(ev.pointerId);}catch(e){}
     group.style.cursor='grabbing';
   });
   group.addEventListener('pointermove',ev=>{
     if(!di)return;
     const[sx,sy]=svgPt(ev);
-    pos.x=Math.min(maxX,Math.max(minX,sx-di.ox));
-    pos.y=Math.min(maxY,Math.max(minY,sy-di.oy));
+    const nx=Math.min(maxX,Math.max(minX,sx-di.ox));
+    const ny=Math.min(maxY,Math.max(minY,sy-di.oy));
+    // <3px of travel still counts as a click (lets clickable parts like the
+    // POWER switch be draggable without every press toggling them)
+    if(!di.moved&&Math.hypot(nx-pos.x,ny-pos.y)<3)return;
+    di.moved=true;
+    pos.x=nx;pos.y=ny;
     group.setAttribute('transform',`translate(${pos.x},${pos.y})`);
     if(onMove)onMove();
   });
-  const endPart=()=>{di=null;group.style.cursor=dragEnabled?'grab':'pointer';};
+  const endPart=()=>{group._dragMoved=!!(di&&di.moved);di=null;group.style.cursor=dragEnabled?'grab':'pointer';};
   group.addEventListener('pointerup',endPart);
   group.addEventListener('pointercancel',endPart);
 }
@@ -506,50 +515,55 @@ drawWires();
  reads cleanly: + rail -> POWER button -> D1 LED -> − rail (see drawPC). */
 
 // D1 power LED — large 5mm-style indicator, lit only when switched on (draggable)
-d1Pos={x:920,y:70};
+d1Pos={x:975,y:64};
 const d1G=el('g',{transform:`translate(${d1Pos.x},${d1Pos.y})`});
+const d1Inner=el('g',{transform:`scale(${D1_SCALE})`}); // enlarged LED; terminals scale via D1_LEAD
+d1G.appendChild(d1Inner);
 const d1Glow=el('circle',{cx:0,cy:0,r:22,fill:'#ff5b3a'});
 d1Glow.style.opacity=0;
-d1G.appendChild(d1Glow);
+d1Inner.appendChild(d1Glow);
 // short leads from the body out to the trace terminals
-d1G.appendChild(el('line',{x1:-18,y1:0,x2:-10,y2:0,stroke:'#b4b4b4','stroke-width':2.6,'stroke-linecap':'round'}));
-d1G.appendChild(el('line',{x1:10,y1:0,x2:18,y2:0,stroke:'#b4b4b4','stroke-width':2.6,'stroke-linecap':'round'}));
+d1Inner.appendChild(el('line',{x1:-18,y1:0,x2:-10,y2:0,stroke:'#b4b4b4','stroke-width':2.6,'stroke-linecap':'round'}));
+d1Inner.appendChild(el('line',{x1:10,y1:0,x2:18,y2:0,stroke:'#b4b4b4','stroke-width':2.6,'stroke-linecap':'round'}));
 // outer rim + main coloured dome (d1Dome is recoloured by power state)
-d1G.appendChild(el('circle',{cx:0,cy:0,r:11,fill:'#5a1f19',stroke:'#00000033','stroke-width':0.8,filter:'url(#cshadow)'}));
+d1Inner.appendChild(el('circle',{cx:0,cy:0,r:11,fill:'#5a1f19',stroke:'#00000033','stroke-width':0.8,filter:'url(#cshadow)'}));
 const d1Dome=el('circle',{cx:0,cy:0,r:9.5,fill:'#7a2a22'});
-d1G.appendChild(d1Dome);
+d1Inner.appendChild(d1Dome);
 // flat side = cathode (−) marker, the classic LED orientation cue
-d1G.appendChild(el('rect',{x:7,y:-7.5,width:3,height:15,rx:1,fill:'#3a1410',opacity:0.85}));
+d1Inner.appendChild(el('rect',{x:7,y:-7.5,width:3,height:15,rx:1,fill:'#3a1410',opacity:0.85}));
 // specular highlight
-d1G.appendChild(el('ellipse',{cx:-3.2,cy:-3.2,rx:3.4,ry:2.4,fill:'#ffffff',opacity:0.6}));
-d1G.appendChild(tx('D1',{x:0,y:30,'font-size':10,'font-family':'monospace',fill:'#8a8273','text-anchor':'middle','font-weight':'bold'}));
+d1Inner.appendChild(el('ellipse',{cx:-3.2,cy:-3.2,rx:3.4,ry:2.4,fill:'#ffffff',opacity:0.6}));
+d1Inner.appendChild(tx('D1',{x:0,y:30,'font-size':10,'font-family':'monospace',fill:'#8a8273','text-anchor':'middle','font-weight':'bold'}));
 svg.appendChild(d1G);
-makeDraggable(d1G,d1Pos,BX+24,BX+BW-24,BY+24,BY+BH-30,drawPC);
+makeDraggable(d1G,d1Pos,BX+28,BX+BW-28,BY+28,BY+BH-38,drawPC);
 
-// POWER push switch — large round latching power button, top-right
+// POWER push switch — large round latching power button, top-right (draggable;
+// its rail trace re-routes live, and the label travels with it)
 const swG=el('g',{transform:`translate(${BC.x},${BC.y})`});
-swG.style.cursor='pointer';
+const swInner=el('g',{transform:`scale(${SW_SCALE})`}); // enlarged button; terminals scale via SW_R
+swG.appendChild(swInner);
 const swGlow=el('circle',{r:34,fill:'#2aa84a'});
 swGlow.style.opacity=0;
-swG.appendChild(swGlow);
-swG.appendChild(el('circle',{r:26,fill:'#c4c4c8',stroke:'#8a8a8e','stroke-width':1.6,filter:'url(#cshadow)'}));
-swG.appendChild(el('circle',{r:21,fill:'#dcdce0',stroke:'#aaaaae','stroke-width':1}));
+swInner.appendChild(swGlow);
+swInner.appendChild(el('circle',{r:26,fill:'#c4c4c8',stroke:'#8a8a8e','stroke-width':1.6,filter:'url(#cshadow)'}));
+swInner.appendChild(el('circle',{r:21,fill:'#dcdce0',stroke:'#aaaaae','stroke-width':1}));
 const swRing=el('circle',{r:17,fill:'none',stroke:'#4a4a4e','stroke-width':2.8});
-swG.appendChild(swRing);
+swInner.appendChild(swRing);
 const swCap=el('circle',{r:14,fill:'#2e2e32',stroke:'#1a1a1c','stroke-width':1});
-swG.appendChild(swCap);
-swG.appendChild(el('circle',{cx:-4,cy:-4.6,r:3.8,fill:'#fff',opacity:0.12}));
+swInner.appendChild(swCap);
+swInner.appendChild(el('circle',{cx:-4,cy:-4.6,r:3.8,fill:'#fff',opacity:0.12}));
 const swSym=el('g',{stroke:'#88888c','stroke-width':2.8,fill:'none','stroke-linecap':'round'});
 swSym.appendChild(el('path',{d:'M-6,-5 A8.4,8.4 0 1 0 6,-5'}));
 swSym.appendChild(el('line',{x1:0,y1:-10.5,x2:0,y2:-1.2}));
-swG.appendChild(swSym);
-swG.addEventListener('pointerdown',ev=>ev.stopPropagation()); // never pan from the switch
+swInner.appendChild(swSym);
+swG.appendChild(tx('POWER',{x:0,y:SW_R+20,'font-size':11,'font-family':'monospace',fill:'#8a8273','text-anchor':'middle','font-weight':'bold','letter-spacing':1.5}));
 swG.addEventListener('mousedown',()=>swCap.setAttribute('r','13'));
 swG.addEventListener('mouseup',()=>swCap.setAttribute('r','14'));
 swG.addEventListener('mouseleave',()=>swCap.setAttribute('r','14'));
-swG.addEventListener('click',togglePower);
+// a press that dragged the button must not also toggle power
+swG.addEventListener('click',()=>{if(swG._dragMoved){swG._dragMoved=false;return;}togglePower();});
 svg.appendChild(swG);
-svg.appendChild(tx('POWER',{x:BC.x,y:BC.y+40,'font-size':11,'font-family':'monospace',fill:'#8a8273','text-anchor':'middle','font-weight':'bold','letter-spacing':1.5}));
+makeDraggable(swG,BC,BX+SW_R+8,BX+BW-SW_R-8,BY+SW_R+8,BY+BH-SW_R-26,drawPC);
 
 drawPC(); // initial render of the loop traces now that the button + LED exist
 
@@ -611,15 +625,14 @@ PROJECTS.forEach(p=>{
   // project sets its OWN spacing via fmt:{...} in the PROJECTS array so the
   // tech-stack line sits a deliberate distance under the subtitle on every
   // chip (techDY is measured DOWN from the icon baseline, like subDY).
-  const big=p.h>110;
+  const big=p.h>125;
   const F=Object.assign(
-    big?{iconX:15,iconY:37,iconSize:23,nameDX:30,nameDY:-4,nameSize:17,subDY:24,subSize:12,techDY:44,techSize:9.5,techCount:3}
-       :{iconX:14,iconY:29,iconSize:18,nameDX:25,nameDY:-3,nameSize:13.5,subDY:18,subSize:10.5,techDY:37,techSize:9,techCount:2},
+    big?{iconX:15,iconY:37,nameDY:-4,nameSize:17,subDY:24,subSize:12,techDY:44,techSize:9.5,techCount:3}
+       :{iconX:15,iconY:33,nameDY:-3,nameSize:15.5,subDY:21,subSize:11.5,techDY:42,techSize:10,techCount:3},
     p.shape==='display'?{iconX:26}:{},
     p.fmt||{}
   );
-  tg.appendChild(tx(p.icon,{x:F.iconX,y:F.iconY,'font-size':F.iconSize,'font-family':'sans-serif'}));
-  tg.appendChild(tx(p.name,{x:F.iconX+F.nameDX,y:F.iconY+F.nameDY,'text-anchor':'start','font-size':F.nameSize,'font-weight':'bold','font-family':'Courier New,monospace',fill:p.label,'letter-spacing':1.2}));
+  tg.appendChild(tx(p.name,{x:F.iconX,y:F.iconY+F.nameDY,'text-anchor':'start','font-size':F.nameSize,'font-weight':'bold','font-family':'Courier New,monospace',fill:p.label,'letter-spacing':1.2}));
   tg.appendChild(tx(p.subtitle,{x:F.iconX,y:F.iconY+F.subDY,'text-anchor':'start','font-size':F.subSize,'font-family':'Courier New,monospace',fill:subFill}));
   tg.appendChild(tx(p.tech.slice(0,F.techCount).join(' · '),{x:F.iconX,y:F.iconY+F.techDY,'text-anchor':'start','font-size':F.techSize,'font-family':'Courier New,monospace',fill:techFill,'font-weight':500}));
   tg.appendChild(tx(`${p.id.slice(0,4).toUpperCase()}-${200+Math.floor(p.x/10)*3}`,{x:p.shape==='ic'?22:28,y:H-8,'font-size':8,'font-family':'Courier New,monospace',fill:'#ffffff4d'}));
@@ -678,7 +691,7 @@ const scList=document.getElementById('sc-list');
 if(scList){
   PROJECTS.forEach(p=>{
     const b=document.createElement('button');
-    b.className='scb';b.textContent=`${p.icon} ${p.name}`;
+    b.className='scb';b.textContent=p.name;
     b.style.borderColor=p.border+'55';b.style.color=p.border;
     b.addEventListener('click',()=>selectP(p));
     scList.appendChild(b);
@@ -714,7 +727,7 @@ function applyPower(){
   fs.style.color=powerOn?'#1a6b3a':'#a09584';
   // readout panel
   document.getElementById('pe-sub').textContent=powerOn?'Select a chip to inspect':'No power detected';
-  document.getElementById('pe-icon').textContent=powerOn?'🔌':'⏻';
+  document.getElementById('pe-icon').textContent='⏻';
   document.getElementById('pe-txt').innerHTML=powerOn
     ?'TAP A COMPONENT<br><span style="font-size:16px;color:#bdab8e">to power it up</span>'
     :'<span style="font-size:24px;color:#bdab8e; font-weight:bold;">SYSTEM OFFLINE</span><br><span style="font-size:24px;color:#bdab8e">press the POWER switch on the top right of the board to boot up</span>';
@@ -768,12 +781,9 @@ function selectP(p){
   dv.style.display='flex';
   document.getElementById('panel-hdr-content').innerHTML=`
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
-      <div style="display:flex;align-items:center;gap:12px">
-        <span style="font-size:36px;line-height:1">${p.icon}</span>
-        <div>
-          <div class="panel-name">${p.name}</div>
-          <div class="panel-sub">${p.subtitle}</div>
-        </div>
+      <div>
+        <div class="panel-name">${p.name}</div>
+        <div class="panel-sub">${p.subtitle}</div>
       </div>
       <button class="cls-btn" onclick="selectP(window.__sp)">✕</button>
     </div>
@@ -791,7 +801,7 @@ function selectP(p){
       <div class="phls">${p.highlights.map(h=>`<div class="phl"><span class="phl-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span><span>${h}</span></div>`).join('')}</div>
     </div>
     <div class="pdiv"></div>
-    ${p.awards.length?`<div><div class="plbl">RECOGNITION</div><div class="pawds">${p.awards.map(a=>`<div class="pawd"><span>🏆</span><span>${a}</span></div>`).join('')}</div></div><div class="pdiv"></div>`:''}
+    ${p.awards.length?`<div><div class="plbl">RECOGNITION</div><div class="pawds">${p.awards.map(a=>`<div class="pawd"><span>★</span><span>${a}</span></div>`).join('')}</div></div><div class="pdiv"></div>`:''}
     <div class="plinks">
       <div class="plbl">LINKS</div>
       <div class="plinks-row">
@@ -815,7 +825,7 @@ function applyDrag(){
   });
   const b=document.getElementById('dragbtn');
   if(b){
-    b.textContent=dragEnabled?'🔓 DRAG: ON':'🔒 DRAG: OFF';
+    b.textContent=dragEnabled?'DRAG: ON':'DRAG: OFF';
     b.style.color=dragEnabled?'#1a6b3a':'#6b5b45';
     b.style.borderColor=dragEnabled?'#1a6b3a66':'#cfc7b6';
   }
