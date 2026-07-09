@@ -8,9 +8,9 @@ const projects = (await getCollection('projects'))
 
 // accent colours matching each project's chip on the breadboard
 const ACCENTS: Record<string, string> = {
-  'pawse': '#16a34a',
-  'ableware': '#1d4ed8',
-  'drama-tracker': '#b45309',
+  'pawse': '#b45309',
+  'ableware': '#15803d',
+  'drama-tracker': '#1e40af',
   'deep-diabetes-risk': '#0e7490',
   'arctos-robotic-arm': '#7c3aed',
   'ai-spider-droid': '#b91c1c',
@@ -26,6 +26,8 @@ const awardsOf = (a: string | string[] | undefined) =>
       <span class="pv-lbl">VIEW MODE:</span>
       <button id="pv-btn-board" class="pv-btn pv-on" type="button">BREADBOARD</button>
       <button id="pv-btn-cards" class="pv-btn" type="button">CARDS</button>
+      <!-- live readout updated by the breadboard component's script -->
+      <span id="sys-status" class="pv-status" style="color:#1a6b3a">● SYSTEM: IDLE</span>
     </div>
 
     <div id="view-board">
@@ -37,7 +39,6 @@ const awardsOf = (a: string | string[] | undefined) =>
         {projects.map((p) => (
           <a class="pv-card" href={`/projects/${p.id}`} style={`--acc:${ACCENTS[p.id] ?? '#6b5b45'}`}>
             <div class="pv-card-hd">
-              <span class="pv-dot"></span>
               <span class="pv-name">{p.data.title}</span>
             </div>
             <p class="pv-sum">{p.data.summary}</p>
@@ -61,36 +62,36 @@ const awardsOf = (a: string | string[] | undefined) =>
   .pv-wrap{height:calc(100vh - 60px);display:flex;flex-direction:column;}
 
   /* ---------- view toggle ---------- */
-  .pv-bar{flex:none;display:flex;align-items:center;gap:10px;padding:12px 16px 0;background:#fdfaf3;font-family:ui-sans-serif,system-ui,sans-serif;}
-  .pv-lbl{font-size:13px;font-weight:600;letter-spacing:1.5px;color:#6b5b45;}
-  .pv-btn{background:#fdfaf3;border:1px solid #cfc7b6;color:#6b5b45;padding:9px 24px;border-radius:8px;cursor:pointer;font-size:14px;font-family:ui-sans-serif,system-ui,sans-serif;font-weight:600;letter-spacing:1px;transition:background 0.15s,color 0.15s,border-color 0.15s;}
-  .pv-btn:hover{background:#f3eee2;color:#3a2e20;}
+  .pv-bar{flex:none;display:flex;align-items:center;gap:10px;padding:12px 16px 0;background:#ffffff;font-family:ui-sans-serif,system-ui,sans-serif;}
+  .pv-lbl{font-size:13px;font-weight:600;letter-spacing:1.5px;color:#6b7280;}
+  .pv-btn{background:#ffffff;border:1px solid #d1d5db;color:#4b5563;padding:9px 24px;border-radius:8px;cursor:pointer;font-size:14px;font-family:ui-sans-serif,system-ui,sans-serif;font-weight:600;letter-spacing:1px;transition:background 0.15s,color 0.15s,border-color 0.15s;}
+  .pv-btn:hover{background:#f9fafb;color:#111827;}
   .pv-btn.pv-on{background:#1a6b3a;border-color:#1a6b3a;color:#fdfaf3;}
+  .pv-status{margin-left:auto;font-size:21px;font-weight:bold;letter-spacing:2px;font-family:'Courier New',monospace;}
 
   /* ---------- view containers ---------- */
   #view-board{flex:1 1 0;min-height:0;}
-  #view-cards{flex:1 1 0;min-height:0;overflow-y:auto;display:none;background:#fdfaf3;padding:14px 16px 24px;}
+  #view-cards{flex:1 1 0;min-height:0;overflow-y:auto;display:none;background:#ffffff;padding:24px 48px 40px;}
 
   /* ---------- card grid (matches the breadboard's panel styling) ---------- */
-  .pv-grid{display:grid;grid-template-columns:1fr;gap:16px;align-items:stretch;}
+  .pv-grid{display:grid;grid-template-columns:1fr;gap:28px;align-items:stretch;}
   @media (min-width: 700px){.pv-grid{grid-template-columns:repeat(2,1fr);}}
   @media (min-width: 1100px){.pv-grid{grid-template-columns:repeat(3,1fr);}}
-  .pv-card{display:flex;flex-direction:column;gap:12px;background:#faf3e4;border:1.5px solid #e9dcc3;border-radius:14px;padding:18px 20px;text-decoration:none;box-shadow:0 4px 14px rgba(120,85,30,0.07);transition:box-shadow 0.15s,transform 0.15s,border-color 0.15s;}
-  .pv-card:hover{box-shadow:0 8px 22px rgba(120,85,30,0.16);transform:translateY(-2px);border-color:var(--acc);}
+  .pv-card{display:flex;flex-direction:column;gap:12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:18px 20px;text-decoration:none;box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:box-shadow 0.15s,transform 0.15s,border-color 0.15s;}
+  .pv-card:hover{box-shadow:0 8px 22px rgba(0,0,0,0.10);transform:translateY(-2px);border-color:var(--acc);}
   .pv-card-hd{display:flex;align-items:center;gap:10px;}
-  .pv-dot{width:10px;height:10px;border-radius:50%;background:var(--acc);flex:none;}
-  .pv-name{font-size:22px;font-weight:900;letter-spacing:1px;color:#2b2014;font-family:'Courier New',monospace;text-transform:uppercase;}
-  .pv-sum{font-size:15.5px;color:#3a2e20;line-height:1.7;font-family:sans-serif;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+  .pv-name{font-size:22px;font-weight:900;letter-spacing:1px;color:#111827;font-family:'Courier New',monospace;text-transform:uppercase;}
+  .pv-sum{font-size:15.5px;color:#4b5563;line-height:1.7;font-family:sans-serif;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
   .pv-tags{display:flex;flex-wrap:wrap;gap:7px;}
-  .pv-tag{font-size:13px;padding:5px 13px;border-radius:8px;border:1.5px solid #e5d7bb;background:#fdf8ee;color:#4a3c2a;white-space:nowrap;font-family:sans-serif;font-weight:500;}
+  .pv-tag{font-size:13px;padding:5px 13px;border-radius:8px;border:1px solid #e5e7eb;background:#ffffff;color:#374151;white-space:nowrap;font-family:sans-serif;font-weight:500;}
   .pv-awds{display:flex;flex-direction:column;gap:5px;}
-  .pv-awd{font-size:14px;color:#92600a;line-height:1.5;font-family:sans-serif;font-weight:500;}
-  .pv-go{margin-top:auto;display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-radius:9px;font-size:14px;color:#2b1505;background:#ee7a23;font-family:'Courier New',monospace;font-weight:700;letter-spacing:2px;transition:background 0.15s;}
-  .pv-card:hover .pv-go{background:#e06a12;}
+  .pv-awd{font-size:14px;color:#92400e;line-height:1.5;font-family:sans-serif;font-weight:500;}
+  .pv-go{margin-top:auto;display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-radius:9px;font-size:14px;color:#ffffff;background:#16a34a;font-family:'Courier New',monospace;font-weight:700;letter-spacing:2px;transition:background 0.15s;}
+  .pv-card:hover .pv-go{background:#15803d;}
 
   @media (max-width: 880px){
     .pv-wrap{height:auto;}
-    #view-cards{overflow-y:visible;}
+    #view-cards{overflow-y:visible;padding:20px 20px 32px;}
   }
 </style>
 

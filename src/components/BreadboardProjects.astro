@@ -6,9 +6,6 @@
 .bb-outer, .bb-outer *{box-sizing:border-box;margin:0;padding:0;}
 .bb-outer{width:100%;height:100%;min-height:540px;display:block;}
 .wrap{font-family:'Courier New',monospace;background:#fdfaf3;padding:12px 16px 12px;border-radius:0;height:100%;display:flex;flex-direction:column;}
-.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
-.ttl{font-size:24px;color:#1a6b3a;letter-spacing:4px;font-weight:bold;}
-.leg{display:flex;gap:22px;font-size:24px;font-weight:bold;color:#6b5b45;flex-wrap:wrap;margin-left:auto;align-items:center;}
 .main{display:flex;gap:16px;flex:1;min-height:0;}
 
 /* ---------- BOARD ---------- */
@@ -33,35 +30,35 @@
 .zb:hover{background:#f3eee2;color:#3a2e20;}
 
 /* ---------- DETAIL PANEL ---------- */
-.panel-col{flex:0 0 40%;max-width:460px;background:#faf3e4;border:1.5px solid #e9dcc3;border-radius:16px;display:flex;flex-direction:column;height:100%;overflow:hidden;box-shadow:0 6px 18px rgba(120,85,30,0.08);}
+.panel-col{flex:0 0 48%;max-width:640px;background:#faf3e4;border:1.5px solid #e9dcc3;border-radius:16px;display:flex;flex-direction:column;height:100%;overflow:hidden;box-shadow:0 6px 18px rgba(120,85,30,0.08);}
 .panel-hdr{padding:16px 18px 12px;border-bottom:1px solid #ecdfc6;background:#faf3e4;}
-.panel-name{font-size:19px;font-weight:900;letter-spacing:0.5px;margin-top:0;color:#2b2014;font-family:'Courier New',monospace;line-height:1.1;}
-.panel-sub{font-size:12px;color:#8a7a64;margin-top:4px;font-family:sans-serif;font-weight:400;letter-spacing:0;}
+.panel-name{font-size:24px;font-weight:900;letter-spacing:0.5px;margin-top:0;color:#2b2014;font-family:'Courier New',monospace;line-height:1.1;}
+.panel-sub{font-size:14.5px;color:#8a7a64;margin-top:4px;font-family:sans-serif;font-weight:400;letter-spacing:0;}
 .cls-btn{background:none;border:1px solid #d9cbab;color:#a08e72;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:14px;font-family:monospace;flex-shrink:0;transition:all 0.15s;line-height:1;}
 .cls-btn:hover{color:#3a2e20;border-color:#b49b73;background:#f3e9d4;}
 .panel-body{flex:1;overflow-y:auto;padding:14px 18px 20px;display:flex;flex-direction:column;gap:14px;background:#faf3e4;}
 .pdiv{height:1px;background:#ecdfc6;margin:0;}
-.plbl{font-size:10px;letter-spacing:3px;font-weight:700;margin-bottom:10px;color:#6b5b45;font-family:'Courier New',monospace;}
-.pdesc{font-size:13px;color:#3a2e20;line-height:1.8;font-family:'Courier New',monospace;}
+.plbl{font-size:12px;letter-spacing:3px;font-weight:700;margin-bottom:10px;color:#6b5b45;font-family:'Courier New',monospace;}
+.pdesc{font-size:17px;color:#3a2e20;line-height:1.8;font-family:'Courier New',monospace;}
 .ptags{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px;}
-.ptag{font-size:11px;padding:6px 14px;border-radius:8px;border:1.5px solid #e5d7bb;background:#fdf8ee;color:#4a3c2a;white-space:nowrap;font-family:sans-serif;font-weight:500;display:inline-flex;align-items:center;}
+.ptag{font-size:13px;padding:6px 14px;border-radius:8px;border:1.5px solid #e5d7bb;background:#fdf8ee;color:#4a3c2a;white-space:nowrap;font-family:sans-serif;font-weight:500;display:inline-flex;align-items:center;}
 .phls{display:flex;flex-direction:column;gap:9px;}
-.phl{display:flex;align-items:flex-start;gap:10px;font-size:12.5px;color:#3a2e20;line-height:1.5;font-family:sans-serif;}
-.phl-check{width:20px;height:20px;border-radius:50%;background:#ee7a23;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.phl{display:flex;align-items:flex-start;gap:10px;font-size:14.5px;color:#3a2e20;line-height:1.5;font-family:sans-serif;}
+.phl-check{width:20px;height:20px;border-radius:50%;background:#1a6b3a;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
 .phl-check svg{width:11px;height:11px;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
 .pawds{display:flex;flex-direction:column;gap:7px;}
-.pawd{display:flex;gap:8px;font-size:11.5px;color:#92600a;line-height:1.55;font-family:sans-serif;font-weight:500;align-items:flex-start;}
+.pawd{display:flex;gap:8px;font-size:13.5px;color:#92600a;line-height:1.55;font-family:sans-serif;font-weight:500;align-items:flex-start;}
 .plinks-row{display:flex;gap:8px;margin-top:2px;}
-.plink-sm{flex:1;text-align:center;padding:10px 6px;border-radius:8px;font-size:11px;text-decoration:none;border:1.5px solid #e5d7bb;color:#4a3c2a;background:#fdf8ee;font-family:sans-serif;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;transition:background 0.15s;}
+.plink-sm{flex:1;text-align:center;padding:10px 6px;border-radius:8px;font-size:13px;text-decoration:none;border:1.5px solid #e5d7bb;color:#4a3c2a;background:#fdf8ee;font-family:sans-serif;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;transition:background 0.15s;}
 .plink-sm:hover{background:#f3e9d4;}
-.plink-main{width:100%;text-align:center;padding:15px 16px;border-radius:10px;font-size:13px;text-decoration:none;border:none;color:#2b1505;background:#ee7a23;font-family:'Courier New',monospace;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:space-between;letter-spacing:2px;transition:background 0.15s;margin-top:4px;}
-.plink-main:hover{background:#e06a12;}
+.plink-main{width:100%;text-align:center;padding:15px 16px;border-radius:10px;font-size:15px;text-decoration:none;border:none;color:#fdfaf3;background:#1a6b3a;font-family:'Courier New',monospace;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:space-between;letter-spacing:2px;transition:background 0.15s;margin-top:4px;}
+.plink-main:hover{background:#14532d;}
 .plinks{display:flex;flex-direction:column;gap:10px;}
 .pempty{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;align-items:center;justify-content:safe center;padding:16px;gap:10px;}
 .pempty-icon{font-size:48px;}
-.pempty-txt{font-size:14px;color:#a08e72;text-align:center;line-height:1.8;font-family:'Courier New',monospace;letter-spacing:2px;}
+.pempty-txt{font-size:16px;color:#a08e72;text-align:center;line-height:1.8;font-family:'Courier New',monospace;letter-spacing:2px;}
 .sc-list{width:100%;margin-top:8px;display:flex;flex-direction:column;gap:7px;}
-.scb{width:100%;background:#fdf8ee;border:1.5px solid #e5d7bb;color:#4a3c2a;padding:11px 14px;border-radius:10px;cursor:pointer;font-size:12px;font-family:monospace;text-align:left;letter-spacing:1.5px;transition:background 0.15s;font-weight:600;}
+.scb{width:100%;background:#fdf8ee;border:1.5px solid #e5d7bb;color:#4a3c2a;padding:13px 16px;border-radius:10px;cursor:pointer;font-size:16px;font-family:monospace;text-align:center;letter-spacing:1.5px;transition:background 0.15s;font-weight:600;}
 .scb:hover{background:#f3e9d4;color:#2b2014;}
 
 /* flowing "current" dashes along the energized power-indicator loop */
@@ -78,21 +75,12 @@
   .panel-col{flex:none;width:100%;max-width:none;height:auto;}
   .panel-body{overflow-y:visible;}
   .pempty{overflow-y:visible;}
-  .ttl{font-size:17px;letter-spacing:3px;}
-  .leg{font-size:13px;gap:14px;}
 }
 </style>
 
 <div class="wrap">
-  <div class="hdr">
-    <div>
-      <div class="ttl">● PROJECT BREADBOARD</div>
-    </div>
-    <div class="leg">
-      <span id="sys-status" style="color:#1a6b3a">● SYSTEM: IDLE</span>
-    </div>
-  </div>
-
+  <!-- board title removed; the live #sys-status readout now lives in the
+       VIEW MODE bar (projects/index.astro) and is updated by this component -->
   <div class="main">
     <div class="board-col">
       <div class="rail rail-t" id="rt"></div>
@@ -117,8 +105,8 @@
     <div class="panel-col" id="panel-col">
       <div id="p-empty-view" style="display:flex;flex-direction:column;height:100%">
         <div class="panel-hdr">
-          <div style="font-size:13px;color:#1a6b3a;letter-spacing:2px;font-family:'Courier New',monospace;font-weight:bold">● COMPONENT READOUT</div>
-          <div style="font-size:13px;color:#8a7a64;margin-top:6px;font-family:sans-serif" id="pe-sub">Select a chip to inspect</div>
+          <div style="font-size:15px;color:#1a6b3a;letter-spacing:2px;font-family:'Courier New',monospace;font-weight:bold">● COMPONENT READOUT</div>
+          <div style="font-size:15px;color:#8a7a64;margin-top:6px;font-family:sans-serif" id="pe-sub">Select a chip to inspect</div>
         </div>
         <div class="pempty">
           <div class="pempty-icon" id="pe-icon">⏻</div>
@@ -177,9 +165,9 @@ const DRAG_ON_AT_START=true;
 */
 
 const PROJECTS=[
-  {id:'pawse',name:'PAWSE',subtitle:'Smart Notification Classifier',bg:'#1b1b1f',border:'#16a34a',label:'#4ade80',x:30,y:22,w:270,h:140,pins:5,shape:'ic',tech:['Python','MobileBERT','ESP32','React Native','BLE','Supabase'],desc:'A phone lockbox that physically locks your phone during focus sessions, with AI-powered notification filtering.',highlights:['95%+ MobileBERT classifier accuracy','BLE hardware-software bridge','FreeRTOS firmware on ESP32','School mode with roster polling'],awards:['Semifinalist — UCI Stella Zhang New Venture Competition','Semifinalist — Beall & Butterworth 2026'],github:'https://github.com/linh-on/pawse',page:'/projects/pawse',fmt:{subDY:27,subSize:13,techDY:52,techSize:11}},
-  {id:'ableware',name:'ABLEWARE',subtitle:'Assistive Lift System',bg:'#11301c',border:'#1d4ed8',label:'#6ee7a0',x:420,y:24,w:260,h:135,pins:5,shape:'display',tech:['Python','Raspberry Pi','Arduino','WebSocket','FastAPI','TypeScript'],desc:'Voice-controlled assistive lift. A Pi listens for wake words and sends commands over WebSocket to a hub coordinating hardware and simulation.',highlights:['Wake word + Vosk voice pipeline','WebSocket hub architecture','PyBullet 3D simulation','React/TypeScript dashboard'],awards:['2nd Place — 2026 UCI MCS ICS Expo'],github:'https://github.com/EliyaKhajeiee/ableware-pi-final',page:'/projects/ableware',fmt:{subDY:27,subSize:12.5,techDY:50,techSize:9.5}},
-  {id:'drama',name:'DRAMA TRACKER',subtitle:'Movie Web App',bg:'#231c0e',border:'#b45309',label:'#fcd34d',x:740,y:225,w:230,h:115,pins:3,shape:'ic',tech:['React.js','Node.js','PostgreSQL','Python','Flask','TMDB API'],desc:'Full-stack movie tracking app with a content-based filtering recommendation engine using TF-IDF cosine similarity.',highlights:['TF-IDF content filtering','TMDB API integration','Flask recommendation service','Vercel + Render deployed'],awards:[],github:'https://github.com/linh-on/drama-tracker',page:'/projects/drama-tracker',fmt:{subDY:21,techDY:42}},
+  {id:'pawse',name:'PAWSE',subtitle:'Smart Notification Classifier',bg:'#231c0e',border:'#b45309',label:'#fcd34d',x:30,y:22,w:270,h:140,pins:5,shape:'ic',tech:['Python','MobileBERT','ESP32','React Native','BLE','Supabase'],desc:'A phone lockbox that physically locks your phone during focus sessions, with AI-powered notification filtering.',highlights:['95%+ MobileBERT classifier accuracy','BLE hardware-software bridge','FreeRTOS firmware on ESP32','School mode with roster polling'],awards:['Semifinalist — UCI Stella Zhang New Venture Competition','Semifinalist — Beall & Butterworth 2026'],github:'https://github.com/linh-on/pawse',page:'/projects/pawse',fmt:{subDY:27,subSize:13,techDY:52,techSize:11}},
+  {id:'ableware',name:'ABLEWARE',subtitle:'Assistive Lift System',bg:'#11301c',border:'#15803d',label:'#6ee7a0',x:420,y:24,w:260,h:135,pins:5,shape:'display',tech:['Python','Raspberry Pi','Arduino','WebSocket','FastAPI','TypeScript'],desc:'Voice-controlled assistive lift. A Pi listens for wake words and sends commands over WebSocket to a hub coordinating hardware and simulation.',highlights:['Wake word + Vosk voice pipeline','WebSocket hub architecture','PyBullet 3D simulation','React/TypeScript dashboard'],awards:['2nd Place — 2026 UCI MCS ICS Expo'],github:'https://github.com/EliyaKhajeiee/ableware-pi-final',page:'/projects/ableware',fmt:{subDY:27,subSize:12.5,techDY:50,techSize:9.5}},
+  {id:'drama',name:'DRAMA TRACKER',subtitle:'Movie Web App',bg:'#1b1b1f',border:'#1e40af',label:'#60a5fa',x:740,y:225,w:230,h:115,pins:3,shape:'ic',tech:['React.js','Node.js','PostgreSQL','Python','Flask','TMDB API'],desc:'Full-stack movie tracking app with a content-based filtering recommendation engine using TF-IDF cosine similarity.',highlights:['TF-IDF content filtering','TMDB API integration','Flask recommendation service','Vercel + Render deployed'],awards:[],github:'https://github.com/linh-on/drama-tracker',page:'/projects/drama-tracker',fmt:{subDY:21,techDY:42}},
   {id:'diabetes',name:'DEEP DIABETES',subtitle:'Risk Prediction Model',bg:'#16335e',border:'#0e7490',label:'#7dd3fc',x:30,y:225,w:230,h:115,pins:3,shape:'sensor',tech:['Python','PyTorch','Scikit-learn','Pandas','NumPy'],desc:'Deep MLP for diabetes risk prediction on CDC BRFSS 2015 data, outperforming baseline classifiers.',highlights:['Weighted BCE for imbalance','AdamW + CosineAnnealing LR','Early stopping on ROC-AUC','Feature ablation analysis'],awards:[],github:'https://github.com/juliethecao/deep-diabetes-risk',page:'/projects/deep-diabetes-risk',fmt:{subDY:21,techDY:42}},
   {id:'obstacle',name:'OBSTACLE BOT',subtitle:'Autonomous Avoidance Vehicle',bg:'#8f2424',border:'#b91c1c',label:'#ffe3c2',x:385,y:222,w:240,h:115,pins:3,shape:'sensor',tech:['Arduino','C++','VL53L1X ToF','TCA9548A','DRV8835'],desc:'Arduino-based autonomous vehicle that navigates around obstacles using time-of-flight distance sensors and differential drive motors.',highlights:['VL53L1X ToF sensor array','TCA9548A I2C multiplexer','DRV8835 motor driver control','Real-time avoidance logic'],awards:[],github:'https://github.com/linh-on',page:'/projects/obstacle-avoidance-vehicle',fmt:{subDY:21,subSize:11,techDY:42}},
   {id:'arctos',name:'ARCTOS 6-DOF',subtitle:'Robotic Arm',bg:'#1e1a2e',border:'#7c3aed',label:'#c4b5fd',x:30,y:415,w:230,h:115,pins:3,shape:'ic',tech:['Arduino','C++','Python','Arctos Studio','3D Printing'],desc:'6-DOF robotic arm using Arduino MEGA coordinating stepper motors across all joints for competition tasks.',highlights:['6-joint stepper motor control','Custom CAD end-effector','Waypoint programming','Cup stacking & weight lift'],awards:[],github:'https://github.com/linh-on',page:'/projects/arctos-robotic-arm',fmt:{subDY:21,techDY:42}},
@@ -746,7 +734,7 @@ function togglePower(){
 }
 
 function pulseHint(){
-  hintT.setAttribute('fill','#ee7a23');
+  hintT.setAttribute('fill','#1a6b3a');
   setTimeout(()=>hintT.setAttribute('fill','#6b5b45'),650);
 }
 
@@ -769,7 +757,7 @@ function selectP(p){
   selected=p;
   PROJECTS.forEach(q=>{
     const s=q.id===p.id;
-    q._body.setAttribute('stroke',s?'#ee7a23':q._baseStroke);
+    q._body.setAttribute('stroke',s?'#22c55e':q._baseStroke);
     q._body.setAttribute('stroke-width',s?'2.5':'1.5');
     q._ledInner.setAttribute('opacity',s?1:0.25);
   });

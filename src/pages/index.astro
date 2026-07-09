@@ -89,7 +89,7 @@ function formatDate(dateStr: string): string {
     </div>
 
     <!-- Right: mini-breadboard preview card -->
-    <div class="lg:w-2/3 w-full">
+    <div class="lg:w-1/2 w-full">
       <div class="bb-preview">
         <div class="bbp-rail">
           <span class="bbp-mark bbp-mark-red">+</span>
@@ -97,24 +97,21 @@ function formatDate(dateStr: string): string {
           <span class="bbp-mark bbp-mark-red">+</span>
         </div>
 
-        <div class="bbp-head">● PROJECT BREADBOARD</div>
+        <div class="bbp-head">PROJECT BREADBOARD</div>
         <div class="bbp-sub">An interactive breadboard — explore each project as a hardware component.</div>
 
         <div class="bbp-chips">
-          <a class="bbp-chip" href="/projects" style="--chip-bg:#ecfdf5;--chip-name:#16a34a;--led:#16a34a;">
-            <span class="bbp-led"></span>
+          <a class="bbp-chip" href="/projects" style="--chip-bg:#fef3c7;--chip-name:#b45309;--led:#b45309;">
             <span class="bbp-name">PAWSE</span>
             <span class="bbp-tech">Python · MobileBERT · ESP32 · BLE</span>
           </a>
-          <a class="bbp-chip" href="/projects" style="--chip-bg:#eef2ff;--chip-name:#4523cb;--led:#4523cb;">
-            <span class="bbp-led"></span>
+          <a class="bbp-chip" href="/projects" style="--chip-bg:#ecfdf5;--chip-name:#15803d;--led:#15803d;">
             <span class="bbp-name">ABLEWARE</span>
             <span class="bbp-tech">Python · Raspberry Pi · WebSocket · FastAPI</span>
           </a>
-          <a class="bbp-chip" href="/projects" style="--chip-bg:#f5f3ff;--chip-name:#7c3aed;--led:#7c3aed;">
-            <span class="bbp-led"></span>
-            <span class="bbp-name">ARCTOS 6-DOF</span>
-            <span class="bbp-tech">Arduino · C++ · Python · 3D Printing</span>
+          <a class="bbp-chip" href="/projects" style="--chip-bg:#eff6ff;--chip-name:#1e40af;--led:#1e40af;">
+            <span class="bbp-name">DRAMA TRACKER</span>
+            <span class="bbp-tech">React.js · Node.js · PostgreSQL · Flask</span>
           </a>
         </div>
 
@@ -428,16 +425,18 @@ function formatDate(dateStr: string): string {
     50% { transform: translateY(-5px); }
   }
 
-  /* ── Mini-breadboard preview card (mirrors the /projects board palette) ── */
+  /* ── Mini-breadboard preview card ──
+     Breadboard personality (rails, LEDs, chips) in the home page's own
+     white/gray palette, so the hero reads as one design. */
   .bb-preview {
     font-family: 'Courier New', monospace;
     background:
-      radial-gradient(#cdc6b4 1.1px, transparent 1.4px) 0 0 / 16px 16px,
-      #efeadd;
-    border: 1px solid #cfc7b6;
+      radial-gradient(#d1d5db 1px, transparent 1.3px) 0 0 / 16px 16px,
+      #f3f4f6;
+    border: 1px solid #e5e7eb;
     border-radius: 16px;
     padding: 16px 22px;
-    box-shadow: 0 6px 18px rgba(90, 70, 40, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   }
   .bbp-rail {
     display: flex;
@@ -456,15 +455,16 @@ function formatDate(dateStr: string): string {
   .bbp-mark-red { color: #d8281c; }
   .bbp-mark-blue { color: #2a5ac4; }
   .bbp-head {
-    font-size: 20px;
+    font-size: 18px;
     letter-spacing: 3px;
     font-weight: bold;
-    color: #1a6b3a;
+    color: #16a34a;
   }
   .bbp-sub {
-    font-size: 16px;
-    font-weight: bold;
-    color: #8a7a64;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #6b7280;
     margin: 4px 0 14px;
   }
   .bbp-chips {
@@ -477,26 +477,17 @@ function formatDate(dateStr: string): string {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: var(--chip-bg, #f5f3ff);
-  border: 1.5px solid rgba(120, 113, 108, 0.25);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 10px;
   padding: 10px 14px;
   text-decoration: none;
-  box-shadow: 0 3px 8px rgba(58, 46, 26, 0.12);
   transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
 }
   .bbp-chip:hover {
     transform: translateY(-2px);
-    border-color: #ee7a23;
-    box-shadow: 0 6px 14px rgba(58, 46, 26, 0.3);
-  }
-  .bbp-led {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--led, #4ade80);
-    box-shadow: 0 0 7px var(--led, #4ade80);
-    flex-shrink: 0;
+    border-color: var(--led, #16a34a);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   }
   .bbp-name {
     font-weight: bold;
@@ -506,7 +497,8 @@ function formatDate(dateStr: string): string {
     flex-shrink: 0;
   }
   .bbp-tech {
-    color: #b8b8c0;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    color: #6b7280;
     font-size: 14px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -516,8 +508,8 @@ function formatDate(dateStr: string): string {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #ee7a23;
-    color: #2b1505;
+    background: #16a34a;
+    color: #ffffff;
     font-weight: bold;
     letter-spacing: 2px;
     font-size: 13px;
@@ -526,7 +518,7 @@ function formatDate(dateStr: string): string {
     text-decoration: none;
     transition: background 0.15s;
   }
-  .bbp-cta:hover { background: #e06a12; }
+  .bbp-cta:hover { background: #15803d; }
 
   /* ── Section highlight (existing) ── */
   .section-label {
