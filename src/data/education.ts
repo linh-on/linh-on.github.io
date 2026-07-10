@@ -15,7 +15,7 @@ const education: Education[] = [
         endDate: "",
         school: "University of California, Irvine",
         location: "Irvine, CA",
-        description: "Expected graduation December 2026. Focusing on advanced topics in software engineering, AI/ML, and systems.",
+        description: "Expected graduation December 2026.\nFocusing on advanced topics in software engineering, AI/ML, and systems.",
         currentUni: true,
     },
     {
@@ -24,7 +24,7 @@ const education: Education[] = [
         endDate: "2025-03-31",
         school: "University of California, Irvine",
         location: "Irvine, CA",
-        description: "GPA: 3.86. Coursework in algorithms, data structures, embedded systems, computer architecture, and software engineering.",
+        description: "GPA: 3.86. Graduated Cum Laude from the Henry Samueli School of Engineering.\nCoursework in algorithms, data structures, embedded systems, computer architecture, and software engineering.",
         currentUni: false,
     },
 ];

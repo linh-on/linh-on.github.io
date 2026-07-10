@@ -13,6 +13,7 @@ const ACCENTS: Record<string, string> = {
   'drama-tracker': '#1e40af',
   'deep-diabetes-risk': '#0e7490',
   'arctos-robotic-arm': '#7c3aed',
+  'obstacle-avoidance-vehicle': '#b91c1c',
   'ai-spider-droid': '#b91c1c',
 };
 
@@ -50,7 +51,7 @@ const awardsOf = (a: string | string[] | undefined) =>
                 {awardsOf(p.data.award).map((a) => <div class="pv-awd">★ {a}</div>)}
               </div>
             )}
-            <span class="pv-go">VIEW FULL PROJECT <span>→</span></span>
+            <span class="pv-go">VIEW FULL PROJECT <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </a>
         ))}
       </div>

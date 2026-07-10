@@ -1,0 +1,75 @@
+---
+title: "Obstacle Avoidance Vehicle"
+summary: "An autonomous robot car built with a UCI professor as the main robot for the ICS Summer Academy's Intelligent Robotics session. An Arduino UNO R4 WiFi reads three Modulino time-of-flight distance sensors through a PCA9546 I2C multiplexer and controls two drive motors through a DRV8835 motor shield."
+tags:
+  [
+    "Arduino UNO R4 WiFi",
+    "C",
+    "Modulino ToF Sensors",
+    "PCA9546 I2C Multiplexer",
+    "DRV8835",
+    "I2C",
+    "Robotics",
+    "Embedded Systems",
+  ]
+startDate: 2025-02-01
+endDate: 2026-07-31
+github: "https://github.com/linh-on"
+status: "In use at the ICS Summer Academy 2026"
+role: "Robotics Assistant to the Instructing Professor"
+timeline: "Feb 2025 to Jul 2026"
+author: Linh On
+cover: ../../assets/images/hourglass.jpg
+---
+
+## Overview
+
+This project is a robot car that drives itself and steers around obstacles on its own. I built it together with a UCI professor as the main robot for the ICS Summer Academy's Intelligent Robotics session. It is the robot that high school students in the program put together, program, and test themselves.
+
+The car uses an Arduino UNO R4 WiFi as its brain. Three Arduino Modulino Distance sensors measure how far away objects are, and they connect through a PCA9546 I2C multiplexer. A Pololu DRV8835 motor driver shield controls the two drive motors. The code is written in C and runs the whole sense, decide, and drive loop on the Arduino.
+
+Since high school students are the ones building it, the robot also had to be easy to put together, easy to understand, and easy to fix.
+
+## Problem
+
+The summer program needed a robot for the students to build. Most of them have never worked with hardware before, so the robot had to be simple to put together but still teach the basics: wiring, I2C, sensors, and motor control. We also had to be able to buy the parts easily and replace them when something broke. So we went with common, well documented parts and kept the design as simple as we could.
+
+## My Role
+
+The instructing professor asked me to help him build the robot for the program, and I have worked with him since February 2025. I helped design, build, and improve the robot over many versions. My work included wiring the sensors and motors, writing and testing the C code on the Arduino, assembling and stress testing the frame, and writing the step by step assembly guide that students follow during the program. This same work led to my role as Lead Program Assistant for the July 2026 session, where students build this robot.
+
+## Key Features
+
+- **Three distance sensors.** Modulino Distance sensors sit at the front center, front left, and front right of the car, with the side sensors angled outward. Together they give the robot a wide view of what is ahead.
+- **PCA9546 I2C multiplexer.** All three sensors come with the same fixed I2C address, so they cannot share one bus directly. Each sensor gets its own channel on the multiplexer, and the code switches between channels to read them one at a time.
+- **DRV8835 motor shield.** The motor driver stacks right on top of the Arduino and controls the two gear motors separately. That lets the car make smooth turns, spin in place, and back away from obstacles. A ball caster in the front keeps it balanced.
+- **Built for the classroom.** The car uses a metal beam frame, plastic motor mounts, a strapped down goBILDA 6V battery, and plug together Qwiic cables. No soldering is needed, and the whole thing can be rebuilt from the guide.
+- **Real time avoidance.** The code checks all three distance readings every cycle, steers toward the most open direction, and slows down as objects get closer.
+
+## Tech Stack
+
+- **Controller:** Arduino UNO R4 WiFi, programmed in C
+- **Sensing:** 3x Arduino Modulino Distance time-of-flight sensors
+- **I2C routing:** Adafruit PCA9546 4-channel STEMMA QT / Qwiic I2C multiplexer with Qwiic cables
+- **Drive:** Pololu DRV8835 dual motor driver shield, 2x TT right angle gear motors, large drive wheels, front ball caster
+- **Frame and power:** Metal beam chassis with acetal motor mounts, goBILDA 5100 Series 6V 2700mAh NiMH battery
+
+## Development Process
+
+The robot went through many build, test, and fix cycles between February 2025 and the start of the program. Each part was tested on its own first: one distance sensor over I2C, then all three through the multiplexer, then the motor shield with basic moves like driving forward and turning. After that, the avoidance code brought everything together. Every version was judged by how well it would work for teaching. Parts that were hard to mount, wires that came loose, and steps that were easy to get wrong were redesigned, and each fix went straight into the assembly guide that students use.
+
+## Challenges & Solutions
+
+- **Sensors with the same address.** The distance sensors all ship with the same fixed I2C address, so they cannot share one bus. Giving each sensor its own channel on the PCA9546 multiplexer fixed the problem while keeping the wiring beginner friendly.
+- **Making it student proof.** A robot that works once on a desk is not the same as one that survives thirty students. The motor mounts, sensor brackets, and battery straps were redone until the build came out right every time using only the guide.
+- **Keeping the code teachable.** The driving logic had to work well but also be simple enough to explain in a lecture. The final loop reads three distances, picks the most open direction, and slows down near objects. It drives reliably and a first time programmer can still follow it.
+
+## Final Result
+
+The finished car drives around a room on its own and avoids obstacles using only its onboard sensors and the Arduino. It is the robot used in the July 2026 Intelligent Robotics session, and students build their own copies of it by following the assembly guide.
+
+## What I Learned
+
+- Designing for education is a real engineering constraint. The robot had to be easy to rebuild, hard to break, and simple to explain, and those needs shaped the hardware and code as much as performance did.
+- Managing an I2C bus, including shared addresses, multiplexers, and plug together cabling like Qwiic, is a practical skill that shows up in real products.
+- Working with a professor on a physical product over a long period taught me how building, testing, and documentation feed each other. A fix was only done when someone else could follow the guide and get the same result.

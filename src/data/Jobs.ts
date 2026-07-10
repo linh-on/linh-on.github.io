@@ -22,12 +22,12 @@ interface WorkExperience {
 
 const workExperience: WorkExperience[] = [
   {
-    title: "ICS Summer Academy — Intelligent Robotics",
+    title: "ICS Summer Academy: Intelligent Robotics",
     startDate: "2025-02-01",
     company: "UCI Donald Bren School of ICS",
     location: "Irvine, CA",
     description:
-      "Progressed from volunteering on the session's autonomous robot demo to leading the program assistant team for the July session.",
+      "Started out helping the instructing professor build the session's robot, then moved up to leading the program assistant team for the July session.",
     goals: [],
     roles: [
       {
@@ -41,11 +41,11 @@ const workExperience: WorkExperience[] = [
         ],
       },
       {
-        title: "Robotics Assistant (Volunteer)",
+        title: "Robotics Assistant to the Instructing Professor",
         startDate: "2025-02-01",
         goals: [
-          "Collaborate with the instructing professor to design, build, and iterate on the autonomous driving robot demo used as the reference platform for the Intelligent Robotics curriculum.",
-          "Develop and test the robot across its full stack — Arduino firmware in C, sensor and motor circuitry, and chassis assembly — so the build is reliable and reproducible by students.",
+          "Invited by the instructing professor to help design, build, and iterate on the autonomous driving robot used as the reference platform for the Intelligent Robotics curriculum.",
+          "Develop and test the robot across its full stack, including Arduino firmware in C, sensor and motor circuitry, and chassis assembly, so the build is reliable and easy for students to reproduce.",
           "Refine the demo through repeated build-test cycles, documenting issues and fixes to shape the hands-on lab instructions used during the program.",
         ],
       },
@@ -132,7 +132,7 @@ const workExperience: WorkExperience[] = [
     title: "Undergraduate Research Assistant",
     startDate: "2024-03-01",
     endDate: "2024-06-30",
-    company: "UCI Samueli School of Engineering — Professor Rimoli's Lab",
+    company: "UCI Samueli School of Engineering, Professor Rimoli's Lab",
     location: "Irvine, CA",
     description:
       "Contributed to tensegrity structure simulation research by developing unit tests and optimizing computational algorithms in Python.",
@@ -188,7 +188,7 @@ const workExperience: WorkExperience[] = [
     currentJob: false,
   },
   {
-    title: "Research Assistant — Vaccine R&D Lab Center",
+    title: "Research Assistant, Vaccine R&D Lab Center",
     startDate: "2022-04-01",
     endDate: "2023-04-30",
     company: "University of California, Irvine",

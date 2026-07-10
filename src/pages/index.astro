@@ -32,20 +32,22 @@ const featuredProjects = [
 
 function formatDate(dateStr: string): string {
   if (!dateStr) return 'Present';
-  const d = new Date(dateStr);
+  // Parse date-only strings as local time; plain "YYYY-MM-DD" is treated as UTC
+  // midnight and can render as the previous month (e.g. Sep 1 showing as Aug).
+  const d = new Date(dateStr.includes('T') ? dateStr : `${dateStr}T00:00:00`);
   return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 }
 
-// Range label for a role: "Jul 2026", "Feb 2026 — Jun 2026", or "Feb 2026 — Present"
+// Range label for a role: "Jul 2026", "Feb 2026 – Jun 2026", or "Feb 2026 – Present"
 function formatRange(start: string, end?: string): string {
   const s = formatDate(start);
-  if (!end) return `${s} — Present`;
+  if (!end) return `${s} – Present`;
   const e = formatDate(end);
-  return s === e ? s : `${s} — ${e}`;
+  return s === e ? s : `${s} – ${e}`;
 }
 ---
 
-<Layout title="Linh On | Portfolio" description="Software Engineer & Embedded Systems Engineer — MS CS student at UC Irvine" scrollSmooth={true}>
+<Layout title="Linh On | Portfolio" description="Software Engineer & Embedded Systems Engineer, MS CS student at UC Irvine" scrollSmooth={true}>
 
   <!-- ── HERO ── -->
   <section class="px-8 md:px-20 lg:px-32 py-12 flex flex-col lg:flex-row gap-10 items-center">
@@ -65,9 +67,9 @@ function formatRange(start: string, end?: string): string {
         <h1 class="text-4xl font-bold text-gray-900 mb-2">Linh On</h1>
         <p class="text-lg text-gray-500 font-medium">Software Engineer &amp; Embedded Systems Engineer</p>
       </div>
-      <p class="text-gray-600 leading-relaxed text-center lg:text-left max-w-md">
-        MS Computer Science student at UC Irvine (expected Dec 2026). I build things across
-        the stack — from full-stack web apps to embedded systems and robotics.
+      <p class="text-gray-600 leading-relaxed text-center lg:text-left">
+        I am a Master of Computer Science student at UC Irvine and graduating in December 2026.<br />
+        I enjoy learning new things and building full-stack web apps, embedded systems, and robots.
       </p>
       <div class="flex flex-wrap gap-3 justify-center lg:justify-start">
         <a
@@ -106,7 +108,7 @@ function formatRange(start: string, end?: string): string {
         </div>
 
         <div class="bbp-head">PROJECT BREADBOARD</div>
-        <div class="bbp-sub">An interactive breadboard — explore each project as a hardware component.</div>
+        <div class="bbp-sub">An interactive breadboard. Explore each project as a hardware component.</div>
 
         <div class="bbp-chips">
           <a class="bbp-chip" href="/projects" style="--chip-bg:#fef3c7;--chip-name:#b45309;--led:#b45309;">
@@ -123,7 +125,7 @@ function formatRange(start: string, end?: string): string {
           </a>
         </div>
 
-        <a href="/projects" class="bbp-cta">VIEW INTERACTIVE BREADBOARD <span>→</span></a>
+        <a href="/projects" class="bbp-cta">VIEW INTERACTIVE BREADBOARD <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
 
         <div class="bbp-rail bbp-rail-bottom">
           <span class="bbp-mark bbp-mark-blue">−</span>
@@ -143,9 +145,9 @@ function formatRange(start: string, end?: string): string {
         <h2 class="text-4xl font-bold text-gray-900 mb-6 section-heading">About Me</h2>
         <div class="space-y-4 text-gray-600 leading-relaxed">
           <p>
-            I'm Linh, a Master of Computer Science student at UC Irvine (expected December 2026),
-            with a B.S. in Computer Science and Engineering (GPA 3.86). I enjoy building things
-            that work — whether that's a full-stack web app, an embedded system, or a trained ML model.
+            I'm Linh, a Master of Computer Science student at UC Irvine, graduating in December 2026.
+            I have a B.S. in Computer Science and Engineering (GPA 3.86). I enjoy building things
+            that work, whether that's a full-stack web app, an embedded system, or a trained ML model.
           </p>
           <p>
             My experience spans front-end development with React and TypeScript, back-end APIs with
@@ -177,9 +179,9 @@ function formatRange(start: string, end?: string): string {
               </div>
               <p class="text-gray-500 text-sm font-medium mb-1">{edu.school} · {edu.location}</p>
               <p class="text-gray-400 text-xs mb-2">
-                {formatDate(edu.startDate)} — {edu.endDate ? formatDate(edu.endDate) : 'Present'}
+                {formatDate(edu.startDate)} – {edu.endDate ? formatDate(edu.endDate) : 'Present'}
               </p>
-              <p class="text-gray-600 text-sm leading-relaxed">{edu.description}</p>
+              <p class="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{edu.description}</p>
             </div>
           ))}
         </div>
@@ -204,7 +206,7 @@ function formatRange(start: string, end?: string): string {
           class="flex flex-col p-6 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md hover:border-gray-400 transition-all"
         >
           <h3 class="font-bold text-gray-900 text-lg mb-2">{project.title}</h3>
-          <p class="text-gray-600 text-sm leading-relaxed mb-4 flex-1">{project.summary}</p>
+          <p class="text-gray-600 text-base leading-relaxed mb-4 flex-1">{project.summary}</p>
           <div class="flex flex-wrap gap-1.5">
             {project.tags.map(tag => (
               <span class="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded border border-gray-200">
@@ -323,7 +325,7 @@ function formatRange(start: string, end?: string): string {
                     <p class="text-gray-500 text-sm mt-0.5">{job.company} · {job.location}</p>
                   </div>
                   <span class="font-mono text-xs px-2.5 py-1 rounded-md shrink-0" style="background:#f9fafb;color:#9ca3af;border:1px solid #e5e7eb;">
-                    {formatDate(job.startDate)} — {job.endDate ? formatDate(job.endDate) : 'Present'}
+                    {formatDate(job.startDate)} – {job.endDate ? formatDate(job.endDate) : 'Present'}
                   </span>
                 </div>
                 <ul class="space-y-1">
@@ -357,7 +359,7 @@ function formatRange(start: string, end?: string): string {
           </div>
           <div class="flex flex-wrap gap-2">
             {['Python','C','C++','Java','JavaScript','TypeScript','HTML','CSS','SQL','Verilog','VHDL','MIPS'].map(s => (
-              <span class="px-3 py-1.5 bg-gray-900 text-white text-sm rounded-lg font-medium font-mono">{s}</span>
+              <span class="px-3 py-1.5 text-sm rounded-lg font-medium border" style="background:#f0fdf4;color:#15803d;border-color:#bbf7d0;">{s}</span>
             ))}
           </div>
         </div>
@@ -371,7 +373,7 @@ function formatRange(start: string, end?: string): string {
           </div>
           <div class="flex flex-wrap gap-2">
             {['Flask','React.js','Node.js','Express.js','EJS','WordPress','PHP','Pandas','Scikit-learn'].map(s => (
-              <span class="px-3 py-1.5 bg-white text-gray-800 text-sm rounded-lg font-medium border border-gray-200">{s}</span>
+              <span class="px-3 py-1.5 text-sm rounded-lg font-medium border" style="background:#f0fdf4;color:#15803d;border-color:#bbf7d0;">{s}</span>
             ))}
           </div>
         </div>
@@ -398,8 +400,8 @@ function formatRange(start: string, end?: string): string {
             <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-widest leading-relaxed">Soft Skills</h3>
           </div>
           <div class="flex flex-wrap gap-2">
-            {['Team Leadership','Mentorship','Technical Writing','Problem Solving','Cross-functional Collaboration','Public Speaking','Project Management','Adaptability'].map(s => (
-              <span class="px-3 py-1.5 text-sm rounded-lg font-medium border" style="background:#f0fdf4;color:#15803d;border-color:#bbf7d0;">{s}</span>
+            {['Team Leadership','Mentorship','Technical Writing','Problem Solving','Cross-functional Collaboration','Quick Learner','Project Management','Adaptability'].map(s => (
+              <span class="px-3 py-1.5 bg-white text-gray-800 text-sm rounded-lg font-medium border border-gray-200">{s}</span>
             ))}
           </div>
         </div>

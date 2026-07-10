@@ -9,7 +9,7 @@ const languages: Language[] = [
   {
     name: "English",
     level: "Fluent",
-    description: "Native speaker — fluent in reading, writing, and speaking",
+    description: "Native speaker, fluent in reading, writing, and speaking",
     show: true,
   },
   {
