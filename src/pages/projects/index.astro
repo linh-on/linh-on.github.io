@@ -51,7 +51,7 @@ const awardsOf = (a: string | string[] | undefined) =>
                 {awardsOf(p.data.award).map((a) => <div class="pv-awd">★ {a}</div>)}
               </div>
             )}
-            <span class="pv-go">VIEW FULL PROJECT <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            <span class="pv-go">VIEW PROJECT DETAILS <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </a>
         ))}
       </div>
@@ -92,7 +92,13 @@ const awardsOf = (a: string | string[] | undefined) =>
 
   @media (max-width: 880px){
     .pv-wrap{height:auto;}
+    /* flex:1 1 0 collapses to zero height once the wrapper is height:auto,
+       spilling content over the footer; let both views take natural height */
+    #view-board,#view-cards{flex:none;min-height:auto;}
     #view-cards{overflow-y:visible;padding:20px 20px 32px;}
+    .pv-bar{flex-wrap:wrap;row-gap:8px;}
+    .pv-lbl{white-space:nowrap;}
+    .pv-status{margin-left:0;width:100%;font-size:16px;}
   }
 </style>
 

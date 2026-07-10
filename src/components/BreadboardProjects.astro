@@ -75,6 +75,8 @@
   .panel-col{flex:none;width:100%;max-width:none;height:auto;}
   .panel-body{overflow-y:visible;}
   .pempty{overflow-y:visible;}
+  .fhint{display:none;}
+  .foot{justify-content:center;}
 }
 </style>
 
@@ -92,7 +94,7 @@
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
           <button class="zb" id="dragbtn" onclick="toggleDrag()">DRAG: ON</button>
           <div class="fstatus" id="fstatus">● ALL SYSTEMS OPERATIONAL</div>
-          <div class="fstatus" style="color:#a09584">DRAG BOARD TO PAN &nbsp;·&nbsp; CTRL+SCROLL TO ZOOM</div>
+          <div class="fstatus fhint" style="color:#a09584">DRAG BOARD TO PAN &nbsp;·&nbsp; CTRL+SCROLL TO ZOOM</div>
         </div>
         <div class="zbtns">
           <button class="zb" onclick="zm(-0.2)">− ZOOM</button>
@@ -795,9 +797,8 @@ function selectP(p){
       <div class="plbl">LINKS</div>
       <div class="plinks-row">
         <a href="${p.github}" target="_blank" class="plink-sm">GitHub <svg width="15" height="15" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg></a>
-        <a href="${p.page}" class="plink-sm">Docs <svg width="15" height="15" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 10L10 2M10 2H4M10 2v6"/></svg></a>
       </div>
-      <a href="${p.page}" class="plink-main">VIEW FULL PROJECT <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="${p.page}" class="plink-main">VIEW PROJECT DETAILS <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
   `;
   window.__sp=p;

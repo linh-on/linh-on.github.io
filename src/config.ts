@@ -22,7 +22,7 @@ export const ME = {
         linkedin: "https://www.linkedin.com/in/linh-m-on/",
         resumeDoc: "resume.pdf",
     },
-    aboutMe: "Master of Computer Science student at UC Irvine, graduating in December 2026, with a BS in Computer Science and Engineering (GPA 3.86). I enjoy building things across the stack, from full-stack web apps to embedded systems and robotics. Outside of school I'm involved in the Thai Culture Association and love bringing people together through events and community.",
+    aboutMe: "Master of Computer Science student at UC Irvine, graduating in December 2026, with a BS in Computer Science and Engineering, graduated Cum Laude. I enjoy building things across the stack, from full-stack web apps to embedded systems and robotics. Outside of school I'm involved in the Thai Culture Association and love bringing people together through events and community.",
 }
 
 export const SOCIALS = [
