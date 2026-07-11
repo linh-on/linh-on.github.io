@@ -5,7 +5,7 @@
 <style is:global>
 .bb-outer, .bb-outer *{box-sizing:border-box;margin:0;padding:0;}
 .bb-outer{width:100%;height:100%;min-height:540px;display:block;}
-.wrap{font-family:'Courier New',monospace;background:#fdfaf3;padding:12px 16px 12px;border-radius:0;height:100%;display:flex;flex-direction:column;}
+.wrap{font-family:'Courier New',monospace;background:#fdfaf3;padding:12px 16px 12px;border-radius:14px;border:1px solid #ece5d4;height:100%;display:flex;flex-direction:column;}
 .main{display:flex;gap:16px;flex:1;min-height:0;}
 
 /* ---------- BOARD ---------- */
@@ -155,20 +155,24 @@ const DRAG_ON_AT_START=true;
      the − rail. When the switch is OFF the loop is broken: the traces go
      grey, no current animates, and the LED stays dark.
    +RAIL ──> PAWSE (MCU / brain)
-   DEEP DIABETES (analog sensor) ──SIGNAL──> PAWSE
-   OBSTACLE BOT (ToF sensor board) ──I2C DATA──> PAWSE
-   PAWSE ──DATA+CLK──> ABLEWARE (display module)
-   PAWSE ──PWM──> ARCTOS (motor driver, bottom section)
-   ABLEWARE ──> DRAMA TRACKER (memory IC) ──> SPIDER (coprocessor) ──> NEW (expansion slot)
    GND rail ──> ARCTOS
+   SIGNAL WIRES map real shared technology between the projects:
+     DEEP DIABETES ──ML──> PAWSE            (Python AI classifiers: Deep MLP / MobileBERT)
+     PAWSE ──PYTHON──> ABLEWARE             (Python control logic on both)
+     PAWSE ──EMBEDDED──> ABLEWARE           (ESP32 <-> Raspberry Pi + Arduino boards)
+     PAWSE ──REACT/DB──> DRAMA TRACKER      (React Native/Supabase <-> React.js/PostgreSQL)
+     DEEP DIABETES ──PYTORCH──> SPIDER      (PyTorch deep learning)
+     OBSTACLE BOT ──AUTONOMY──> SPIDER      (obstacle avoidance: ToF <-> LiDAR sensing)
+     OBSTACLE BOT ──ARDUINO──> ARCTOS       (Arduino C/C++ robot firmware)
+   NEW (expansion slot) is intentionally unwired until a project fills it.
  Components are draggable: wires are anchored to chips and re-route live.
  When the switch is OFF, nothing downstream has power: wires read dead,
  silkscreen text is dark, status LEDs are unlit, and chips don't respond to clicks.
 */
 
 const PROJECTS=[
-  {id:'pawse',name:'PAWSE',subtitle:'Smart Notification Classifier',bg:'#231c0e',border:'#b45309',label:'#fcd34d',x:30,y:22,w:270,h:140,pins:5,shape:'ic',tech:['Python','MobileBERT','ESP32','React Native','BLE','Supabase'],desc:'A phone lockbox that physically locks your phone during focus sessions, with AI-powered notification filtering.',highlights:['95%+ MobileBERT classifier accuracy','BLE hardware-software bridge','FreeRTOS firmware on ESP32','School mode with roster polling'],awards:['Semifinalist, UCI Stella Zhang New Venture Competition','Semifinalist, Beall & Butterworth 2026'],github:'https://github.com/linh-on/pawse',page:'/projects/pawse',fmt:{subDY:27,subSize:13,techDY:52,techSize:11}},
-  {id:'ableware',name:'ABLEWARE',subtitle:'Assistive Lift System',bg:'#11301c',border:'#15803d',label:'#6ee7a0',x:420,y:24,w:260,h:135,pins:5,shape:'display',tech:['Python','Raspberry Pi','Arduino','WebSocket','FastAPI','TypeScript'],desc:'Voice-controlled assistive lift. A Pi listens for wake words and sends commands over WebSocket to a hub coordinating hardware and simulation.',highlights:['Wake word + Vosk voice pipeline','WebSocket hub architecture','PyBullet 3D simulation','React/TypeScript dashboard'],awards:['2nd Place, 2026 UCI MCS ICS Expo'],github:'https://github.com/EliyaKhajeiee/ableware-pi-final',page:'/projects/ableware',fmt:{subDY:27,subSize:12.5,techDY:50,techSize:9.5}},
+  {id:'pawse',name:'PAWSE',subtitle:'Smart Notification Classifier',bg:'#231c0e',border:'#b45309',label:'#fcd34d',x:420,y:22,w:270,h:140,pins:5,shape:'ic',tech:['Python','MobileBERT','ESP32','React Native','BLE','Supabase'],desc:'A phone lockbox that physically locks your phone during focus sessions, with AI-powered notification filtering.',highlights:['95%+ MobileBERT classifier accuracy','BLE hardware-software bridge','FreeRTOS firmware on ESP32','School mode with roster polling'],awards:['Semifinalist, UCI Stella Zhang New Venture Competition','Semifinalist, Beall & Butterworth 2026'],github:'https://github.com/linh-on/pawse',page:'/projects/pawse',fmt:{subDY:27,subSize:13,techDY:52,techSize:11}},
+  {id:'ableware',name:'ABLEWARE',subtitle:'Assistive Lift System',bg:'#11301c',border:'#15803d',label:'#6ee7a0',x:30,y:24,w:260,h:135,pins:5,shape:'display',tech:['Python','Raspberry Pi','Arduino','WebSocket','FastAPI','TypeScript'],desc:'Voice-controlled assistive lift. A Pi listens for wake words and sends commands over WebSocket to a hub coordinating hardware and simulation.',highlights:['Wake word + Vosk voice pipeline','WebSocket hub architecture','PyBullet 3D simulation','React/TypeScript dashboard'],awards:['2nd Place, 2026 UCI MCS ICS Expo'],github:'https://github.com/EliyaKhajeiee/ableware-pi-final',page:'/projects/ableware',fmt:{subDY:27,subSize:12.5,techDY:50,techSize:9.5}},
   {id:'drama',name:'DRAMA TRACKER',subtitle:'Movie Web App',bg:'#1b1b1f',border:'#1e40af',label:'#60a5fa',x:740,y:225,w:230,h:115,pins:3,shape:'ic',tech:['React.js','Node.js','PostgreSQL','Python','Flask','TMDB API'],desc:'Full-stack movie tracking app with a content-based filtering recommendation engine using TF-IDF cosine similarity.',highlights:['TF-IDF content filtering','TMDB API integration','Flask recommendation service','Vercel + Render deployed'],awards:[],github:'https://github.com/linh-on/drama-tracker',page:'/projects/drama-tracker',fmt:{subDY:21,techDY:42}},
   {id:'diabetes',name:'DEEP DIABETES',subtitle:'Risk Prediction Model',bg:'#16335e',border:'#0e7490',label:'#7dd3fc',x:30,y:225,w:230,h:115,pins:3,shape:'sensor',tech:['Python','PyTorch','Scikit-learn','Pandas','NumPy'],desc:'Deep MLP for diabetes risk prediction on CDC BRFSS 2015 data, outperforming baseline classifiers.',highlights:['Weighted BCE for imbalance','AdamW + CosineAnnealing LR','Early stopping on ROC-AUC','Feature ablation analysis'],awards:[],github:'https://github.com/juliethecao/deep-diabetes-risk',page:'/projects/deep-diabetes-risk',fmt:{subDY:21,techDY:42}},
   {id:'obstacle',name:'OBSTACLE BOT',subtitle:'Autonomous Avoidance Vehicle',bg:'#8f2424',border:'#b91c1c',label:'#ffe3c2',x:385,y:222,w:240,h:115,pins:3,shape:'sensor',tech:['Arduino UNO R4','C','Modulino ToF','PCA9546','DRV8835'],desc:'A robot car that drives itself, built with a UCI professor for the ICS Summer Academy. Three distance sensors help it steer around obstacles on its own.',highlights:['3x Modulino ToF distance sensors','PCA9546 I2C multiplexer','DRV8835 motor driver shield','Built for the ICS Summer Academy'],awards:[],github:'https://github.com/linh-on',page:'/projects/obstacle-avoidance-vehicle',fmt:{subDY:21,subSize:11,techDY:42,techSize:9}},
@@ -187,14 +191,13 @@ const PROJECTS=[
 const WIRES=[
   {a:{rail:'top'},    b:{p:'pawse',dx:40,dy:0},      color:'#d8281c'}, // VCC: top rail -> MCU
   {a:{rail:'bottom'}, b:{p:'arctos',dx:100,dy:115},  color:'#2e2e32'}, // GND: bottom rail -> motor driver
-  {a:{p:'diabetes',dx:115,dy:0},  b:{p:'pawse',dx:100,dy:140},  color:'#2563eb'}, // SIGNAL: diabetes sensor -> MCU
-  {a:{p:'obstacle',dx:120,dy:0},  b:{p:'pawse',dx:170,dy:140},  color:'#e8a013', via:188}, // I2C DATA via channel 1
-  {a:{p:'pawse',dx:235,dy:140},   b:{p:'arctos',dx:40,dy:0},    color:'#f47b20', via:366}, // PWM via channel 2
-  {a:{p:'pawse',dx:270,dy:80},    b:{p:'ableware',dx:0,dy:85},  color:'#22a04a', lane:0.42}, // DATA: MCU -> display
-  {a:{p:'pawse',dx:270,dy:94},    b:{p:'ableware',dx:0,dy:99},  color:'#2563eb', lane:0.58}, // CLK:  MCU -> display
-  {a:{p:'ableware',dx:215,dy:135},b:{p:'drama',dx:120,dy:0},    color:'#0ea5b7'}, // BUS: display -> memory IC below
-  {a:{p:'drama',dx:215,dy:115},   b:{p:'spider',dx:100,dy:0},   color:'#c89b2a', via:370}, // ADDR via channel 2
-  {a:{p:'spider',dx:200,dy:57},   b:{p:'new',dx:0,dy:57},       color:'#7c3aed'}, // EXP: coprocessor -> expansion slot
+  {a:{p:'diabetes',dx:115,dy:0},  b:{p:'pawse',dx:100,dy:140},  color:'#e8a013', via:188}, // ML: Python AI classifiers (Deep MLP <-> MobileBERT)
+  {a:{p:'ableware',dx:260,dy:85}, b:{p:'pawse',dx:0,dy:80},     color:'#22a04a', lane:0.42}, // PYTHON: shared core language
+  {a:{p:'ableware',dx:260,dy:99}, b:{p:'pawse',dx:0,dy:94},     color:'#2563eb', lane:0.58}, // EMBEDDED: ESP32 <-> Raspberry Pi/Arduino
+  {a:{p:'pawse',dx:235,dy:140},   b:{p:'drama',dx:60,dy:0},     color:'#38bdf8', via:188}, // REACT+DB: React Native/Supabase <-> React.js/PostgreSQL
+  {a:{p:'diabetes',dx:115,dy:115},b:{p:'spider',dx:60,dy:0},    color:'#f47b20', via:363}, // PYTORCH: deep learning models
+  {a:{p:'obstacle',dx:120,dy:115},b:{p:'spider',dx:140,dy:0},   color:'#c89b2a', via:368}, // AUTONOMY: ToF <-> LiDAR obstacle avoidance
+  {a:{p:'obstacle',dx:40,dy:115}, b:{p:'arctos',dx:140,dy:0},   color:'#00979d', via:373}, // ARDUINO: C/C++ robot firmware
 ];
 
 let selected=null,blinkT=[],powerOn=true,dragEnabled=DRAG_ON_AT_START;
@@ -260,7 +263,7 @@ svg.appendChild(wireG);
  as a real series circuit: +RAIL -> button -> LED anode/cathode -> -RAIL. */
 const pcG=el('g');
 svg.appendChild(pcG);
-const BC={x:905,y:64};   // POWER button centre — top-right corner (draggable; traces re-route live)
+const BC={x:865,y:64};   // POWER button centre — top-right corner (draggable; traces re-route live)
 const SW_SCALE=1.35;         // POWER button enlargement factor
 const SW_R=26*SW_SCALE;      // scaled outer radius — where the traces terminate
 const D1_SCALE=1.25;         // D1 LED enlargement factor
@@ -505,7 +508,7 @@ drawWires();
  reads cleanly: + rail -> POWER button -> D1 LED -> − rail (see drawPC). */
 
 // D1 power LED — large 5mm-style indicator, lit only when switched on (draggable)
-d1Pos={x:975,y:64};
+d1Pos={x:935,y:64};
 const d1G=el('g',{transform:`translate(${d1Pos.x},${d1Pos.y})`});
 const d1Inner=el('g',{transform:`scale(${D1_SCALE})`}); // enlarged LED; terminals scale via D1_LEAD
 d1G.appendChild(d1Inner);
