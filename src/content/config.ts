@@ -16,10 +16,15 @@ const posts = defineCollection({
       relatedPosts: z.array(reference("posts")).optional(),
       tags: z.array(z.string()),
       description: z.string(),
-      cover: z.object({
-        src: image(),
-        alt: z.string().optional(),
-      }),
+      cover: z
+        .object({
+          src: image(),
+          alt: z.string().optional(),
+        })
+        .optional(),
+      // sidebar links on the post page
+      github: z.string().optional(),
+      project: reference("projects").optional(),
     }),
 });
 

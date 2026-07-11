@@ -10,7 +10,7 @@ interface Post {
         description: string;
         publishDate: Date;
         tags: string[];
-        cover: {
+        cover?: {
             src: ImageMetadata;
             alt?: string;
         };
@@ -22,19 +22,15 @@ const allPost = (await getCollection('posts'))
 ---
 
 <Layout title="Linh On | Portfolio | Blog" description="A list of my blog posts" scrollSmooth={false}>
-    <section class="blog-wrap">
-        <!-- cute header -->
-        <header class="blog-header">
-            <span class="blog-kicker">my little corner</span>
-            <h1 class="blog-title">The Blog <span class="sparkle">&#10022;</span></h1>
-            <p class="blog-sub">
-                Stories about the projects I build, the bugs I chase, and the wins
-                I get to celebrate along the way. Grab a snack and stay a while.
-            </p>
-        </header>
+    <section class="px-8 md:px-20 lg:px-32 py-12">
+        <p class="font-mono text-xs tracking-widest mb-6" style="color:#22c55e;">● BLOG</p>
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Blog</h1>
+        <p class="text-gray-600 text-2xl leading-relaxed mb-10">
+            Stories about the projects I build, the bugs I chase, and the wins I get to celebrate along the way.
+        </p>
 
         {allPost.length > 0 ? (
-            <div class="blog-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {allPost.map((post: Post) => (
                     <PostCard
                         id={post.id}
@@ -47,98 +43,7 @@ const allPost = (await getCollection('posts'))
                 ))}
             </div>
         ) : (
-            <p class="blog-empty">No posts yet. Check back soon!</p>
+            <p class="text-gray-500">No posts yet. Check back soon!</p>
         )}
     </section>
 </Layout>
-
-<style>
-    .blog-wrap {
-        max-width: 1040px;
-        margin: 0 auto;
-        padding: 48px 24px 80px;
-    }
-
-    .blog-header {
-        position: relative;
-        text-align: center;
-        background: linear-gradient(135deg, #fff0fa 0%, #f1f0ff 55%, #eafff5 100%);
-        border: 2px solid #f6e3f4;
-        border-radius: 30px;
-        padding: 44px 28px 40px;
-        margin-bottom: 44px;
-        box-shadow: 0 10px 30px rgba(180, 140, 200, 0.14);
-        overflow: hidden;
-    }
-    .blog-header::before,
-    .blog-header::after {
-        content: "";
-        position: absolute;
-        border-radius: 50%;
-        opacity: 0.5;
-        pointer-events: none;
-    }
-    .blog-header::before {
-        width: 150px; height: 150px;
-        background: #ffd6ee;
-        top: -50px; left: -40px;
-    }
-    .blog-header::after {
-        width: 170px; height: 170px;
-        background: #c9f7e1;
-        bottom: -60px; right: -50px;
-    }
-
-    .blog-kicker {
-        position: relative;
-        display: inline-block;
-        font-size: 13px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        color: #c66bab;
-        background: #ffffff;
-        padding: 6px 16px;
-        border-radius: 999px;
-        box-shadow: 0 3px 10px rgba(190, 110, 170, 0.18);
-        margin-bottom: 16px;
-    }
-    .blog-title {
-        position: relative;
-        font-size: 44px;
-        font-weight: 900;
-        color: #3a2e44;
-        letter-spacing: -0.5px;
-    }
-    .sparkle { color: #f6b73c; }
-    .blog-sub {
-        position: relative;
-        max-width: 540px;
-        margin: 14px auto 0;
-        font-size: 16px;
-        line-height: 1.6;
-        color: #6f6678;
-    }
-
-    .blog-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 28px;
-    }
-
-    .blog-empty {
-        text-align: center;
-        color: #8a8294;
-        font-size: 16px;
-    }
-
-    @media (prefers-color-scheme: dark) {
-        .blog-header {
-            background: linear-gradient(135deg, #241a28, #1a1a2c, #15241f);
-            border-color: #34293a;
-        }
-        .blog-title { color: #f3eafa; }
-        .blog-sub { color: #c3b9cf; }
-        .blog-kicker { background: #2a2233; color: #efa9df; }
-    }
-</style>

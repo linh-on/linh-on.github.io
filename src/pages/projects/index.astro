@@ -72,7 +72,10 @@ const awardsOf = (a: string | string[] | undefined) =>
 
   /* ---------- view containers ---------- */
   #view-board{flex:1 1 0;min-height:0;}
-  #view-cards{flex:1 1 0;min-height:0;overflow-y:auto;display:none;background:#ffffff;padding:24px 48px 40px;}
+  /* side padding matches the site's page margins (px-8 / md:px-20 / lg:px-32) */
+  #view-cards{flex:1 1 0;min-height:0;overflow-y:auto;display:none;background:#ffffff;padding:24px 32px 40px;}
+  @media (min-width: 768px){#view-cards{padding:24px 80px 40px;}}
+  @media (min-width: 1024px){#view-cards{padding:24px 128px 40px;}}
 
   /* ---------- card grid (matches the breadboard's panel styling) ---------- */
   .pv-grid{display:grid;grid-template-columns:1fr;gap:28px;align-items:stretch;}

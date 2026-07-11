@@ -1,7 +1,6 @@
 ---
-import {getCollection, render} from "astro:content";
+import {getCollection, getEntry, render} from "astro:content";
 import Layout from "../../layouts/Layout.astro";
-import BackBtn from "../../components/BackBtn.astro";
 import {Image} from "astro:assets";
 import BackToTop from "../../components/BackToTop.astro";
 
@@ -14,8 +13,11 @@ export async function getStaticPaths() {
 }
 
 const {post} = Astro.props;
-const {title, description, publishDate, tags, cover, author} = post.data;
+const {title, description, publishDate, cover, author, github} = post.data;
 const {Content} = await render(post);
+
+// Resolve the linked project (if any) for the sidebar
+const project = post.data.project ? await getEntry(post.data.project) : undefined;
 
 const niceDate = publishDate.toLocaleDateString("en-US", {
     month: "long", day: "numeric", year: "numeric",
@@ -24,13 +26,22 @@ const niceDate = publishDate.toLocaleDateString("en-US", {
 const words = (post.body ?? "").trim().split(/\s+/).filter(Boolean).length;
 const readingTime = Math.max(1, Math.round(words / 200));
 ---
-<Layout title={title} description={description} imageOg={cover.src.src} scrollSmooth={true}>
-    <article class="mx-auto max-w-3xl px-6 py-12 md:py-16">
-        <div class="mb-8">
-            <BackBtn/>
-        </div>
+<Layout title={title} description={description} imageOg={cover?.src.src} scrollSmooth={true}>
+    <!-- ============ Hero (matches the project page) ============ -->
+    <section class="w-full border-b border-blue-lightest bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-10">
 
-        <header class="mb-8">
+            <!-- Back button -->
+            <button
+                onclick="history.back()"
+                class="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-full border border-n300 text-n500 hover:text-n600 hover:border-n500 hover:bg-n100 transition-all duration-200 text-sm font-medium"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                    <path d="M7.82843 10.9999H20V12.9999H7.82843L13.1924 18.3638L11.7782 19.778L4 11.9999L11.7782 4.22168L13.1924 5.63589L7.82843 10.9999Z" />
+                </svg>
+                Back
+            </button>
+
             <div class="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-500">
                 <time datetime={publishDate.toISOString()}>{niceDate}</time>
                 {author && (<><span class="text-gray-300">·</span><span>{author}</span></>)}
@@ -38,36 +49,93 @@ const readingTime = Math.max(1, Math.round(words / 200));
                 <span>{readingTime} min read</span>
             </div>
 
-            <h1 class="mb-4 text-3xl font-bold leading-tight text-gray-900 md:text-4xl">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-4" style="color:#1a1a1a;">
                 {title}
             </h1>
 
-            <p class="mb-5 text-lg leading-relaxed text-gray-500">
+            <p class="text-base md:text-lg text-n500 leading-relaxed">
                 {description}
             </p>
-
-            <div class="flex flex-wrap gap-2">
-                {tags.map((tag) => (
-                    <span class="rounded-full border border-gray-200 bg-gray-100 px-3 py-0.5 text-xs font-medium text-gray-600">
-                        #{tag}
-                    </span>
-                ))}
-            </div>
-        </header>
-
-        <Image
-            transition:name={`${post.id}-image`}
-            src={cover.src}
-            alt={cover.alt ?? title}
-            class="mb-10 w-full rounded-2xl border border-gray-100 object-cover"
-        />
-
-        <div class="post-body prose prose-lg max-w-none dark:prose-invert">
-            <Content/>
         </div>
+    </section>
 
-        <BackToTop/>
-    </article>
+    <!-- ============ Body ============ -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-14">
+
+            <!-- Main content -->
+            <div class="lg:col-span-2 min-w-0">
+                {cover && (
+                    <Image
+                        transition:name={`${post.id}-image`}
+                        src={cover.src}
+                        alt={cover.alt ?? title}
+                        class="mb-10 w-full rounded-xl border border-blue-lightest object-cover"
+                    />
+                )}
+
+                <article class="post-body prose prose-lg max-w-none dark:prose-invert">
+                    <Content/>
+                </article>
+
+                <BackToTop/>
+            </div>
+
+            <!-- Sticky sidebar -->
+            <aside class="lg:col-span-1">
+                <div class="lg:sticky lg:top-24 space-y-5">
+
+                    {(project || github) && (
+                        <div class="rounded-xl border border-blue-lightest bg-white p-5 shadow-sm space-y-3">
+                            {github && (
+                                <a
+                                    href={github}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-lg border border-n300 hover:border-n500 text-n600 hover:bg-n100 font-semibold text-sm transition-colors duration-200"
+                                >
+                                    View on GitHub
+                                </a>
+                            )}
+
+                            {project && (
+                                <a
+                                    href={`/projects/${project.id}`}
+                                    class="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-lg border border-n300 hover:border-n500 text-n600 hover:bg-n100 font-semibold text-sm transition-colors duration-200"
+                                >
+                                    View Project Details
+                                </a>
+                            )}
+                        </div>
+                    )}
+
+                    <!-- Post info -->
+                    <div class="rounded-xl border border-blue-lightest bg-white p-5 shadow-sm">
+                        <p class="text-xs font-semibold uppercase tracking-widest text-n500 mb-4">
+                            Post Info
+                        </p>
+                        <dl class="space-y-3 text-sm">
+                            <div>
+                                <dt class="text-xs text-n400 uppercase tracking-wide mb-0.5">Published</dt>
+                                <dd class="font-medium text-n600">{niceDate}</dd>
+                            </div>
+                            {author && (
+                                <div>
+                                    <dt class="text-xs text-n400 uppercase tracking-wide mb-0.5">Author</dt>
+                                    <dd class="font-medium text-n600">{author}</dd>
+                                </div>
+                            )}
+                            <div>
+                                <dt class="text-xs text-n400 uppercase tracking-wide mb-0.5">Reading Time</dt>
+                                <dd class="font-medium text-n600">{readingTime} min</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                </div>
+            </aside>
+        </div>
+    </div>
 </Layout>
 
 <style>
@@ -77,6 +145,10 @@ const readingTime = Math.max(1, Math.round(words / 200));
         font-weight: 700;
         padding-bottom: 0.3em;
         border-bottom: 1px solid #f0f0f0;
+    }
+    /* the first heading shouldn't add its section gap on top of the page padding */
+    .post-body :global(h2:first-child) {
+        margin-top: 0;
     }
     .post-body :global(p) { line-height: 1.75; }
     .post-body :global(a) {

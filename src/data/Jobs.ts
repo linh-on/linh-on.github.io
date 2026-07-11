@@ -23,7 +23,7 @@ interface WorkExperience {
 const workExperience: WorkExperience[] = [
   {
     title: "ICS Summer Academy: Intelligent Robotics",
-    startDate: "2025-02-01",
+    startDate: "2026-02-01",
     company: "UCI Donald Bren School of ICS",
     location: "Irvine, CA",
     description:
@@ -42,7 +42,7 @@ const workExperience: WorkExperience[] = [
       },
       {
         title: "Robotics Assistant to the Instructing Professor",
-        startDate: "2025-02-01",
+        startDate: "2026-02-01",
         goals: [
           "Invited by the instructing professor to help design, build, and iterate on the autonomous driving robot used as the reference platform for the Intelligent Robotics curriculum.",
           "Develop and test the robot across its full stack, including Arduino firmware in C, sensor and motor circuitry, and chassis assembly, so the build is reliable and easy for students to reproduce.",
@@ -74,9 +74,9 @@ const workExperience: WorkExperience[] = [
     description:
       "Planned and ran club hangouts and cultural events to bring Thai and Southeast Asian students together at UCI.",
     goals: [
-      "Helped plan and run club hangouts and cultural events to bring Thai and Southeast Asian students together.",
-      "Handled event logistics like finding locations, making posts, and spreading the word to get members to show up.",
-      "Worked with the rest of the board to keep events fun, consistent, and worth coming to.",
+      "Planned and led social and cultural events that brought Thai and Southeast Asian students together and helped build a stronger community on campus.",
+      "Managed event logistics and execution to ensure each event was organized and ran smoothly.",
+      "Worked closely with the executive board to create welcoming, well-organized events that kept members involved and excited to participate.",
     ],
     currentJob: false,
   },
@@ -89,9 +89,9 @@ const workExperience: WorkExperience[] = [
     description:
       "Supported the annual Thai Culture Night for four years across backstage coordination, the cultural play, and Thai Market Night.",
     goals: [
-      "Supported the annual Thai Culture Night for four years, starting with two years helping backstage and coordinating the cultural play.",
-      "Shifted to helping run Thai Market Night the last two years, setting up vendor booths, managing foot traffic, and keeping things running smoothly on event day.",
-      "Helped create a welcoming space for attendees to experience Thai food, culture, and community.",
+      "Supported Thai Culture Night and Thai Market Night over four years, beginning backstage with the cultural play before moving into event-day operations.",
+      "Organized vendor booths and ensured activities ran smoothly.",
+      "Helped create a welcoming space where attendees could experience Thai food, culture, and community.",
     ],
     currentJob: false,
   },
@@ -151,9 +151,9 @@ const workExperience: WorkExperience[] = [
     description:
       "Provided technical support for instructors and managed event equipment setup and breakdown.",
     goals: [
-      "Delivered technical support for instructors, ensuring smooth operation of hardware and software systems.",
-      "Diagnosed and resolved computer and Zoom-related technical issues in real-time, minimizing disruptions and ensuring uninterrupted sessions.",
-      "Managed the setup, testing, and breakdown of equipment for events, streamlining processes for efficient event execution.",
+      "Provided hands-on technical support for instructors and kept classroom hardware and software working reliably.",
+      "Resolved computer and Zoom issues during live sessions so classes could continue with minimal interruption.",
+      "Prepared and tested equipment before events and handled breakdown and storage afterward.",
     ],
     currentJob: false,
   },
@@ -194,11 +194,11 @@ const workExperience: WorkExperience[] = [
     company: "University of California, Irvine",
     location: "Irvine, CA",
     description:
-      "Supported research operations including literature searches, data management, and grant preparation.",
+      "Prepared laboratory equipment and materials and kept the lab stocked and ready for vaccine research work.",
     goals: [
-      "Performed literature searches, data management, and maintaining files for research projects.",
-      "Conducted research and summarized findings for the lab team.",
-      "Prepared materials for submission to granting agencies and foundations.",
+      "Prepared and organized laboratory equipment and materials for vaccine research projects.",
+      "Maintained inventory records and monitored supplies to keep the lab stocked and ready for daily work.",
+      "Supported experiments as needed through equipment setup, material preparation, and cleanup.",
     ],
     currentJob: false,
   },
