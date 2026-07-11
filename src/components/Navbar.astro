@@ -31,8 +31,8 @@ function getSectionId(href: string): string | null {
       </div>
     </a>
 
-    <!-- Center: nav links (desktop only) -->
-    <div class="hidden md:flex items-center justify-center" id="navbar-sticky">
+    <!-- Center: nav links (laptop and wider only; tablets use the hamburger) -->
+    <div class="hidden xl:flex items-center justify-center" id="navbar-sticky">
       <ul class="flex items-center m-0 p-0" style="list-style:none;gap:32px;">
         {menu.map(item => {
           const sectionId = getSectionId(item.href);
@@ -59,7 +59,7 @@ function getSectionId(href: string): string | null {
     <!-- Right: hamburger on mobile, empty spacer on desktop -->
     <div class="flex justify-end">
       <button id="btn-menu" type="button"
-        class="inline-flex items-center justify-center p-2 w-9 h-9 rounded-lg md:hidden focus:outline-none"
+        class="inline-flex items-center justify-center p-2 w-9 h-9 rounded-lg xl:hidden focus:outline-none"
         style="color:#888;"
         aria-expanded="false">
         <span class="sr-only">Open main menu</span>
@@ -72,7 +72,7 @@ function getSectionId(href: string): string | null {
   </div>
 
   <!-- Mobile dropdown -->
-  <div class="hidden md:hidden w-full" id="navbar-mobile" style="background:#0f0f1a;border-top:1px solid #1a1a2e;">
+  <div class="hidden xl:hidden w-full" id="navbar-mobile" style="background:#0f0f1a;border-top:1px solid #1a1a2e;">
     <ul class="flex flex-col p-4 m-0" style="list-style:none;gap:12px;">
       {menu.map(item => {
         const sectionId = getSectionId(item.href);
