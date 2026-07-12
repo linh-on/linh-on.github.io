@@ -1,0 +1,135 @@
+[
+  {
+    "id": "bio",
+    "title": "About Linh",
+    "text": "Linh On is a software engineer and embedded systems engineer. She is a Master of Computer Science student at UC Irvine and holds a BS in Computer Science and Engineering from UCI, where she graduated Cum Laude. She likes working where software meets the physical world, and she has built full-stack web apps, embedded systems, and robots. She is happiest when she can take an idea and turn it into something real, and she enjoys picking up unfamiliar tools and solving problems across hardware and software.",
+    "link": "/#about",
+    "source": "src/config.ts, src/pages/index.astro"
+  },
+  {
+    "id": "education",
+    "title": "Education",
+    "text": "Linh is a Master of Computer Science student at the University of California, Irvine, and she expects to graduate in December 2026. Before that she earned a Bachelor of Science in Computer Science and Engineering at UCI in March 2025, with a 3.86 GPA, and graduated Cum Laude from the Henry Samueli School of Engineering. Her coursework covered algorithms, data structures, embedded systems, computer architecture, and software engineering, and her graduate work focuses on software engineering, AI and machine learning, and systems.",
+    "link": "/#about",
+    "source": "src/data/education.ts, public/resume.pdf"
+  },
+  {
+    "id": "current-work",
+    "title": "Current work",
+    "text": "Right now Linh is working on two things. Since February 2026 she has been designing and building the autonomous driving robot used in the ICS Summer Academy's Intelligent Robotics session together with a UCI professor, and in July 2026 she is leading the program assistant team for that session, supporting lectures and labs where more than 30 high school students build robots. She is also working as an AI Research Assistant and Web Development Intern at Live Good Inc. in Irvine, where she maintains web pages built with WordPress and PHP and researches AI integration ideas for the company website.",
+    "link": "/#experience",
+    "source": "src/data/Jobs.ts, public/resume.pdf"
+  },
+  {
+    "id": "project-pawse",
+    "title": "Pawse, her strongest project",
+    "text": "Linh's strongest and most impressive project is Pawse, an AI-powered phone lockbox she built as a hardware startup. She was co-founder and CTO on the four-person team that built it: a productivity system pairing a physical phone lockbox with a mobile app. An ESP32 microcontroller drives the box, which talks to a React Native app over Bluetooth Low Energy. During a focus session, a MobileBERT classifier that Linh trained screens notifications with 95% accuracy and only lets urgent ones through. She wrote the full ESP32 firmware in Arduino C++, built the BLE layer, and developed most of the app screens. Pawse reached the semifinals of two UCI entrepreneurship competitions in 2026, the Stella Zhang New Venture Competition and the Beall and Butterworth Product Design Competition.",
+    "link": "/projects/pawse",
+    "source": "src/content/projects/pawse.mdx"
+  },
+  {
+    "id": "project-ableware",
+    "title": "Ableware, a voice-controlled assistive lift",
+    "text": "Ableware is a voice-controlled lift system for people with limited mobility. A Raspberry Pi listens for the wake word, recognizes spoken commands with Vosk, and sends them over WebSocket to a FastAPI hub server. The hub coordinates the physical lift, a 3D physics simulation, and a live dashboard at the same time. Linh was the embedded systems and backend engineer. She wrote the Arduino C++ firmware that drives the lift actuator, built the WebSocket pipeline between the Pi and the hub, and integrated the full voice flow from wake word to physical motion. The project won 2nd place at the 2026 UCI MCS ICS Expo.",
+    "link": "/projects/ableware",
+    "source": "src/content/projects/ableware.mdx"
+  },
+  {
+    "id": "project-spider-droid",
+    "title": "AI Spider Droid, an autonomous legged robot",
+    "text": "The AI Spider Droid is a multi-legged robot that walks and avoids obstacles completely on its own. It runs PyTorch neural networks directly on an NVIDIA Jetson Nano, so no remote computer or human operator is needed. Linh was the AI and robotics engineer. She designed the system architecture, trained the vision models, optimized them with TensorRT so they run in real time on the small board, and built the Python control loop that turns what the camera sees into leg movements. Every part of the pipeline, from pixels to motion, runs on the robot itself.",
+    "link": "/projects/ai-spider-droid",
+    "source": "src/content/projects/ai-spider-droid.mdx, public/resume.pdf"
+  },
+  {
+    "id": "project-drama-tracker",
+    "title": "DramaTracker, a full-stack movie app",
+    "text": "DramaTracker is a full-stack web app for discovering, rating, and tracking movies. Linh designed and built the entire application herself: a React frontend, a Node.js and Express REST API, a PostgreSQL database, JWT-based login, and a Python Flask microservice for data enrichment. The app pulls live movie data from the TMDB API, and a content-based recommendation engine she built with Python, Pandas, and scikit-learn suggests similar titles by comparing attributes like genre, cast, and keywords. She also added server-side caching to stay within the TMDB rate limits and speed up common searches.",
+    "link": "/projects/drama-tracker",
+    "source": "src/content/projects/drama-tracker.mdx, public/resume.pdf"
+  },
+  {
+    "id": "skills-embedded",
+    "title": "Hardware and embedded systems skills",
+    "text": "Yes, Linh has done a lot of hardware and embedded systems work. She has shipped firmware in C and C++ on the ESP32, Arduino boards, the Tiva C, the Raspberry Pi, and the NVIDIA Jetson Nano. Her project work covers servo and motor control, I2C sensor buses with multiplexers, Bluetooth Low Energy communication, FreeRTOS-safe task design, and 3D-printed enclosures. She has also studied Verilog, VHDL, and MIPS in her computer engineering coursework. Examples include the Pawse lockbox firmware, the Ableware lift actuator firmware, and the obstacle avoidance robot she built for UCI's summer robotics program.",
+    "link": "/#skills",
+    "source": "src/data/hardSkills.ts, public/resume.pdf, src/content/projects/*.mdx"
+  },
+  {
+    "id": "skills-web",
+    "title": "Web development skills",
+    "text": "Linh builds full-stack web applications. On the frontend she works with JavaScript, TypeScript, React, HTML, CSS, and Tailwind CSS, and she has translated Figma designs into responsive interfaces during her front-end internship at Nichietsu System Development. On the backend she has built REST APIs with Node.js and Express, services with Python and Flask and FastAPI, and databases in PostgreSQL with JWT authentication. She also maintains WordPress and PHP sites in her current internship at Live Good Inc. DramaTracker, her movie tracking app, shows this whole stack working together in one project.",
+    "link": "/#skills",
+    "source": "public/resume.pdf, src/data/Jobs.ts, src/content/projects/drama-tracker.mdx"
+  },
+  {
+    "id": "skills-ai-ml",
+    "title": "AI and machine learning (AI/ML) skills",
+    "text": "Linh has hands-on AI/ML experience. She has applied machine learning in several real projects using Python, PyTorch, scikit-learn, and Pandas. For Pawse she fine-tuned a MobileBERT text classifier to 95% accuracy for detecting urgent notifications, with a TF-IDF model as a fallback. For the AI Spider Droid she trained vision models and optimized them with TensorRT to run in real time on a Jetson Nano. For Deep Diabetes Risk she worked with health data, building a deep neural network in PyTorch that predicts diabetes risk from CDC health survey data and beats classical baselines. She also built a content-based recommendation engine for her DramaTracker app.",
+    "link": "/#skills",
+    "source": "src/content/projects/pawse.mdx, src/content/projects/ai-spider-droid.mdx, src/content/projects/deep-diabetes-risk.mdx, src/content/projects/drama-tracker.mdx"
+  },
+  {
+    "id": "teaching-mentoring",
+    "title": "Teaching and mentoring",
+    "text": "Teaching is a big part of Linh's experience. As an undergraduate lab tutor at UCI's Donald Bren School of ICS, she gave one-on-one help to more than 300 students in Python and C++ coursework, explaining concepts, debugging code, and guiding problem solving. As a Freshman Edge peer mentor she supported more than 10 incoming students and helped run events for about 150 participants. In summer 2026 she mentors high school students at UCI's ICS Summer Academy while they build and program their first robots, helping them debug both code and hardware on the spot.",
+    "link": "/#experience",
+    "source": "src/data/Jobs.ts, public/resume.pdf"
+  },
+  {
+    "id": "leadership-teamwork",
+    "title": "Leadership and teamwork",
+    "text": "Linh has led both technical and social teams. She leads the program assistant team for UCI's Intelligent Robotics summer session, and as co-founder and CTO of Pawse she owned the technical direction for a five-person team. As Lead IT Services Assistant at the UCI Division of Continuing Education she led support operations for more than 300 users. Outside of engineering she was Social Chair of the Thai Culture Association at UCI, where she planned social and cultural events, and she supported the annual Thai Culture Night for four years.",
+    "link": "/#experience",
+    "source": "src/data/Jobs.ts, src/content/projects/pawse.mdx"
+  },
+  {
+    "id": "experience-industry",
+    "title": "Industry experience",
+    "text": "Linh has industry experience in both web development and IT. At Nichietsu System Development in Vietnam she worked as a front-end developer intern, building responsive interfaces in TypeScript and React from Figma designs and testing them across platforms. At the UCI Division of Continuing Education she was Lead IT Services Assistant for about two and a half years, supporting more than 300 users, provisioning more than 200 endpoint systems, and handling more than 50 help desk tickets a week with an 85% resolution rate within 24 hours. She currently interns at Live Good Inc. doing web development and AI research.",
+    "link": "/#experience",
+    "source": "src/data/Jobs.ts, public/resume.pdf"
+  },
+  {
+    "id": "research",
+    "title": "Research experience",
+    "text": "Linh worked as an undergraduate research assistant in Professor Rimoli's lab at the UCI Samueli School of Engineering. The lab studies tensegrity structure simulation, and she contributed by writing unit tests for the simulation code in Python, which made the codebase more reliable, and by optimizing a conjugate gradient descent algorithm to cut its computation time. Earlier she also supported a vaccine research and development lab at UCI, where she prepared equipment and materials and kept the lab stocked for daily experiments.",
+    "link": "/#experience",
+    "source": "src/data/Jobs.ts"
+  },
+  {
+    "id": "availability",
+    "title": "Availability and graduation",
+    "text": "Linh graduates with her Master of Computer Science degree from UC Irvine in December 2026. She is currently looking for software engineering and embedded systems internship opportunities where she can keep growing while contributing to real products.",
+    "link": "/#about",
+    "source": "src/data/education.ts, src/pages/index.astro"
+  },
+  {
+    "id": "robots",
+    "title": "Robots Linh has built",
+    "text": "Linh has built several robots. The AI Spider Droid is a legged robot that walks and avoids obstacles on its own, using neural networks running on a Jetson Nano. The obstacle avoidance vehicle is an Arduino robot car she built with a UCI professor, and it is the robot that high school students build in UCI's ICS Summer Academy. She also assembled and programmed a 3D-printed robotic arm with 6 degrees of freedom, based on the open-source Arctos design. Right now she keeps improving the summer program robot and mentors the students who build it.",
+    "link": "/projects",
+    "source": "src/content/projects/ai-spider-droid.mdx, src/content/projects/obstacle-avoidance-vehicle.mdx, src/content/projects/arctos-robotic-arm.mdx, src/data/Jobs.ts"
+  },
+  {
+    "id": "awards",
+    "title": "Awards and honors",
+    "text": "Linh has earned several awards and honors. She graduated Cum Laude from the Henry Samueli School of Engineering at UCI with a 3.86 GPA. Her project Ableware, a voice-controlled assistive lift, won 2nd place at the 2026 UCI MCS ICS Expo. Her startup project Pawse was a semifinalist at the UCI Stella Zhang New Venture Competition 2026 and a semifinalist at the Beall and Butterworth Product Design Competition 2026.",
+    "link": "/projects",
+    "source": "src/data/education.ts, src/content/projects/ableware.mdx, src/content/projects/pawse.mdx"
+  },
+  {
+    "id": "why-hire",
+    "title": "Why hire Linh",
+    "text": "Linh stands out because she can work across the whole stack, from firmware on a microcontroller to a web app to a machine learning model. She has shipped real products, not just class assignments. Her startup project Pawse reached the semifinals of two UCI competitions, and Ableware won 2nd place at the 2026 UCI MCS ICS Expo. She picks up unfamiliar tools quickly and has shown it across web, embedded, and AI/ML work. She also communicates well. She has tutored more than 300 students, mentors high school students in robotics, and has led teams in both technical and social settings.",
+    "link": "/#about",
+    "source": "src/data/Jobs.ts, src/content/projects/pawse.mdx, src/content/projects/ableware.mdx, src/pages/index.astro"
+  },
+  {
+    "id": "contact",
+    "title": "Contact",
+    "text": "The best way to reach Linh is by email at linhon07@gmail.com. She is also on LinkedIn at linkedin.com/in/linh-m-on and her code is on GitHub at github.com/linh-on. Her resume can be downloaded directly from this site.",
+    "link": "/contact",
+    "source": "src/config.ts, public/resume.pdf"
+  }
+]
