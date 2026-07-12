@@ -1,0 +1,52 @@
+---
+/*
+ * "Ask AI about me" chat widget launcher
+ */
+---
+
+<div id="ask-ai-root" transition:persist="ask-ai">
+    <button
+        id="ask-ai-launcher"
+        type="button"
+        aria-label="Ask AI about Linh"
+        class="fixed bottom-6 right-6 z-30 w-14 h-14 rounded-full text-white shadow-lg flex items-center justify-center transition-transform hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-600"
+        style="background:#16a34a;"
+    >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            <path d="M8 9h8M8 13h5"></path>
+        </svg>
+    </button>
+    <div id="ask-ai-mount"></div>
+</div>
+
+<script>
+    const launcher = document.getElementById("ask-ai-launcher");
+    const mountEl = document.getElementById("ask-ai-mount");
+    async function ensureReactPreamble() {
+        if (!import.meta.env.DEV) return;
+        const w = window as any;
+        if (w.__vite_plugin_react_preamble_installed__) return;
+        const refreshUrl = "/@react-refresh";
+        const { default: RefreshRuntime } = await import(/* @vite-ignore */ refreshUrl);
+        RefreshRuntime.injectIntoGlobalHook(window);
+        w.$RefreshReg$ = () => {};
+        w.$RefreshSig$ = () => (type: unknown) => type;
+        w.__vite_plugin_react_preamble_installed__ = true;
+    }
+
+    let booting = false;
+    launcher?.addEventListener("click", async () => {
+        if (booting || !mountEl) return;
+        booting = true;
+        try {
+            await ensureReactPreamble();
+            const { mountChat } = await import("./chat/mount");
+            mountChat(mountEl);
+            launcher.remove();
+        } catch (err) {
+            console.error("Failed to load the chat widget", err);
+            booting = false; // allow another attempt
+        }
+    });
+</script>
