@@ -55,10 +55,28 @@ function TypingIndicator() {
   );
 }
 
+function SeeMoreArrow() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  );
+}
+
 function BotMessage({ response }: { response: AgentResponse }) {
   if (response.type === "fallback") {
     return (
-      <div className="flex justify-start">
+      <div className="flex justify-start" data-bot-message>
         <div className="max-w-[90%] bg-amber-50 border border-amber-200 text-amber-800 rounded-2xl rounded-bl-md px-4 py-3 text-sm leading-relaxed">
           {response.intro}
         </div>
@@ -66,45 +84,65 @@ function BotMessage({ response }: { response: AgentResponse }) {
     );
   }
   return (
-    <div className="flex justify-start">
+    <div className="flex justify-start" data-bot-message>
       <div className="max-w-[90%] bg-gray-50 border border-gray-200 rounded-2xl rounded-bl-md px-4 py-3">
-        <p className="text-sm text-gray-800 leading-relaxed">
-          {response.intro}
-        </p>
-        {response.chunks.map((chunk) => (
-          <div
-            key={chunk.id}
-            className="mt-3 pl-3 border-l-2"
-            style={{ borderColor: "#bbf7d0" }}
-          >
-            <p className="text-sm font-semibold text-gray-900">{chunk.title}</p>
-            <p className="text-sm text-gray-600 leading-relaxed mt-0.5">
-              {chunk.text}
+        {response.answerText ? (
+          <>
+            {/* v3: LLM-generated answer, with source links kept underneath */}
+            <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">
+              {response.answerText}
             </p>
-            {chunk.link && (
-              <a
-                href={chunk.link}
-                className="inline-flex items-center gap-1 text-sm font-medium mt-1 hover:underline"
-                style={{ color: "#16a34a" }}
-              >
-                See more
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </a>
+            {response.chunks.some((c) => c.link) && (
+              <div className="mt-3 pt-2 border-t border-gray-200 flex flex-col gap-1">
+                {response.chunks
+                  .filter((c) => c.link)
+                  .map((chunk) => (
+                    <a
+                      key={chunk.id}
+                      href={chunk.link}
+                      className="inline-flex items-center gap-1 text-sm font-medium hover:underline"
+                      style={{ color: "#16a34a" }}
+                    >
+                      See more: {chunk.title}
+                      <SeeMoreArrow />
+                    </a>
+                  ))}
+              </div>
             )}
-          </div>
-        ))}
+          </>
+        ) : (
+          <>
+            {/* v1: retrieved chunks shown directly */}
+            <p className="text-sm text-gray-800 leading-relaxed">
+              {response.intro}
+            </p>
+            {response.chunks.map((chunk) => (
+              <div
+                key={chunk.id}
+                className="mt-3 pl-3 border-l-2"
+                style={{ borderColor: "#bbf7d0" }}
+              >
+                <p className="text-sm font-semibold text-gray-900">{chunk.title}</p>
+                <p className="text-sm text-gray-600 leading-relaxed mt-0.5">
+                  {chunk.text}
+                </p>
+                {chunk.link && (
+                  <a
+                    href={chunk.link}
+                    className="inline-flex items-center gap-1 text-sm font-medium mt-1 hover:underline"
+                    style={{ color: "#16a34a" }}
+                  >
+                    See more
+                    <SeeMoreArrow />
+                  </a>
+                )}
+              </div>
+            ))}
+          </>
+        )}
+        {response.note && (
+          <p className="mt-2 text-xs text-gray-400 italic">{response.note}</p>
+        )}
       </div>
     </div>
   );
@@ -122,11 +160,16 @@ export default function ChatWidget({
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isAnswering, setIsAnswering] = useState(false);
+  const [streamingText, setStreamingText] = useState<string | null>(null);
 
   const panelRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const messagesRef = useRef<HTMLDivElement>(null);
+  // Scroll coordination: never auto-scroll after the user scrolls manually.
+  const manualScrollRef = useRef(false);
+  const programmaticScrollRef = useRef(false);
+  const streamScrolledRef = useRef(false);
 
   // Kick off the (mock) model load on first open only.
   useEffect(() => {
@@ -147,11 +190,52 @@ export default function ChatWidget({
     else panelRef.current?.focus();
   }, [open, initState]);
 
-  // Auto-scroll to the newest message.
+  const scrollProgrammatically = (fn: (container: HTMLDivElement) => void) => {
+    const container = messagesRef.current;
+    if (!container) return;
+    programmaticScrollRef.current = true;
+    fn(container);
+    // The resulting scroll event fires asynchronously; keep the flag up
+    // briefly so it is not mistaken for a manual scroll.
+    setTimeout(() => {
+      programmaticScrollRef.current = false;
+    }, 50);
+  };
+
+  // Align the TOP of the newest bot answer with the top of the visible chat
+  // area, so the visitor reads from the beginning. Skipped once the user has
+  // scrolled manually during this answer.
+  const scrollBotAnswerToTop = () => {
+    if (manualScrollRef.current) return;
+    scrollProgrammatically((container) => {
+      const bots = container.querySelectorAll<HTMLElement>("[data-bot-message]");
+      const el = bots[bots.length - 1];
+      if (!el) return;
+      container.scrollTop +=
+        el.getBoundingClientRect().top - container.getBoundingClientRect().top - 8;
+    });
+  };
+
   useEffect(() => {
-    const el = messagesRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [messages, isAnswering]);
+    const last = messages[messages.length - 1];
+    if (!last) return;
+    if (last.role === "user") {
+      // Keep the just-sent question and the typing indicator in view.
+      scrollProgrammatically((c) => {
+        c.scrollTop = c.scrollHeight;
+      });
+    } else {
+      scrollBotAnswerToTop();
+    }
+  }, [messages]);
+
+  // First streamed token: bring the top of the incoming answer into view once.
+  useEffect(() => {
+    if (streamingText !== null && !streamScrolledRef.current) {
+      streamScrolledRef.current = true;
+      scrollBotAnswerToTop();
+    }
+  }, [streamingText]);
 
   const close = useCallback(() => {
     setOpen(false);
@@ -168,13 +252,18 @@ export default function ChatWidget({
     const trimmed = question.trim();
     if (!trimmed || isAnswering || initState !== "ready") return;
     setInput("");
+    manualScrollRef.current = false;
+    streamScrolledRef.current = false;
+    setStreamingText(null);
     setMessages((prev) => [
       ...prev,
       { id: nextMessageId++, role: "user", text: trimmed },
     ]);
     setIsAnswering(true);
     try {
-      const response = await answerQuestion(trimmed);
+      const response = await answerQuestion(trimmed, (partial) =>
+        setStreamingText(partial),
+      );
       setMessages((prev) => [
         ...prev,
         { id: nextMessageId++, role: "bot", response },
@@ -193,6 +282,7 @@ export default function ChatWidget({
         },
       ]);
     } finally {
+      setStreamingText(null);
       setIsAnswering(false);
       inputRef.current?.focus();
     }
@@ -224,7 +314,7 @@ export default function ChatWidget({
           aria-label="Ask AI about Linh"
           tabIndex={-1}
           onKeyDown={handleKeyDown}
-          className="fixed z-40 bg-white flex flex-col overflow-hidden inset-0 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[380px] sm:h-[600px] sm:max-h-[calc(100vh-6rem)] sm:rounded-2xl sm:border sm:border-gray-200 sm:shadow-2xl focus:outline-none"
+          className="fixed z-40 bg-white flex flex-col overflow-hidden inset-0 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[520px] sm:max-w-[calc(100vw-3rem)] sm:h-[600px] sm:max-h-[calc(100vh-6rem)] sm:rounded-2xl sm:border sm:border-gray-200 sm:shadow-2xl focus:outline-none"
         >
           {/* Header, styled after the site navbar */}
           <div
@@ -333,6 +423,9 @@ export default function ChatWidget({
               {/* Messages */}
               <div
                 ref={messagesRef}
+                onScroll={() => {
+                  if (!programmaticScrollRef.current) manualScrollRef.current = true;
+                }}
                 className="flex-1 overflow-y-auto px-4 py-4 space-y-3"
                 aria-live="polite"
               >
@@ -357,7 +450,16 @@ export default function ChatWidget({
                     <BotMessage key={msg.id} response={msg.response} />
                   ),
                 )}
-                {isAnswering && <TypingIndicator />}
+                {isAnswering && streamingText && (
+                  <div className="flex justify-start" data-bot-message>
+                    <div className="max-w-[90%] bg-gray-50 border border-gray-200 rounded-2xl rounded-bl-md px-4 py-3">
+                      <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">
+                        {streamingText}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                {isAnswering && !streamingText && <TypingIndicator />}
               </div>
 
               {/* Suggested questions, hidden only while a question is being answered */}
