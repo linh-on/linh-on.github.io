@@ -65,25 +65,27 @@
 .bb-flow{stroke-dasharray:4 11;animation:bbflow 0.55s linear infinite;}
 @keyframes bbflow{to{stroke-dashoffset:-15;}}
 
-/* ---------- RESPONSIVE ---------- */
-@media (max-width: 880px){
-  .bb-outer{height:auto;min-height:0;}
-  .wrap{height:auto;padding:14px 12px 16px;}
-  .main{flex-direction:column;min-height:0;}
-  .board-col{flex:none;width:100%;}
-  .svg-area{aspect-ratio:1000/580;}
-  .panel-col{flex:none;width:100%;max-width:none;height:auto;}
-  .panel-body{overflow-y:visible;}
-  .pempty{overflow-y:visible;}
-  .fhint{display:none;}
-  .foot{justify-content:center;}
-  /* readout empty-state text: the script sets inline 24px spans, so !important */
-  .pempty-icon{font-size:36px;}
-  .pempty-txt{font-size:13px;letter-spacing:1.5px;}
-  .pempty-txt span{font-size:15px !important;}
-  .sc-list{gap:6px;}
-  .scb{padding:8px 12px;font-size:13px;letter-spacing:1px;border-radius:8px;}
-}
+/* ---------- RESPONSIVE ----------
+   Stack breadboard-on-top / readout-below whenever the window is narrow:
+   always on phones/tablets, and on larger displays whenever the window is
+   less than 3/4 of the screen width. Driven by the html.pv-stacked class,
+   toggled from an inline script on the projects page (see projects/index). */
+html.pv-stacked .bb-outer{height:auto;min-height:0;}
+html.pv-stacked .wrap{height:auto;padding:14px 12px 16px;}
+html.pv-stacked .main{flex-direction:column;min-height:0;}
+html.pv-stacked .board-col{flex:none;width:100%;}
+html.pv-stacked .svg-area{aspect-ratio:1000/580;}
+html.pv-stacked .panel-col{flex:none;width:100%;max-width:none;height:auto;}
+html.pv-stacked .panel-body{overflow-y:visible;}
+html.pv-stacked .pempty{overflow-y:visible;}
+html.pv-stacked .fhint{display:none;}
+html.pv-stacked .foot{justify-content:center;}
+/* readout empty-state text: the script sets inline 24px spans, so !important */
+html.pv-stacked .pempty-icon{font-size:36px;}
+html.pv-stacked .pempty-txt{font-size:13px;letter-spacing:1.5px;}
+html.pv-stacked .pempty-txt span{font-size:15px !important;}
+html.pv-stacked .sc-list{gap:6px;}
+html.pv-stacked .scb{padding:8px 12px;font-size:13px;letter-spacing:1px;border-radius:8px;}
 </style>
 
 <div class="wrap">
@@ -631,12 +633,16 @@ PROJECTS.forEach(p=>{
     p.shape==='display'?{iconX:26}:{},
     p.fmt||{}
   );
-  tg.appendChild(tx(p.name,{x:F.iconX,y:F.iconY+F.nameDY,'text-anchor':'start','font-size':F.nameSize,'font-weight':'bold','font-family':'Courier New,monospace',fill:p.label,'letter-spacing':1.2}));
-  tg.appendChild(tx(p.subtitle,{x:F.iconX,y:F.iconY+F.subDY,'text-anchor':'start','font-size':F.subSize,'font-family':'Courier New,monospace',fill:subFill}));
-  tg.appendChild(tx(p.tech.slice(0,F.techCount).join(' · '),{x:F.iconX,y:F.iconY+F.techDY,'text-anchor':'start','font-size':F.techSize,'font-family':'Courier New,monospace',fill:techFill,'font-weight':500}));
-  tg.appendChild(tx(`${p.id.slice(0,4).toUpperCase()}-${200+Math.floor(p.x/10)*3}`,{x:p.shape==='ic'?22:28,y:H-8,'font-size':8,'font-family':'Courier New,monospace',fill:'#ffffff4d'}));
+  const nameEl=tx(p.name,{x:F.iconX,y:F.iconY+F.nameDY,'text-anchor':'start','font-size':F.nameSize,'font-weight':'bold','font-family':'Courier New,monospace',fill:p.label,'letter-spacing':1.2});
+  const subEl=tx(p.subtitle,{x:F.iconX,y:F.iconY+F.subDY,'text-anchor':'start','font-size':F.subSize,'font-family':'Courier New,monospace',fill:subFill});
+  const techEl=tx(p.tech.slice(0,F.techCount).join(' · '),{x:F.iconX,y:F.iconY+F.techDY,'text-anchor':'start','font-size':F.techSize,'font-family':'Courier New,monospace',fill:techFill,'font-weight':500});
+  const partEl=tx(`${p.id.slice(0,4).toUpperCase()}-${200+Math.floor(p.x/10)*3}`,{x:p.shape==='ic'?22:28,y:H-8,'font-size':8,'font-family':'Courier New,monospace',fill:'#ffffff4d'});
+  tg.appendChild(nameEl);tg.appendChild(subEl);tg.appendChild(techEl);tg.appendChild(partEl);
   g.appendChild(tg);
   p._tg=tg;
+  // kept for the phone layout: only the chip NAME shows, centered (see applyChipText)
+  p._nameEl=nameEl;p._detailEls=[subEl,techEl,partEl];
+  p._nameHome={x:F.iconX,y:F.iconY+F.nameDY};p._W=W;p._H=H;
 
   // hit area (hover affordance lives here; click/drag handled on the group)
   const hit=el('rect',{width:W,height:H,rx:5,fill:'transparent'});
@@ -685,6 +691,32 @@ PROJECTS.forEach(p=>{
 });
 svg.appendChild(handleG); // wire endpoint handles render above all chips
 drawWires(); // rebuild now that the handle layer is live
+
+/* ---------- PHONE CHIP LABELS ----------
+ On phone-width screens the chips are too small to read the subtitle + tech
+ lines, so show ONLY the project name, centered in the chip. Above phone width
+ the full silkscreen (name + subtitle + tech + part no.) returns. */
+let chipTextPhone=null;
+function applyChipText(){
+  const phone=window.innerWidth<=600;
+  if(phone===chipTextPhone)return; // only touch the DOM when we cross the boundary
+  chipTextPhone=phone;
+  PROJECTS.forEach(p=>{
+    if(!p._nameEl)return;
+    p._detailEls.forEach(e=>{if(e)e.style.display=phone?'none':'';});
+    if(phone){
+      p._nameEl.setAttribute('x',p._W/2);
+      p._nameEl.setAttribute('y',p._H/2);
+      p._nameEl.setAttribute('text-anchor','middle');
+      p._nameEl.setAttribute('dominant-baseline','central');
+    }else{
+      p._nameEl.setAttribute('x',p._nameHome.x);
+      p._nameEl.setAttribute('y',p._nameHome.y);
+      p._nameEl.setAttribute('text-anchor','start');
+      p._nameEl.removeAttribute('dominant-baseline');
+    }
+  });
+}
 
 const scList=document.getElementById('sc-list');
 if(scList){
@@ -901,7 +933,14 @@ svg.addEventListener('wheel',ev=>{
   applyCam();
 },{passive:false});
 
-window.addEventListener('resize',applyCam);
+window.addEventListener('resize',()=>{applyCam();applyChipText();});
+// When the page flips between the stacked (board-on-top) and side-by-side
+// layouts, the container's aspect ratio changes enough that keeping the current
+// pan/zoom looks cropped — reset to the default fitted view, same as RESET.
+// Double rAF lets the new flex layout settle before we measure the container.
+window.addEventListener('pv-layout-change',()=>{
+  requestAnimationFrame(()=>requestAnimationFrame(fitDefault));
+});
 
 // initialize power + drag state instantly (no transition flash), then enable fades.
 // A power state saved earlier in this browser session wins over the default,
@@ -911,6 +950,7 @@ try{savedPower=sessionStorage.getItem('bb-power');}catch(e){}
 powerOn=savedPower===null?POWER_ON_AT_START:savedPower==='1';
 applyPower();
 applyDrag();
+applyChipText();
 fitDefault();
 requestAnimationFrame(fitDefault); // refit once layout fully settles
 requestAnimationFrame(()=>{

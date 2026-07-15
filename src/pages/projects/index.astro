@@ -11,6 +11,32 @@ const awardsOf = (a: string | string[] | undefined) =>
 ---
 
 <Layout title="Linh On | Portfolio | My Projects" description="A list of my best projects" scrollSmooth={false}>
+  <!-- Toggle the stacked (breadboard-on-top) layout whenever the window is
+       narrow. Runs early + on resize + on view-transition swaps so it applies
+       before the board paints and stays correct as the window is resized. -->
+  <script is:inline>
+    (function () {
+      function applyStack() {
+        // Stack on phones/tablets (window ~= whole screen, <=1024px) and,
+        // on bigger displays, whenever the window is under 3/4 of the screen.
+        var w = window.innerWidth;
+        var stack = w <= 1024 || w < window.screen.width * 0.75;
+        var html = document.documentElement;
+        var was = html.classList.contains('pv-stacked');
+        html.classList.toggle('pv-stacked', stack);
+        // When the layout actually flips (on-top <-> side-by-side), the board's
+        // container changes aspect ratio, so tell the breadboard to reset its
+        // view. No event on plain resizes that don't cross the threshold.
+        if (stack !== was) window.dispatchEvent(new CustomEvent('pv-layout-change'));
+      }
+      if (!window.__pvStackInit) {
+        window.__pvStackInit = true;
+        window.addEventListener('resize', applyStack);
+        document.addEventListener('astro:after-swap', applyStack);
+      }
+      applyStack();
+    })();
+  </script>
   <div class="pv-wrap">
     <div class="pv-bar">
       <span class="pv-lbl">VIEW MODE:</span>
@@ -85,17 +111,21 @@ const awardsOf = (a: string | string[] | undefined) =>
   .pv-arrow{transition:transform 0.2s ease;}
   .pv-card:hover .pv-arrow{transform:translateX(4px);}
 
-  @media (max-width: 880px){
-    .pv-wrap{height:auto;}
-    /* flex:1 1 0 collapses to zero height once the wrapper is height:auto,
-       spilling content over the footer; let both views take natural height */
-    #view-board,#view-cards{flex:none;min-height:auto;}
-    #view-cards{overflow-y:visible;padding:20px 0 32px;}
-    .pv-bar{flex-wrap:wrap;row-gap:8px;}
-    .pv-lbl{display:none;}
-    .pv-btn{flex:1;padding:8px 12px;font-size:13px;}
-    .pv-status{margin-left:0;margin-right:0;top:3px;width:100%;font-size:16px;text-align:right;}
-  }
+  /* Stack breadboard-on-top / readout-below whenever the window is narrow:
+     always on phones/tablets, and on larger displays whenever the window
+     occupies less than 3/4 of the screen width. The html.pv-stacked class is
+     toggled by the inline script below (it can't be a plain media query
+     because "3/4 of the screen" depends on the actual screen size). */
+  :global(html.pv-stacked) .pv-wrap{height:auto;}
+  /* flex:1 1 0 collapses to zero height once the wrapper is height:auto,
+     spilling content over the footer; let both views take natural height */
+  :global(html.pv-stacked) #view-board,
+  :global(html.pv-stacked) #view-cards{flex:none;min-height:auto;}
+  :global(html.pv-stacked) #view-cards{overflow-y:visible;padding:20px 0 32px;}
+  :global(html.pv-stacked) .pv-bar{flex-wrap:wrap;row-gap:8px;}
+  :global(html.pv-stacked) .pv-lbl{display:none;}
+  :global(html.pv-stacked) .pv-btn{flex:1;padding:8px 12px;font-size:13px;}
+  :global(html.pv-stacked) .pv-status{margin-left:0;margin-right:0;top:3px;width:100%;font-size:16px;text-align:right;}
 </style>
 
 <script is:inline>
