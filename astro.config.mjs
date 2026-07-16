@@ -14,7 +14,7 @@ import vercel from "@astrojs/vercel";
 
 // https://astro.build/config
 export default defineConfig({
-    site: 'https://linh-on.github.io/',
+    site: 'https://linhon-portfolio.vercel.app/',
     // Pages stay fully prerendered (static). The adapter exists so routes marked `prerender = false` (the /api/chat endpoint) run as Vercel serverless functions.
     adapter: vercel(),
     integrations: [mdx(), react(), tailwind({

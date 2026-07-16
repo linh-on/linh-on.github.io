@@ -1,5 +1,5 @@
 export const SITE = {
-    website: "https://linh-on.github.io",
+    website: "https://linhon-portfolio.vercel.app",
     title: "Linh On | Portfolio",
     description: "Software Engineer & Embedded Systems Engineer, MS CS student at UC Irvine",
     tags: ["portfolio", "Resume cv", "Astro"],
